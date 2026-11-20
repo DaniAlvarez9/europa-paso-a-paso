@@ -242,7 +242,7 @@ function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang='es-ES';u.r
   if(v)u.voice=v;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
 
 /* ---------- home ---------- */
-function renderHome(){
+function renderHome(){$('#unlockAll').textContent=S.unlockAll?'Volver a cerrar los bloques':'Abrir todos los bloques';
   const el=$('#blocks');el.innerHTML='';let tot=0;
   BLOCKS.forEach((B,i)=>{
     const ok=unlocked(i),ms=members(i);
@@ -258,7 +258,7 @@ function renderHome(){
   $('#tot').textContent=tot+'/10';$('#totbar').style.width=(tot*10)+'%';
 }
 function toastHome(i){alert(`Para abrir «${BLOCKS[i].name}» consigue antes las dos estrellas de «${BLOCKS[i-1].name}».`)}
-$('#unlockAll').onclick=()=>{if(confirm('¿Abrir todos los bloques sin tener que ganar las estrellas?')){S.unlockAll=true;save();renderHome()}};
+$('#unlockAll').onclick=()=>{if(S.unlockAll||confirm('¿Abrir todos los bloques sin tener que ganar las estrellas?')){S.unlockAll=!S.unlockAll;save();renderHome()}};
 $('#reset').onclick=()=>{if(confirm('¿Borrar todas las estrellas y empezar de cero?')){S={best:{},seen:{},unlockAll:false};save();renderHome()}};
 
 /* ---------- map ---------- */

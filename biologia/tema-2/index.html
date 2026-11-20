@@ -458,6 +458,7 @@ function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.to
 
 /* ---------- portada: camino ---------- */
 function renderHome(){
+  $('#unlockAll').textContent=S.unlockAll?'Volver a cerrar los bloques':'Abrir todos los bloques';
   const n=totalStars(),owned=ALBUM.filter(cardOwned).length;
   $('#tot').textContent=n+'/'+TSTARS;$('#totbar').style.width=(100*n/TSTARS)+'%';$('#albc').textContent=owned+'/'+ALBUM.length;
   const curI=BLOCKS.findIndex((b,i)=>unlocked(i)&&!(b.final?has('final','run'):done(b.id)));
@@ -486,7 +487,7 @@ function drawTrail(){const path=$('#path'),svg=$('#trail');if(!svg)return;const 
   svg.innerHTML=`<path d="${d}" fill="none" stroke="#d9cfbd" stroke-width="6" stroke-dasharray="2 12" stroke-linecap="round"/>`}
 addEventListener('resize',()=>{if($('#home').classList.contains('on'))drawTrail()});
 function msgSheet(m,h,p){sheet(`${MIC(m)}<h2>${h}</h2><p>${p}</p><button class="big" onclick="closeSheet()">Vale</button>`)}
-$('#unlockAll').onclick=()=>{S.unlockAll=true;save();renderHome()};
+$('#unlockAll').onclick=()=>{S.unlockAll=!S.unlockAll;save();renderHome()};
 $('#reset').onclick=()=>{sheet(`${MIC('oops')}<h2>¿Empezar de cero?</h2><p>Se borrarán las estrellas, los cromos y el récord de este tema.</p>
   <button class="big" id="rs">Sí, borrar</button><button class="big alt" onclick="closeSheet()">Cancelar</button>`);
   $('#rs').onclick=()=>{S={stars:{},best:{},seen:{},unlockAll:false,cards:{},hi:0};save();closeSheet();renderHome()}};
