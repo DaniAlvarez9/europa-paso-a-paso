@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Microorganismos · Biología Tema 2</title>
+<meta name="theme-color" content="#0e7c72">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1f2a37;--muted:#6b7280;--paper:#fbf7ef;--card:#fff;--line:#e7e0d2;
+  --ok:#2fa866;--bad:#e0484d;
+  --b0:#119c8f;--b1:#2f6fd6;--b2:#7a52c7;--b3:#3c9a3c;--b4:#d9467a;--b5:#1f3a5f;
+  --blk:#119c8f;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);font-family:Nunito,system-ui,sans-serif}
+button,a{font:inherit;color:inherit;cursor:pointer;border:0;background:none;text-decoration:none}
+h1,h2,h3{font-family:Fredoka,Nunito,sans-serif}
+.screen{display:none;height:100dvh;flex-direction:column;max-width:760px;margin:0 auto}
+.screen.on{display:flex}
+b{font-weight:800}
+
+/* home */
+#home{overflow-y:auto;padding:22px 16px 28px}
+.tohub{align-self:flex-start;font-weight:800;font-size:14px;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:99px;padding:6px 12px;margin-bottom:8px}
+.hello{font-size:15px;color:var(--muted);font-weight:700;margin:4px 0 0}
+#home h1{font-size:32px;line-height:1.05;margin:4px 0 6px;letter-spacing:-.5px}
+#home h1 span{color:var(--b0)}
+.sub{color:var(--muted);margin:0 0 18px;font-size:15px;line-height:1.4}
+.total{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 14px;margin-bottom:16px}
+.total .bar{flex:1;height:10px;border-radius:99px;background:#efe9dd;overflow:hidden}
+.total .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--b0),var(--b2));border-radius:99px;transition:width .5s}
+.total b{font-family:Fredoka;font-size:18px;min-width:52px;text-align:right}
+.blocks{display:grid;gap:12px}
+.bcard{width:100%;display:flex;align-items:center;gap:14px;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:0 2px 0 var(--line);transition:transform .15s}
+.bcard:active{transform:scale(.98)}
+.bnum{flex:none;width:58px;height:58px;border-radius:16px;display:grid;place-items:center}
+.bnum svg{width:46px;height:46px}
+.binfo{flex:1;min-width:0}
+.binfo h3{margin:0;font-size:19px}
+.binfo p{margin:3px 0 0;font-size:13px;color:var(--muted);font-weight:700}
+.stars{display:flex;gap:6px;margin-top:6px;font-size:12px;font-weight:800;color:var(--muted);flex-wrap:wrap}
+.stars span{padding:2px 8px;border-radius:99px;background:#f3eee4}
+.stars span.got{background:#fff3c4;color:#8a6200}
+.bcard.locked,.bcard.soon{opacity:.55}
+.bcard.locked .bnum,.bcard.soon .bnum{filter:grayscale(1)}
+.side{font-size:20px;flex:none}
+.foot{margin-top:22px;display:flex;justify-content:center;gap:18px;font-size:13px;color:var(--muted)}
+.foot button{text-decoration:underline;color:var(--muted);font-size:13px}
+
+/* block */
+.top{display:flex;align-items:center;gap:10px;padding:12px 12px 8px}
+.back{width:42px;height:42px;border-radius:14px;background:var(--card);border:1px solid var(--line);font-size:20px;display:grid;place-items:center;flex:none}
+.ttl{flex:1;min-width:0}
+.ttl h2{margin:0;font-size:20px;line-height:1.1}
+.ttl small{color:var(--muted);font-weight:700;font-size:12px}
+.tabs{display:flex;gap:6px;padding:0 12px 8px}
+.tab{flex:1;padding:9px 4px;border-radius:12px;background:var(--card);border:1px solid var(--line);font-weight:800;font-size:14px;position:relative}
+.tab.on{background:var(--blk);border-color:var(--blk);color:#fff}
+.tab .st{position:absolute;top:-7px;right:-4px;font-size:13px}
+.body{flex:1;overflow-y:auto;padding:4px 12px calc(16px + env(safe-area-inset-bottom))}
+
+/* learn */
+.lcard{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px 16px 14px;box-shadow:0 2px 0 var(--line);animation:pop .25s ease-out}
+.lhead{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.lhead svg{width:62px;height:62px;flex:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.1))}
+.lhead h3{margin:0;font-size:24px;line-height:1.05}
+.lhead small{display:block;font-family:Nunito;font-size:13px;color:var(--muted);font-weight:800}
+.lcard ul{margin:8px 0 10px;padding-left:20px}
+.lcard li{margin:7px 0;font-size:16px;line-height:1.4}
+.lcard li b{color:color-mix(in srgb,var(--blk) 80%,black)}
+.tip{display:flex;gap:10px;align-items:flex-start;background:#fff8dc;border:1px solid #f1e3a6;border-radius:14px;padding:10px 12px;font-weight:700;font-size:14.5px;line-height:1.38;color:#5b4a12;margin-top:6px}
+.tip span{font-size:20px;line-height:1}
+.pz{display:flex;align-items:center;gap:10px;width:100%;margin-top:10px;padding:8px;border-radius:14px;background:#eef2f0;border:1px solid #dde5e1;text-align:left;font-weight:800;font-size:14px;color:#365049}
+.pz img{width:84px;height:46px;object-fit:cover;border-radius:8px;flex:none}
+.nav{display:flex;align-items:center;gap:10px;margin-top:12px}
+.nav button.arrow{width:52px;height:48px;border-radius:14px;background:var(--card);border:1px solid var(--line);box-shadow:0 2px 0 var(--line);font-size:22px;font-weight:800}
+.nav button.arrow:disabled{opacity:.35}
+.dots{flex:1;display:flex;justify-content:center;gap:6px;flex-wrap:wrap}
+.dots i{width:9px;height:9px;border-radius:99px;background:#ddd5c5}
+.dots i.on{background:var(--blk);width:20px}
+.dots i.seen{background:color-mix(in srgb,var(--blk) 45%,white)}
+
+/* quiz */
+.qbox{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px 16px;margin-bottom:10px;animation:pop .25s ease-out}
+.qtop{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:800;color:var(--muted);margin-bottom:6px}
+.pbar{height:6px;border-radius:99px;background:#efe9dd;overflow:hidden;margin-bottom:10px}
+.pbar i{display:block;height:100%;background:var(--blk);border-radius:99px;transition:width .3s}
+.qtext{font-family:Fredoka;font-size:21px;font-weight:500;line-height:1.2}
+.item{text-align:center;padding:6px 0 2px}
+.item .name{font-family:Fredoka;font-size:30px;font-weight:600;line-height:1.1}
+.item .desc{font-size:14px;color:var(--muted);font-weight:700;margin-top:4px}
+.bins{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bin{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 6px 9px;border-radius:16px;background:var(--card);border:1px solid var(--line);box-shadow:0 2px 0 var(--line);font-weight:800;font-size:15px;line-height:1.1}
+.bin svg{width:42px;height:42px}
+.bin small{font-size:11.5px;color:var(--muted);font-weight:700}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;padding:13px 14px;border-radius:14px;background:var(--card);border:1px solid var(--line);box-shadow:0 2px 0 var(--line);font-weight:700;font-size:16px;line-height:1.3}
+.opts.vf{grid-template-columns:1fr 1fr}
+.opts.vf .opt{text-align:center;font-family:Fredoka;font-size:19px}
+.ok{background:var(--ok)!important;border-color:var(--ok)!important;color:#fff!important;box-shadow:none!important}
+.ok small{color:#e8fff0!important}
+.bad{background:var(--bad)!important;border-color:var(--bad)!important;color:#fff!important;box-shadow:none!important}
+.bad small{color:#ffe9e9!important}
+.dim{opacity:.45}
+.fb{display:flex;gap:12px;align-items:flex-start;border-radius:16px;padding:12px;margin-top:10px;animation:pop .25s ease-out}
+.fb.okk{background:#e3f6ea;border:1px solid #b8e6c9}
+.fb.no{background:#fdecec;border:1px solid #f5c2c3}
+.fb svg{width:54px;height:54px;flex:none}
+.fb .t{flex:1;font-size:15px;font-weight:700;line-height:1.38}
+.fb .t strong{display:block;font-family:Fredoka;font-size:19px;font-weight:600;margin-bottom:2px}
+.big{width:100%;padding:14px;border-radius:16px;background:var(--blk);color:#fff;font-family:Fredoka;font-weight:600;font-size:18px;box-shadow:0 3px 0 color-mix(in srgb,var(--blk) 70%,black);margin-top:10px}
+.big.alt{background:var(--card);color:var(--ink);border:1px solid var(--line);box-shadow:0 2px 0 var(--line)}
+@keyframes pop{from{transform:scale(.96);opacity:0}}
+
+/* overlays */
+.overlay{position:fixed;inset:0;background:rgba(20,28,40,.5);display:none;align-items:flex-end;justify-content:center;z-index:5}
+.overlay.on{display:flex}
+.sheet{width:100%;max-width:760px;max-height:92dvh;overflow-y:auto;background:var(--paper);border-radius:24px 24px 0 0;padding:22px 18px calc(18px + env(safe-area-inset-bottom));text-align:center;animation:up .3s ease-out}
+@keyframes up{from{transform:translateY(40px);opacity:0}}
+.sheet .emo{font-size:52px;line-height:1}
+.sheet h2{margin:8px 0 4px;font-size:26px}
+.sheet p{margin:0 0 14px;color:var(--muted);font-weight:700}
+.miss{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-4px 0 14px}
+.miss span{background:#fde4e4;color:#9b1c1f;border-radius:99px;padding:4px 10px;font-size:13px;font-weight:800}
+#photo{align-items:center;background:rgba(10,14,20,.92)}
+#photo .pwrap{width:100%;height:100%;overflow:auto;display:flex;align-items:center;-webkit-overflow-scrolling:touch}
+#photo img{width:100%;max-width:1200px;margin:auto;display:block;transition:width .2s}
+#photo.zoom img{width:220%;max-width:none}
+#photo .pbtns{position:fixed;top:calc(10px + env(safe-area-inset-top));right:10px;display:flex;gap:8px}
+#photo .pbtns button{width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.95);font-size:20px;font-weight:800}
+#photo .cap{position:fixed;bottom:calc(14px + env(safe-area-inset-bottom));left:0;right:0;text-align:center;color:#fff;font-weight:800;font-size:13px;opacity:.85}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:6;overflow:hidden}
+.confetti i{position:absolute;top:-12px;width:9px;height:14px;border-radius:2px;animation:fall 1.6s linear forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(540deg)}}
+</style>
+</head>
+<body>
+
+<section id="home" class="screen on">
+  <a class="tohub" href="../../#biologia">← Biología</a>
+  <p class="hello">¡Hola, Laura! 🔬</p>
+  <h1>Tema 2 · <span>Microorganismos</span></h1>
+  <p class="sub">Cinco bloques, en el mismo orden que la pizarra. En cada uno: primero <b>aprende</b>, luego <b>clasifica</b> y al final haz las <b>preguntas de examen</b>. Consigue las dos estrellas para abrir el siguiente.</p>
+  <div class="total"><span>⭐</span><div class="bar"><i id="totbar"></i></div><b id="tot">0/10</b></div>
+  <div class="blocks" id="blocks"></div>
+  <div class="foot"><button id="unlockAll">Abrir todos los bloques</button><button id="reset">Empezar de cero</button></div>
+</section>
+
+<section id="block" class="screen">
+  <div class="top">
+    <button class="back" id="back" aria-label="Volver">←</button>
+    <div class="ttl"><h2 id="btitle"></h2><small id="bsub"></small></div>
+  </div>
+  <div class="tabs" id="tabs">
+    <button class="tab" data-m="learn">📖 Aprender</button>
+    <button class="tab" data-m="sort">🧺 Clasificar<span class="st"></span></button>
+    <button class="tab" data-m="exam">✏️ Examen<span class="st"></span></button>
+  </div>
+  <div class="body" id="body"></div>
+</section>
+
+<div class="overlay" id="over"><div class="sheet" id="sheet"></div></div>
+<div class="overlay" id="photo"><div class="pwrap"><img id="pimg" alt="Foto de la pizarra"></div>
+  <div class="pbtns"><button id="pzoom" aria-label="Ampliar">🔍</button><button id="pclose" aria-label="Cerrar">✕</button></div>
+  <div class="cap">Apuntes de la pizarra · toca 🔍 para ampliar</div></div>
+
+<script>
+/* ---------- icons ---------- */
+const IC={
+bact:`<svg viewBox="0 0 64 64"><path d="M50 22c6-6 8 2 12-3" fill="none" stroke="#3c9a3c" stroke-width="2.5" stroke-linecap="round"/><path d="M14 44c-5 4-9-2-12 3" fill="none" stroke="#3c9a3c" stroke-width="2.5" stroke-linecap="round"/><rect x="8" y="20" width="48" height="24" rx="12" transform="rotate(-25 32 32)" fill="#8fd16f" stroke="#fff" stroke-width="3"/><rect x="8" y="20" width="48" height="24" rx="12" transform="rotate(-25 32 32)" fill="none" stroke="#3c9a3c" stroke-width="2"/><path d="M22 36c4-6 8 2 12-4s6 0 8-3" fill="none" stroke="#2c6f2c" stroke-width="2.2" stroke-linecap="round"/><circle cx="24" cy="30" r="2" fill="#2c6f2c"/><circle cx="41" cy="35" r="1.8" fill="#2c6f2c"/></svg>`,
+proto:`<svg viewBox="0 0 64 64"><path d="M14 30c-6-8 4-16 10-12 2-8 14-10 18-2 8-2 14 6 9 12 6 4 3 14-5 13-2 8-14 9-18 3-7 4-16-2-13-8-5-1-6-5-1-6z" fill="#c9b5ef" stroke="#fff" stroke-width="3"/><path d="M14 30c-6-8 4-16 10-12 2-8 14-10 18-2 8-2 14 6 9 12 6 4 3 14-5 13-2 8-14 9-18 3-7 4-16-2-13-8-5-1-6-5-1-6z" fill="none" stroke="#7a52c7" stroke-width="2"/><circle cx="33" cy="32" r="7" fill="#7a52c7"/><circle cx="31" cy="30" r="2" fill="#e4d9fb"/><circle cx="20" cy="38" r="2" fill="#9f82dc"/><circle cx="45" cy="24" r="2.4" fill="#9f82dc"/></svg>`,
+alga:`<svg viewBox="0 0 64 64"><path d="M32 60C26 46 18 40 22 26s-4-16 0-22c8 8 6 18 8 26s8 16 2 30z" fill="#4fbf7a" stroke="#fff" stroke-width="3"/><path d="M33 60c4-12 14-16 14-28s6-14 10-16c0 10-4 14-4 22s-6 18-20 22z" fill="#2e9c5c" stroke="#fff" stroke-width="3"/><path d="M31 60c-6-10-16-10-20-18s-8-8-8-12c8 0 10 6 14 10s12 8 14 20z" fill="#7fd59a" stroke="#fff" stroke-width="3"/><path d="M27 46c-2-8-6-14-4-24M42 44c2-6 6-10 8-18" fill="none" stroke="#1d6b3e" stroke-width="1.6" stroke-linecap="round"/></svg>`,
+hongo:`<svg viewBox="0 0 64 64"><path d="M25 34h14l3 22c0 3-20 3-20 0z" fill="#f6ead2" stroke="#fff" stroke-width="3"/><path d="M25 34h14l3 22c0 3-20 3-20 0z" fill="none" stroke="#c9a978" stroke-width="2"/><path d="M6 34C6 18 18 8 32 8s26 10 26 26z" fill="#e0484d" stroke="#fff" stroke-width="3"/><path d="M6 34C6 18 18 8 32 8s26 10 26 26z" fill="none" stroke="#a82c31" stroke-width="2"/><circle cx="20" cy="22" r="4" fill="#fff"/><circle cx="36" cy="16" r="3.2" fill="#fff"/><circle cx="46" cy="27" r="3.6" fill="#fff"/><circle cx="30" cy="28" r="2.6" fill="#fff"/></svg>`,
+virus:`<svg viewBox="0 0 64 64"><g stroke="#e07a10" stroke-width="3" stroke-linecap="round"><path d="M32 6v10M32 48v10M6 32h10M48 32h10M13 13l7 7M44 44l7 7M51 13l-7 7M20 44l-7 7"/></g><g fill="#e07a10"><circle cx="32" cy="5" r="3.5"/><circle cx="32" cy="59" r="3.5"/><circle cx="5" cy="32" r="3.5"/><circle cx="59" cy="32" r="3.5"/><circle cx="12" cy="12" r="3.5"/><circle cx="52" cy="52" r="3.5"/><circle cx="52" cy="12" r="3.5"/><circle cx="12" cy="52" r="3.5"/></g><circle cx="32" cy="32" r="17" fill="#ffb347" stroke="#fff" stroke-width="3"/><circle cx="32" cy="32" r="17" fill="none" stroke="#e07a10" stroke-width="2"/><circle cx="26" cy="28" r="3" fill="#e07a10"/><circle cx="37" cy="36" r="2.4" fill="#e07a10"/><circle cx="36" cy="25" r="1.8" fill="#e07a10"/></svg>`,
+micro:`<svg viewBox="0 0 64 64"><rect x="14" y="52" width="36" height="6" rx="3" fill="#0e7c72"/><path d="M38 10l7 4-12 21-7-4z" fill="#119c8f"/><rect x="34" y="6" width="10" height="7" rx="2" transform="rotate(30 39 9)" fill="#0e7c72"/><path d="M22 40h20a10 10 0 0 1-20 0z" fill="#9ad9cf"/><path d="M30 48v4M24 33l6 4" stroke="#0e7c72" stroke-width="4" stroke-linecap="round"/><circle cx="46" cy="38" r="8" fill="#fff" stroke="#119c8f" stroke-width="3"/><circle cx="44" cy="36" r="1.8" fill="#ef8a17"/><circle cx="48.5" cy="40" r="1.5" fill="#d9467a"/></svg>`,
+cell:`<svg viewBox="0 0 64 64"><ellipse cx="32" cy="32" rx="26" ry="22" fill="#cfe7fb" stroke="#fff" stroke-width="3"/><ellipse cx="32" cy="32" rx="26" ry="22" fill="none" stroke="#2f6fd6" stroke-width="2"/><circle cx="34" cy="30" r="8" fill="#2f6fd6"/><circle cx="32" cy="28" r="2.5" fill="#cfe7fb"/><ellipse cx="17" cy="38" rx="4" ry="2.5" fill="#7aa9ec"/><ellipse cx="47" cy="42" rx="4" ry="2.5" fill="#7aa9ec"/></svg>`,
+key:`<svg viewBox="0 0 64 64"><circle cx="20" cy="30" r="13" fill="#ffd34d" stroke="#fff" stroke-width="3"/><circle cx="20" cy="30" r="13" fill="none" stroke="#c99a00" stroke-width="2"/><circle cx="20" cy="30" r="5" fill="#fbf7ef" stroke="#c99a00" stroke-width="2"/><path d="M32 27h26v7h-5v6h-6v-6h-4v4h-5v-4h-6z" fill="#ffd34d" stroke="#c99a00" stroke-width="2" stroke-linejoin="round"/></svg>`
+};
+
+/* ---------- content ---------- */
+const GROUPS={
+  monera:{n:'Monera',s:'bacterias',ic:'bact'},
+  proto:{n:'Protoctista',s:'protozoos y algas',ic:'proto'},
+  fungi:{n:'Fungi',s:'hongos',ic:'hongo'},
+  virus:{n:'Virus',s:'no es ser vivo',ic:'virus'}
+};
+const BLOCKS=[
+ {id:'b1',name:'Mapa del tema',desc:'Los 3 reinos y los virus',ic:'micro',c:'var(--b0)',
+  learn:[
+   {t:'Los microorganismos',s:'De qué va el tema',ic:'micro',pz:'01',
+    p:['Son seres tan pequeños que para verlos necesitamos un **microscopio**.',
+       'En el tema hay **tres reinos** de seres vivos: **Monera**, **Protoctista** y **Fungi**.',
+       'Y además están los **virus**, que **no** son seres vivos.'],
+    tip:'Para acordarte de los reinos: <b>Mo-Pro-Fu</b> (Monera, Protoctista, Fungi)… ¡y los virus aparte!'},
+   {t:'¿Vivos o no vivos?',s:'La gran diferencia',ic:'cell',pz:'01',
+    p:['**Bacterias**, **protozoos**, **algas** y **hongos** son **seres vivos**.',
+       'Los **virus** son **seres no vivos** porque **no están formados por células**.'],
+    tip:'Si no tiene células, no está vivo: por eso el virus va <b>solo</b>, fuera de los reinos.'},
+   {t:'Reino Monera',s:'Bacterias y arqueas',ic:'bact',pz:'02',
+    p:['Aquí están **todas las bacterias** y las **arqueas** (las bacterias **más primitivas**).',
+       'Son seres vivos **unicelulares**: tienen **una sola célula**.',
+       'Su célula es **procariota**: **no tiene núcleo** y su **ADN está libre en el citoplasma**.'],
+    tip:'<b>Monera</b> = la célula más sencilla de todas: sin núcleo.'},
+   {t:'Los protozoos',s:'Reino Protoctista',ic:'proto',pz:'07',
+    p:['El reino Protoctista tiene **dos grupos**: los **protozoos** y las **algas**.',
+       'Los protozoos son **unicelulares**, con célula **eucariota de tipo animal**.',
+       'Su nutrición es **heterótrofa**.',
+       'Necesitan vivir donde haya **agua**: medio acuático, tierra húmeda o fluidos del cuerpo.'],
+    tip:'Proto<b>zoo</b> suena a <b>zoo</b>: su célula es de tipo <b>animal</b>.'},
+   {t:'Las algas',s:'Reino Protoctista',ic:'alga',pz:'10',
+    p:['Tienen célula **eucariota de tipo vegetal**: con **cloroplastos con clorofila** y **pared**.',
+       'Pueden ser **unicelulares** o **pluricelulares**.',
+       'Todas son **autótrofas**: hacen la **fotosíntesis**.',
+       'Viven en ecosistemas **acuáticos**, marinos o de agua dulce.'],
+    tip:'Alga = verde como una planta: célula de tipo <b>vegetal</b> y fotosíntesis.'},
+   {t:'Reino Fungi',s:'Los hongos',ic:'hongo',pz:'15',
+    p:['Aquí están las **levaduras**, los **mohos**, las **setas** y los **líquenes**.',
+       'Son **eucariotas** con **pared celular de quitina**.',
+       '**No tienen cloroplastos ni clorofila**, así que su nutrición es **heterótrofa**.',
+       'Pueden ser **unicelulares** o **pluricelulares**, pero **no forman tejidos**.',
+       'Viven en sitios **húmedos**, **cálidos** y **protegidos de la luz**.'],
+    tip:'Una seta parece una planta, pero <b>no tiene clorofila</b>: no puede hacer la fotosíntesis. Por eso los hongos no son plantas.'},
+   {t:'Palabras clave',s:'Las que más salen en el examen',ic:'key',pz:'04',
+    p:['**Unicelular**: formado por **una** célula. **Pluricelular**: por **muchas** células.',
+       '**Procariota**: célula **sin núcleo**. **Eucariota**: célula **con núcleo**.',
+       '**Autótrofo**: **fabrica** su propia materia orgánica (la mayoría, por fotosíntesis).',
+       '**Heterótrofo**: **no** puede fabricar su alimento y se alimenta de **otros seres vivos**.'],
+    tip:'<b>Auto</b> = por sí mismo (como un <b>auto</b>rretrato). <b>Hetero</b> = de otros.'}
+  ],
+  sortQ:'¿A qué grupo pertenece?',
+  sort:[
+   ['Bacteria','','monera','Las bacterias forman el reino Monera.'],
+   ['Arquea','Las bacterias más primitivas','monera','Las arqueas son del reino Monera, junto con las bacterias.'],
+   ['Bacteria del yogur','Lactobacillus','monera','Es una bacteria, así que va al reino Monera.'],
+   ['Ameba','Se mueve con pseudópodos','proto','La ameba es un protozoo: reino Protoctista.'],
+   ['Paramecio','Se mueve con cilios','proto','El paramecio es un protozoo: reino Protoctista.'],
+   ['Tripanosoma','Se mueve con flagelo','proto','El tripanosoma es un protozoo: reino Protoctista.'],
+   ['Plasmodium','Causa el paludismo o malaria','proto','Es un protozoo (esporozoo): reino Protoctista.'],
+   ['Alga unicelular','','proto','Las algas son del reino Protoctista, igual que los protozoos.'],
+   ['Alga verde','Pluricelular','proto','Las algas, unicelulares o pluricelulares, son del reino Protoctista.'],
+   ['Levadura','','fungi','Las levaduras son hongos: reino Fungi.'],
+   ['Moho','','fungi','Los mohos son hongos: reino Fungi.'],
+   ['Seta','','fungi','La seta es un hongo: reino Fungi.'],
+   ['Liquen','Hongo + alga unicelular','fungi','El liquen va en el reino Fungi.'],
+   ['Virus','','virus','El virus no es un ser vivo: no está formado por células.']
+  ],
+  exam:[
+   ['¿Cuál de estos NO es un ser vivo?',['Virus','Bacteria','Levadura','Ameba'],'El virus no está formado por células, así que no es un ser vivo.'],
+   ['¿Qué necesitas para ver una bacteria?',['Un microscopio','Un telescopio','Unos prismáticos','Nada: se ve a simple vista'],'Los microorganismos son tan pequeños que solo se ven con el microscopio.'],
+   ['¿Cómo es la célula de las bacterias?',['Procariota','Eucariota de tipo animal','Eucariota de tipo vegetal','No tienen células'],'Las bacterias (reino Monera) tienen célula procariota.'],
+   ['¿Qué quiere decir que una célula es procariota?',['Que no tiene núcleo y su ADN está libre en el citoplasma','Que tiene núcleo','Que tiene cloroplastos con clorofila','Que tiene pared de quitina'],'Procariota = sin núcleo. El ADN está suelto en el citoplasma.'],
+   ['¿Qué dos grupos forman el reino Protoctista?',['Protozoos y algas','Bacterias y arqueas','Mohos y levaduras','Virus y bacterias'],'Protoctista = protozoos + algas.'],
+   ['Los protozoos tienen célula eucariota de tipo…',['Animal','Vegetal','Procariota','Hongo'],'Protozoo suena a zoo: célula de tipo animal.'],
+   ['¿Cómo se alimentan las algas?',['Son autótrofas: hacen la fotosíntesis','Son heterótrofas','Se comen a otras algas','No se alimentan'],'Todas las algas tienen nutrición autótrofa fotosintética.'],
+   ['¿Por qué los hongos no son plantas?',['No tienen cloroplastos ni clorofila y son heterótrofos','Porque son muy pequeños','Porque viven en el agua','Porque no tienen células'],'Sin clorofila no pueden hacer la fotosíntesis: se alimentan de otros seres vivos.'],
+   ['La pared celular de los hongos es de…',['Quitina','Clorofila','ADN','Cilios'],'Los hongos tienen pared celular de quitina.'],
+   ['¿Cuál de estos pertenece al reino Fungi?',['Levadura','Paramecio','Arquea','Alga verde'],'La levadura es un hongo. El paramecio es un protozoo, la arquea es Monera y el alga es Protoctista.'],
+   ['¿Dónde se desarrollan mejor los hongos?',['En sitios húmedos, cálidos y protegidos de la luz','En sitios secos y al sol','Solo en el mar','Dentro de los virus'],'Los hongos necesitan humedad, buena temperatura y poca luz.'],
+   ['¿Qué significa heterótrofo?',['Que no fabrica su alimento y se alimenta de otros seres vivos','Que fabrica su propia materia orgánica','Que hace la fotosíntesis','Que tiene una sola célula'],'Hetero = de otros: se alimenta de otros seres vivos.'],
+   ['Las algas pueden ser unicelulares o pluricelulares.',['Verdadero','Falso'],'Verdadero: hay algas de una célula y algas de muchas células.',true],
+   ['Todos los microorganismos del tema son seres vivos.',['Falso','Verdadero'],'Falso: los virus no son seres vivos porque no tienen células.',true],
+   ['Las bacterias son pluricelulares.',['Falso','Verdadero'],'Falso: las bacterias son unicelulares, tienen una sola célula.',true]
+  ]
+ },
+ {id:'b2',name:'Bacterias',desc:'Reino Monera',ic:'bact',c:'var(--b1)',soon:true},
+ {id:'b3',name:'Protozoos',desc:'Reino Protoctista',ic:'proto',c:'var(--b2)',soon:true},
+ {id:'b4',name:'Algas',desc:'Reino Protoctista',ic:'alga',c:'var(--b3)',soon:true},
+ {id:'b5',name:'Hongos',desc:'Reino Fungi',ic:'hongo',c:'var(--b4)',soon:true},
+ {id:'final',name:'Desafío del tema',desc:'Todo mezclado',ic:'virus',c:'var(--b5)',soon:true,final:true}
+];
+const PASS=0.75;
+
+/* ---------- state ---------- */
+const KEY='laura-bio-t2-v1';
+let S={stars:{},best:{},seen:{},unlockAll:false};
+try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const has=(b,m)=>!!S.stars[b+'-'+m];
+function unlocked(i){if(BLOCKS[i].soon)return false;if(S.unlockAll||i===0)return true;const p=BLOCKS[i-1];return has(p.id,'sort')&&has(p.id,'exam')}
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const md=t=>t.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+let AC;
+function tone(ok){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+  const seq=ok?[660,880]:[300,220];seq.forEach((f,i)=>{const o=AC.createOscillator(),g=AC.createGain();
+  o.type=ok?'triangle':'sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,AC.currentTime+i*.1);
+  g.gain.exponentialRampToValueAtTime(.15,AC.currentTime+i*.1+.02);g.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+i*.1+.18);
+  o.connect(g).connect(AC.destination);o.start(AC.currentTime+i*.1);o.stop(AC.currentTime+i*.1+.2)})}catch(e){}}
+function confetti(){const c=document.createElement('div');c.className='confetti';
+  const cols=['#119c8f','#2f6fd6','#ef8a17','#d9467a','#7a52c7','#2fa866'];
+  for(let i=0;i<60;i++){const e=document.createElement('i');e.style.left=Math.random()*100+'%';e.style.background=cols[i%6];
+    e.style.animationDelay=Math.random()*.5+'s';e.style.animationDuration=1.2+Math.random()*.9+'s';c.appendChild(e)}
+  document.body.appendChild(c);setTimeout(()=>c.remove(),2600)}
+
+/* ---------- home ---------- */
+function renderHome(){
+  const n=Object.values(S.stars).filter(Boolean).length,T=10;
+  $('#tot').textContent=n+'/'+T;$('#totbar').style.width=(100*n/T)+'%';
+  $('#blocks').innerHTML=BLOCKS.map((b,i)=>{
+    const u=unlocked(i);
+    const st=b.soon?`<div class="stars"><span>Próximamente</span></div>`:
+      `<div class="stars"><span class="${has(b.id,'sort')?'got':''}">${has(b.id,'sort')?'⭐':'☆'} Clasificar</span><span class="${has(b.id,'exam')?'got':''}">${has(b.id,'exam')?'⭐':'☆'} Examen</span></div>`;
+    return `<button class="bcard ${b.soon?'soon':u?'':'locked'}" data-i="${i}">
+      <div class="bnum" style="background:color-mix(in srgb,${b.c} 16%,white)">${IC[b.ic]}</div>
+      <div class="binfo"><h3>${b.final?'':(i+1)+'. '}${b.name}</h3><p>${b.desc}</p>${st}</div>
+      <span class="side">${b.soon?'🕓':u?'›':'🔒'}</span></button>`}).join('');
+  document.querySelectorAll('.bcard').forEach(el=>el.onclick=()=>{
+    const i=+el.dataset.i,b=BLOCKS[i];
+    if(b.soon)return toastSheet('🕓','Muy pronto','Este bloque todavía se está preparando.');
+    if(!unlocked(i))return toastSheet('🔒','Bloque cerrado','Consigue las dos estrellas del bloque anterior para abrirlo.');
+    openBlock(i,'learn')});
+}
+function toastSheet(emo,h,p){sheet(`<div class="emo">${emo}</div><h2>${h}</h2><p>${p}</p><button class="big" onclick="closeSheet()">Vale</button>`)}
+$('#unlockAll').onclick=()=>{S.unlockAll=true;save();renderHome()};
+$('#reset').onclick=()=>{sheet(`<div class="emo">🔄</div><h2>¿Empezar de cero?</h2><p>Se borrarán las estrellas de este tema.</p>
+  <button class="big" id="rs">Sí, borrar</button><button class="big alt" onclick="closeSheet()">Cancelar</button>`);
+  $('#rs').onclick=()=>{S={stars:{},best:{},seen:{},unlockAll:false};save();closeSheet();renderHome()}};
+
+/* ---------- block ---------- */
+let CUR=0,MODE='learn';
+function openBlock(i,mode){CUR=i;const b=BLOCKS[i];
+  document.documentElement.style.setProperty('--blk',getComputedStyle(document.documentElement).getPropertyValue(b.c.slice(4,-1)).trim()||'#119c8f');
+  $('#btitle').textContent=(i+1)+'. '+b.name;$('#bsub').textContent=b.desc;
+  $('#home').classList.remove('on');$('#block').classList.add('on');setMode(mode)}
+function setMode(m){MODE=m;const b=BLOCKS[CUR];
+  document.querySelectorAll('.tab').forEach(t=>{t.classList.toggle('on',t.dataset.m===m);
+    const st=t.querySelector('.st');if(st)st.textContent=has(b.id,t.dataset.m)?'⭐':''});
+  $('#body').scrollTop=0;
+  if(m==='learn')learn(0);else if(m==='sort')startQuiz('sort');else startQuiz('exam')}
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>setMode(t.dataset.m));
+$('#back').onclick=()=>{$('#block').classList.remove('on');$('#home').classList.add('on');renderHome()};
+
+/* learn */
+function learn(k){const b=BLOCKS[CUR],L=b.learn,c=L[k];
+  S.seen[b.id+'-'+k]=1;save();
+  $('#body').innerHTML=`<div class="lcard">
+    <div class="lhead">${IC[c.ic]}<div><h3>${c.t}</h3><small>${c.s}</small></div></div>
+    <ul>${c.p.map(x=>`<li>${md(x)}</li>`).join('')}</ul>
+    <div class="tip"><span>💡</span><div>${c.tip}</div></div>
+    <button class="pz" id="pz"><img src="img/pizarra/p${c.pz}.webp" alt="">📷 Ver lo que escribió la profesora en la pizarra</button>
+  </div>
+  <div class="nav"><button class="arrow" id="prev" ${k===0?'disabled':''}>‹</button>
+    <div class="dots">${L.map((_,j)=>`<i class="${j===k?'on':S.seen[b.id+'-'+j]?'seen':''}"></i>`).join('')}</div>
+    <button class="arrow" id="next" ${k===L.length-1?'disabled':''}>›</button></div>
+  ${k===L.length-1?`<button class="big" id="tosort">¡Ya lo tengo! A clasificar 🧺</button>`:''}`;
+  $('#prev').onclick=()=>learn(k-1);$('#next').onclick=()=>learn(k+1);
+  $('#pz').onclick=()=>openPhoto(c.pz);
+  if($('#tosort'))$('#tosort').onclick=()=>setMode('sort');
+  swipe($('#body'),d=>{if(d>0&&k<L.length-1)learn(k+1);if(d<0&&k>0)learn(k-1)});
+}
+function swipe(el,cb){let x0=null,y0=null;el.ontouchstart=e=>{x0=e.touches[0].clientX;y0=e.touches[0].clientY};
+  el.ontouchend=e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;
+    if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)cb(dx<0?1:-1);x0=null}}
+function openPhoto(n){$('#pimg').src='img/pizarra/p'+n+'.webp';$('#photo').classList.remove('zoom');$('#photo').classList.add('on')}
+$('#pclose').onclick=()=>$('#photo').classList.remove('on');
+$('#pzoom').onclick=()=>$('#photo').classList.toggle('zoom');
+
+/* quiz (sort + exam) */
+let Q;
+function startQuiz(kind){const b=BLOCKS[CUR];
+  const items=(kind==='sort'?b.sort:b.exam).map((x,i)=>({i,x}));
+  Q={kind,queue:shuffle(items),total:items.length,done:0,first:new Set(),missed:new Set(),tried:new Set()};
+  nextQ()}
+function nextQ(){if(!Q.queue.length)return finish();const it=Q.queue[0];
+  const pct=100*Q.done/Q.total;
+  const head=`<div class="qtop"><span>${Q.kind==='sort'?'🧺 Clasificar':'✏️ Preguntas de examen'}</span><span>${Q.done}/${Q.total}</span></div><div class="pbar"><i style="width:${pct}%"></i></div>`;
+  if(Q.kind==='sort'){const [n,d]=it.x;
+    $('#body').innerHTML=`<div class="qbox">${head}<div class="qtext" style="text-align:center;font-size:16px;color:var(--muted)">${BLOCKS[CUR].sortQ}</div>
+      <div class="item"><div class="name">${n}</div>${d?`<div class="desc">${d}</div>`:''}</div></div>
+      <div class="bins">${Object.entries(GROUPS).map(([k,g])=>`<button class="bin" data-k="${k}">${IC[g.ic]}${g.n}<small>${g.s}</small></button>`).join('')}</div><div id="fbx"></div>`;
+    document.querySelectorAll('.bin').forEach(el=>el.onclick=()=>answerSort(el))}
+  else{const [q,opts,,vf]=it.x;const order=vf?opts.map((o,i)=>i).sort((a,b)=>opts[a]==='Verdadero'?-1:1):shuffle(opts.map((o,i)=>i));
+    $('#body').innerHTML=`<div class="qbox">${head}<div class="qtext">${vf?'¿Verdadero o falso?<br><span style="font-size:19px;font-weight:600">'+q+'</span>':q}</div></div>
+      <div class="opts ${vf?'vf':''}">${order.map(i=>`<button class="opt" data-i="${i}">${opts[i]}</button>`).join('')}</div><div id="fbx"></div>`;
+    document.querySelectorAll('.opt').forEach(el=>el.onclick=()=>answerExam(el))}
+}
+function resolve(ok,it){if(!Q.tried.has(it.i)){Q.tried.add(it.i);if(ok)Q.first.add(it.i);else Q.missed.add(it.i)}
+  Q.queue.shift();if(ok)Q.done++;else Q.queue.push(it)}
+function answerSort(el){const it=Q.queue[0],[n,,g,why]=it.x,ok=el.dataset.k===g;tone(ok);
+  document.querySelectorAll('.bin').forEach(b=>{b.disabled=true;if(b.dataset.k===g)b.classList.add('ok');else if(b===el)b.classList.add('bad');else b.classList.add('dim')});
+  fb(ok,ok?'¡Bien!':'Casi…',why,GROUPS[g].ic);resolve(ok,it)}
+function answerExam(el){const it=Q.queue[0],[,opts,why]=it.x,ok=+el.dataset.i===0;tone(ok);
+  document.querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(+b.dataset.i===0)b.classList.add('ok');else if(b===el)b.classList.add('bad');else b.classList.add('dim')});
+  fb(ok,ok?'¡Correcto!':'No es esa',why,ok?'micro':null);resolve(ok,it)}
+function fb(ok,h,t,ic){$('#fbx').innerHTML=`<div class="fb ${ok?'okk':'no'}">${ic?IC[ic]:''}<div class="t"><strong>${h}</strong>${t}${ok?'':'<br><small style="color:#6b7280">Te la volveré a preguntar al final.</small>'}</div></div>
+  <button class="big" id="nx">${Q.queue.length?'Siguiente →':'Ver resultado'}</button>`;
+  $('#nx').onclick=nextQ;$('#nx').scrollIntoView({behavior:'smooth',block:'end'})}
+function finish(){const b=BLOCKS[CUR],sc=Q.first.size/Q.total,key=b.id+'-'+Q.kind;
+  S.best[key]=Math.max(S.best[key]||0,sc);const got=sc>=PASS,was=!!S.stars[key];if(got)S.stars[key]=1;save();
+  const names=[...Q.missed].map(i=>{const x=(Q.kind==='sort'?b.sort:b.exam)[i];return x[0].length>38?x[0].slice(0,36)+'…':x[0]});
+  const other=Q.kind==='sort'?'exam':'sort';
+  if(got)confetti();
+  sheet(`<div class="emo">${got?'⭐':'💪'}</div><h2>${got?(was?'¡Otra vez genial!':'¡Estrella conseguida!'):'¡Casi lo tienes!'}</h2>
+    <p>${Q.first.size} de ${Q.total} a la primera.${got?'':' Necesitas '+Math.ceil(PASS*Q.total)+' para la estrella.'}</p>
+    ${names.length?`<p style="margin-bottom:8px">Repasa:</p><div class="miss">${names.map(n=>`<span>${n}</span>`).join('')}</div>`:''}
+    ${got&&!has(b.id,other)?`<button class="big" id="s1">${other==='exam'?'Ir al examen ✏️':'Ir a clasificar 🧺'}</button>`:''}
+    ${got&&has(b.id,other)?`<button class="big" id="s3">Volver a los bloques</button>`:''}
+    <button class="big ${got?'alt':''}" id="s2">Repetir</button>`);
+  if($('#s1'))$('#s1').onclick=()=>{closeSheet();setMode(other)};
+  if($('#s3'))$('#s3').onclick=()=>{closeSheet();$('#back').click()};
+  $('#s2').onclick=()=>{closeSheet();setMode(Q.kind)};
+  document.querySelectorAll('.tab').forEach(t=>{const st=t.querySelector('.st');if(st)st.textContent=has(b.id,t.dataset.m)?'⭐':''});
+}
+function sheet(h){$('#sheet').innerHTML=h;$('#over').classList.add('on')}
+function closeSheet(){$('#over').classList.remove('on')}
+$('#over').onclick=e=>{if(e.target.id==='over')closeSheet()};
+
+renderHome();
+</script>
+</body>
+</html>
