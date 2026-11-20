@@ -69,7 +69,7 @@ const MATERIAS=[
  {id:'geografia',name:'Geografía',c:'var(--geo)',bg:'#e4eefc',icon:'geo',sub:'Mapas, países y capitales',
   temas:[{n:'🌍',name:'Europa: países y capitales',desc:'36 países en 5 bloques',href:'geografia/europa/',stars:europaStars,total:10}]},
  {id:'biologia',name:'Biología',c:'var(--bio)',bg:'#dff4f1',icon:'bio',sub:'Biología y Geología · 1º ESO',
-  temas:[{n:'2',name:'Microorganismos',desc:'Moneras, protoctistas, hongos y virus',href:'biologia/tema-2/',stars:()=>bioStars('laura-bio-t2-v1'),total:10}]}
+  temas:[{n:'2',name:'Microorganismos',desc:'5 bloques, Desafío final y álbum de cromos',href:'biologia/tema-2/',stars:()=>bioStars('laura-bio-t2-v1'),total:11}]}
 ];
 
 function bar(t){const s=t.stars(),p=Math.round(100*s/t.total);return `<div class="bar"><i style="width:${p}%"></i></div><p>⭐ ${s} de ${t.total} estrellas</p>`}

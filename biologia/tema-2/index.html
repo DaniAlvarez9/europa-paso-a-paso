@@ -12,18 +12,19 @@
 :root{
   --ink:#1f2a37;--muted:#6b7280;--paper:#fbf7ef;--card:#fff;--line:#e7e0d2;
   --ok:#2fa866;--bad:#e0484d;
-  --b0:#119c8f;--b1:#2f6fd6;--b2:#7a52c7;--b3:#3c9a3c;--b4:#d9467a;--b5:#1f3a5f;
+  --b0:#119c8f;--b1:#2f6fd6;--b2:#7a52c7;--b3:#3c9a3c;--b4:#d9467a;--b5:#e07a10;
   --blk:#119c8f;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);font-family:Nunito,system-ui,sans-serif}
+body{background:radial-gradient(circle at 12% 8%,#e5f6f2 0,transparent 32%),radial-gradient(circle at 92% 30%,#efe8fb 0,transparent 28%),radial-gradient(circle at 10% 80%,#fde9ef 0,transparent 26%),var(--paper);background-attachment:fixed}
 button,a{font:inherit;color:inherit;cursor:pointer;border:0;background:none;text-decoration:none}
 h1,h2,h3{font-family:Fredoka,Nunito,sans-serif}
 .screen{display:none;height:100dvh;flex-direction:column;max-width:760px;margin:0 auto}
 .screen.on{display:flex}
 b{font-weight:800}
 
-/* guide */
+/* guía */
 .guide{display:flex;align-items:flex-end;gap:8px;margin:0 0 14px}
 .guide .mic{width:64px;height:64px;flex:none;animation:bob 2.6s ease-in-out infinite}
 .bubble{position:relative;flex:1;background:var(--card);border:1px solid var(--line);border-radius:18px 18px 18px 6px;padding:10px 13px;font-weight:700;font-size:14.5px;line-height:1.38;box-shadow:0 2px 0 var(--line)}
@@ -31,33 +32,45 @@ b{font-weight:800}
 @keyframes wiggle{20%{transform:rotate(-10deg)}40%{transform:rotate(9deg)}60%{transform:rotate(-6deg)}80%{transform:rotate(4deg)}}
 @keyframes jump{30%{transform:translateY(-12px) scale(1.05)}60%{transform:translateY(0) scale(.97)}}
 
-/* home */
+/* portada: camino */
 #home{overflow-y:auto;padding:22px 16px 28px}
 .tohub{align-self:flex-start;font-weight:800;font-size:14px;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:99px;padding:6px 12px;margin-bottom:8px}
 #home h1{font-size:32px;line-height:1.05;margin:4px 0 10px;letter-spacing:-.5px}
 #home h1 span{color:var(--b0)}
-.total{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 14px;margin-bottom:16px}
+.hud{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:8px}
+.total{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:10px 14px}
 .total .bar{flex:1;height:10px;border-radius:99px;background:#efe9dd;overflow:hidden}
-.total .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--b0),var(--b2));border-radius:99px;transition:width .5s}
-.total b{font-family:Fredoka;font-size:18px;min-width:52px;text-align:right}
-.blocks{display:grid;gap:12px}
-.bcard{width:100%;display:flex;align-items:center;gap:14px;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:0 2px 0 var(--line);transition:transform .15s}
-.bcard:active{transform:scale(.98)}
-.bnum{flex:none;width:58px;height:58px;border-radius:16px;display:grid;place-items:center}
-.bnum svg{width:46px;height:46px}
-.binfo{flex:1;min-width:0}
-.binfo h3{margin:0;font-size:19px}
-.binfo p{margin:3px 0 0;font-size:13px;color:var(--muted);font-weight:700}
-.stars{display:flex;gap:6px;margin-top:6px;font-size:12px;font-weight:800;color:var(--muted);flex-wrap:wrap}
+.total .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--b0),var(--b2),var(--b4));border-radius:99px;transition:width .5s}
+.total b{font-family:Fredoka;font-size:18px}
+.albumbtn{display:flex;align-items:center;gap:6px;background:linear-gradient(135deg,#ffe48a,#ffc94d);border:1px solid #f0c040;border-radius:18px;padding:8px 14px;font-weight:800;font-size:14px;box-shadow:0 2px 0 #e0b030}
+.albumbtn span{font-size:22px}
+.path{position:relative;padding:10px 0 6px;max-width:560px;margin:0 auto;width:100%}
+.path svg.trail{z-index:0}.stop{z-index:1}
+.path svg.trail{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.stop{position:relative;display:flex;align-items:center;gap:12px;margin:0 0 22px;width:100%}
+.stop.r{flex-direction:row-reverse;text-align:right}
+.node{position:relative;flex:none;width:86px;height:86px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--c) calc(var(--p)*1%),#e9e2d4 0);transition:transform .15s}
+.node::before{content:'';position:absolute;inset:6px;border-radius:50%;background:color-mix(in srgb,var(--c) 14%,white);border:3px solid #fff;box-shadow:0 4px 0 color-mix(in srgb,var(--c) 40%,#d8d0c0)}
+.node svg{position:relative;width:50px;height:50px}
+.node:active{transform:scale(.94)}
+.node .lk{position:absolute;right:-2px;bottom:-2px;width:30px;height:30px;border-radius:50%;background:#fff;border:2px solid var(--line);display:grid;place-items:center;font-size:15px}
+.stop.locked .node{filter:grayscale(1)}.stop.locked .node svg{opacity:.55}.stop.locked .plabel{background:#f7f3ec;color:#9b9384}.stop.locked .plabel p{color:#b2aa9b}
+.stop.cur .node{animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.06)}}
+.plabel{flex:1;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:10px 12px;box-shadow:0 2px 0 var(--line)}
+.plabel h3{margin:0;font-size:18px;line-height:1.1}
+.plabel p{margin:2px 0 0;font-size:12.5px;color:var(--muted);font-weight:700}
+.stars{display:flex;gap:5px;margin-top:6px;font-size:11.5px;font-weight:800;color:var(--muted);flex-wrap:wrap}
+.stop.r .stars{justify-content:flex-end}
 .stars span{padding:2px 8px;border-radius:99px;background:#f3eee4}
 .stars span.got{background:#fff3c4;color:#8a6200}
-.bcard.locked,.bcard.soon{opacity:.55}
-.bcard.locked .bnum,.bcard.soon .bnum{filter:grayscale(1)}
-.side{font-size:20px;flex:none}
-.foot{margin-top:22px;display:flex;justify-content:center;gap:18px;font-size:13px;color:var(--muted)}
+.here{position:absolute;top:-30px;width:56px;height:56px;pointer-events:none}
+.here .mic{width:56px;height:56px;animation:bob 2.6s ease-in-out infinite}
+.stop:not(.r) .here{left:62px}.stop.r .here{right:62px}
+.foot{margin-top:10px;display:flex;justify-content:center;gap:18px;font-size:13px;color:var(--muted)}
 .foot button{text-decoration:underline;color:var(--muted);font-size:13px}
 
-/* block */
+/* bloque */
 .top{display:flex;align-items:center;gap:10px;padding:12px 12px 8px}
 .back{width:42px;height:42px;border-radius:14px;background:var(--card);border:1px solid var(--line);font-size:20px;display:grid;place-items:center;flex:none}
 .ttl{flex:1;min-width:0}
@@ -69,7 +82,7 @@ b{font-weight:800}
 .tab .st{position:absolute;top:-7px;right:-4px;font-size:13px}
 .body{flex:1;overflow-y:auto;padding:4px 12px calc(16px + env(safe-area-inset-bottom))}
 
-/* learn */
+/* aprender */
 .lcard{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px 16px 14px;box-shadow:0 2px 0 var(--line);animation:pop .25s ease-out}
 .lhead{display:flex;align-items:center;gap:12px;margin-bottom:6px}
 .lhead svg{width:58px;height:58px;flex:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.1))}
@@ -82,6 +95,7 @@ b{font-weight:800}
 .fig>svg{width:100%;height:auto;display:block}
 .fig .row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center}
 .fig .row.r3{grid-template-columns:repeat(3,1fr)}
+.fig .row.r2{grid-template-columns:repeat(2,1fr)}
 .fig .cell{background:#fff;border-radius:12px;padding:6px 4px;font-weight:800;font-size:13px;line-height:1.15;border:1px solid var(--line)}
 .fig .cell small{display:block;color:var(--muted);font-weight:700;font-size:11.5px}
 .fig .cell .e{font-size:28px;line-height:1.1;display:block}
@@ -89,6 +103,9 @@ b{font-weight:800}
 .fig .lab{font-size:12px;font-weight:800;color:var(--muted);text-align:center;margin-top:6px}
 .tip{display:flex;gap:10px;align-items:flex-start;background:#fff8dc;border:1px solid #f1e3a6;border-radius:14px;padding:10px 12px;font-weight:700;font-size:14.5px;line-height:1.38;color:#5b4a12;margin-top:6px}
 .tip span{font-size:20px;line-height:1}
+.links{display:grid;gap:6px;margin-top:8px}
+.links a{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:14px;background:#fff0f0;border:1px solid #f6caca;font-weight:800;font-size:14px;color:#8f1d1d}
+.links a span{font-size:18px}
 .check{margin-top:10px;border:2px dashed color-mix(in srgb,var(--blk) 40%,white);border-radius:16px;padding:10px 12px}
 .check .cq{font-weight:800;font-size:15px;margin-bottom:8px}
 .check .cq em{font-style:normal;color:var(--blk)}
@@ -105,25 +122,27 @@ b{font-weight:800}
 .dots i.on{background:var(--blk);width:20px}
 .dots i.seen{background:color-mix(in srgb,var(--blk) 45%,white)}
 
-/* quiz */
+/* preguntas */
 .qbox{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px 16px;margin-bottom:10px;animation:pop .25s ease-out}
 .qtop{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:800;color:var(--muted);margin-bottom:6px;gap:8px}
 .streak{background:#fff1e0;color:#b45309;border-radius:99px;padding:2px 9px;font-size:12.5px}
 .streak.hot{animation:jump .5s}
+.hearts{letter-spacing:1px;font-size:15px}
+.pts{background:#eef4ff;color:#1e4fa8;border-radius:99px;padding:2px 9px}
 .pbar{height:6px;border-radius:99px;background:#efe9dd;overflow:hidden;margin-bottom:10px}
 .pbar i{display:block;height:100%;background:var(--blk);border-radius:99px;transition:width .3s}
 .qtext{font-family:Fredoka;font-size:21px;font-weight:500;line-height:1.2}
-.qfig{max-width:200px;margin:8px auto 0}
+.qfig{max-width:210px;margin:8px auto 0}
 .qfig svg{width:100%;height:auto;display:block}
 .item{text-align:center;padding:6px 0 2px}
-.item .name{font-family:Fredoka;font-size:28px;font-weight:600;line-height:1.1}
+.item .name{font-family:Fredoka;font-size:27px;font-weight:600;line-height:1.12}
 .item .desc{font-size:14px;color:var(--muted);font-weight:700;margin-top:4px}
 .item .ifig{width:150px;margin:0 auto}
 .item .ifig svg{width:100%;height:auto;display:block}
 .bins{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .bins.n3{grid-template-columns:1fr 1fr 1fr}
 .bin{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:10px 6px 9px;border-radius:16px;background:var(--card);border:1px solid var(--line);box-shadow:0 2px 0 var(--line);font-weight:800;font-size:15px;line-height:1.1;text-align:center}
-.bin svg{width:42px;height:42px}
+.bin svg{width:46px;height:40px}
 .bin .e{font-size:30px;line-height:1.1}
 .bin small{font-size:11.5px;color:var(--muted);font-weight:700}
 .opts{display:grid;gap:8px}
@@ -151,21 +170,64 @@ b{font-weight:800}
 .big{width:100%;padding:14px;border-radius:16px;background:var(--blk);color:#fff;font-family:Fredoka;font-weight:600;font-size:18px;box-shadow:0 3px 0 color-mix(in srgb,var(--blk) 70%,black);margin-top:10px}
 .big.alt{background:var(--card);color:var(--ink);border:1px solid var(--line);box-shadow:0 2px 0 var(--line)}
 @keyframes pop{from{transform:scale(.96);opacity:0}}
+.intro{text-align:center;padding:10px 4px}
+.intro .mic{width:110px;height:110px;animation:bob 2.6s ease-in-out infinite}
+.intro h2{font-size:28px;margin:6px 0}
+.intro p{font-weight:700;color:var(--muted);line-height:1.45;margin:0 0 8px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.rules div{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 6px;font-weight:800;font-size:13px}
+.rules div span{display:block;font-size:28px}
 
-/* figures */
+/* figuras animadas */
 .bipL,.bipR{animation-duration:4s;animation-iteration-count:infinite;animation-timing-function:ease-in-out}
 .bipL{animation-name:bipL}.bipR{animation-name:bipR}
 @keyframes bipL{0%,20%{transform:translateX(20px)}50%{transform:translateX(0)}80%,100%{transform:translateX(-26px)}}
 @keyframes bipR{0%,20%{transform:translateX(-20px)}50%{transform:translateX(0)}80%,100%{transform:translateX(26px)}}
 .flag{animation:flag 1s ease-in-out infinite;transform-box:fill-box;transform-origin:0 50%}
 @keyframes flag{50%{transform:scaleY(-1)}}
+.cil{animation:cil .5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes cil{to{transform:rotate(25deg)}}
+.blob{animation:blob 3s ease-in-out infinite}
+@keyframes blob{50%{d:path("M18 34c-8-10 2-20 12-14 4-10 18-10 20 0 12-4 18 8 10 14 8 6 2 16-8 14-2 10-16 10-20 2-8 4-18-2-14-8-6-2-6-6 0-8z")}}
+.sun{animation:spin 8s linear infinite;transform-box:fill-box;transform-origin:center}
+@keyframes spin{to{transform:rotate(360deg)}}
+.bubbleup{animation:up2 2.4s ease-in infinite}
+@keyframes up2{from{transform:translateY(0);opacity:1}to{transform:translateY(-40px);opacity:0}}
+.spore{animation:spore 3s ease-out infinite}
+@keyframes spore{from{transform:translate(0,0);opacity:1}to{transform:translate(var(--dx),40px);opacity:0}}
+.part{transition:opacity .2s}
+.hl{animation:hl 1s ease-in-out infinite}
+@keyframes hl{50%{opacity:.35}}
+.balloon{transform-box:fill-box;transform-origin:50% 100%;transform:scale(.25);transition:transform 2.6s cubic-bezier(.3,1.4,.6,1)}
+.lab2{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:6px}
+.lab2 button{padding:8px 12px;border-radius:99px;background:#fff;border:1px solid var(--line);box-shadow:0 2px 0 var(--line);font-weight:800;font-size:14px}
 
-/* overlays */
+/* álbum */
+#album .body{padding-top:8px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cromo{perspective:700px;aspect-ratio:3/4}
+.cromo .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.cromo.flip .in{transform:rotateY(180deg)}
+.cromo .f,.cromo .b{position:absolute;inset:0;border-radius:16px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;text-align:center;border:3px solid #fff;box-shadow:0 3px 8px rgba(0,0,0,.12)}
+.cromo .f{background:linear-gradient(160deg,color-mix(in srgb,var(--c) 22%,white),color-mix(in srgb,var(--c) 50%,white))}
+.cromo .f svg{width:70%;height:auto;max-height:55%}
+.cromo .f b{font-family:Fredoka;font-size:14px;line-height:1.1;margin-top:4px}
+.cromo .f small{font-size:10.5px;font-weight:800;color:#4b5563}
+.cromo .b{transform:rotateY(180deg);background:#fff;font-size:12px;font-weight:700;line-height:1.3;gap:6px;color:#374151}
+.cromo .b b{font-family:Fredoka;font-size:13px;color:var(--c)}
+.cromo.locked .f{background:repeating-linear-gradient(45deg,#ece6da,#ece6da 8px,#e4ddcf 8px,#e4ddcf 16px)}
+.cromo.locked .f svg{filter:brightness(0) opacity(.18)}
+.cromo.locked .f b{color:#9b9384}
+.cromo .num{position:absolute;top:6px;left:8px;font-family:Fredoka;font-size:11px;color:#6b7280}
+.newc{display:flex;gap:8px;justify-content:center;margin:0 0 14px;flex-wrap:wrap}
+.newc .cromo{width:86px}
+
+/* capas */
 .overlay{position:fixed;inset:0;background:rgba(20,28,40,.5);display:none;align-items:flex-end;justify-content:center;z-index:5}
 .overlay.on{display:flex}
 .sheet{width:100%;max-width:760px;max-height:92dvh;overflow-y:auto;background:var(--paper);border-radius:24px 24px 0 0;padding:20px 18px calc(18px + env(safe-area-inset-bottom));text-align:center;animation:up .3s ease-out}
 @keyframes up{from{transform:translateY(40px);opacity:0}}
-.sheet .mic{width:96px;height:96px;animation:jump .7s}
+.sheet>.mic{width:96px;height:96px;animation:jump .7s}
 .sheet h2{margin:4px 0 4px;font-size:26px}
 .sheet p{margin:0 0 14px;color:var(--muted);font-weight:700}
 .miss{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-4px 0 14px}
@@ -180,6 +242,8 @@ b{font-weight:800}
 .confetti{position:fixed;inset:0;pointer-events:none;z-index:6;overflow:hidden}
 .confetti i{position:absolute;top:-12px;width:9px;height:14px;border-radius:2px;animation:fall 1.6s linear forwards}
 @keyframes fall{to{transform:translateY(105vh) rotate(540deg)}}
+@media (min-width:700px){.grid{grid-template-columns:repeat(4,1fr)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
@@ -188,8 +252,11 @@ b{font-weight:800}
   <a class="tohub" href="../../#biologia">← Biología</a>
   <h1>Tema 2 · <span>Microorganismos</span></h1>
   <div class="guide" id="hguide"></div>
-  <div class="total"><span>⭐</span><div class="bar"><i id="totbar"></i></div><b id="tot">0/10</b></div>
-  <div class="blocks" id="blocks"></div>
+  <div class="hud">
+    <div class="total"><span>⭐</span><div class="bar"><i id="totbar"></i></div><b id="tot">0/11</b></div>
+    <button class="albumbtn" id="openAlbum"><span>🃏</span><b id="albc">0/18</b></button>
+  </div>
+  <div class="path" id="path"></div>
   <div class="foot"><button id="unlockAll">Abrir todos los bloques</button><button id="reset">Empezar de cero</button></div>
 </section>
 
@@ -204,6 +271,14 @@ b{font-weight:800}
     <button class="tab" data-m="exam">✏️ Examen<span class="st"></span></button>
   </div>
   <div class="body" id="body"></div>
+</section>
+
+<section id="album" class="screen">
+  <div class="top">
+    <button class="back" id="aback" aria-label="Volver">←</button>
+    <div class="ttl"><h2>🃏 Álbum de cromos</h2><small id="asub"></small></div>
+  </div>
+  <div class="body"><div class="guide">__MIC__<div class="bubble">Cada bloque completo (las dos estrellas) te da sus cromos. <b>Toca un cromo</b> para darle la vuelta y repasar.</div></div><div class="grid" id="grid"></div></div>
 </section>
 
 <div class="overlay" id="over"><div class="sheet" id="sheet"></div></div>
@@ -233,56 +308,136 @@ function MIC(mood){
 const guide=(mood,html)=>`<div class="guide">${MIC(mood)}<div class="bubble">${html}</div></div>`;
 
 /* ---------- iconos ---------- */
+const G='#3c9a3c',GL='#8fd16f',GD='#2c6f2c',P='#7a52c7',PL='#c9b5ef';
 const IC={
-bact:`<svg viewBox="0 0 64 64"><path d="M50 22c6-6 8 2 12-3" fill="none" stroke="#3c9a3c" stroke-width="2.5" stroke-linecap="round"/><path d="M14 44c-5 4-9-2-12 3" fill="none" stroke="#3c9a3c" stroke-width="2.5" stroke-linecap="round"/><rect x="8" y="20" width="48" height="24" rx="12" transform="rotate(-25 32 32)" fill="#8fd16f" stroke="#fff" stroke-width="3"/><rect x="8" y="20" width="48" height="24" rx="12" transform="rotate(-25 32 32)" fill="none" stroke="#3c9a3c" stroke-width="2"/><path d="M22 36c4-6 8 2 12-4s6 0 8-3" fill="none" stroke="#2c6f2c" stroke-width="2.2" stroke-linecap="round"/><circle cx="24" cy="30" r="2" fill="#2c6f2c"/><circle cx="41" cy="35" r="1.8" fill="#2c6f2c"/></svg>`,
-proto:`<svg viewBox="0 0 64 64"><path d="M14 30c-6-8 4-16 10-12 2-8 14-10 18-2 8-2 14 6 9 12 6 4 3 14-5 13-2 8-14 9-18 3-7 4-16-2-13-8-5-1-6-5-1-6z" fill="#c9b5ef" stroke="#fff" stroke-width="3"/><path d="M14 30c-6-8 4-16 10-12 2-8 14-10 18-2 8-2 14 6 9 12 6 4 3 14-5 13-2 8-14 9-18 3-7 4-16-2-13-8-5-1-6-5-1-6z" fill="none" stroke="#7a52c7" stroke-width="2"/><circle cx="33" cy="32" r="7" fill="#7a52c7"/><circle cx="31" cy="30" r="2" fill="#e4d9fb"/><circle cx="20" cy="38" r="2" fill="#9f82dc"/><circle cx="45" cy="24" r="2.4" fill="#9f82dc"/></svg>`,
+bact:`<svg viewBox="0 0 64 64"><path d="M50 22c6-6 8 2 12-3" fill="none" stroke="${G}" stroke-width="2.5" stroke-linecap="round"/><path d="M14 44c-5 4-9-2-12 3" fill="none" stroke="${G}" stroke-width="2.5" stroke-linecap="round"/><rect x="8" y="20" width="48" height="24" rx="12" transform="rotate(-25 32 32)" fill="${GL}" stroke="#fff" stroke-width="3"/><rect x="8" y="20" width="48" height="24" rx="12" transform="rotate(-25 32 32)" fill="none" stroke="${G}" stroke-width="2"/><path d="M22 36c4-6 8 2 12-4s6 0 8-3" fill="none" stroke="${GD}" stroke-width="2.2" stroke-linecap="round"/><circle cx="24" cy="30" r="2" fill="${GD}"/><circle cx="41" cy="35" r="1.8" fill="${GD}"/></svg>`,
+proto:`<svg viewBox="0 0 64 64"><path d="M14 30c-6-8 4-16 10-12 2-8 14-10 18-2 8-2 14 6 9 12 6 4 3 14-5 13-2 8-14 9-18 3-7 4-16-2-13-8-5-1-6-5-1-6z" fill="${PL}" stroke="#fff" stroke-width="3"/><path d="M14 30c-6-8 4-16 10-12 2-8 14-10 18-2 8-2 14 6 9 12 6 4 3 14-5 13-2 8-14 9-18 3-7 4-16-2-13-8-5-1-6-5-1-6z" fill="none" stroke="${P}" stroke-width="2"/><circle cx="33" cy="32" r="7" fill="${P}"/><circle cx="31" cy="30" r="2" fill="#e4d9fb"/><circle cx="20" cy="38" r="2" fill="#9f82dc"/><circle cx="45" cy="24" r="2.4" fill="#9f82dc"/></svg>`,
 alga:`<svg viewBox="0 0 64 64"><path d="M32 60C26 46 18 40 22 26s-4-16 0-22c8 8 6 18 8 26s8 16 2 30z" fill="#4fbf7a" stroke="#fff" stroke-width="3"/><path d="M33 60c4-12 14-16 14-28s6-14 10-16c0 10-4 14-4 22s-6 18-20 22z" fill="#2e9c5c" stroke="#fff" stroke-width="3"/><path d="M31 60c-6-10-16-10-20-18s-8-8-8-12c8 0 10 6 14 10s12 8 14 20z" fill="#7fd59a" stroke="#fff" stroke-width="3"/><path d="M27 46c-2-8-6-14-4-24M42 44c2-6 6-10 8-18" fill="none" stroke="#1d6b3e" stroke-width="1.6" stroke-linecap="round"/></svg>`,
 hongo:`<svg viewBox="0 0 64 64"><path d="M25 34h14l3 22c0 3-20 3-20 0z" fill="#f6ead2" stroke="#fff" stroke-width="3"/><path d="M25 34h14l3 22c0 3-20 3-20 0z" fill="none" stroke="#c9a978" stroke-width="2"/><path d="M6 34C6 18 18 8 32 8s26 10 26 26z" fill="#e0484d" stroke="#fff" stroke-width="3"/><path d="M6 34C6 18 18 8 32 8s26 10 26 26z" fill="none" stroke="#a82c31" stroke-width="2"/><circle cx="20" cy="22" r="4" fill="#fff"/><circle cx="36" cy="16" r="3.2" fill="#fff"/><circle cx="46" cy="27" r="3.6" fill="#fff"/><circle cx="30" cy="28" r="2.6" fill="#fff"/></svg>`,
 virus:`<svg viewBox="0 0 64 64"><g stroke="#e07a10" stroke-width="3" stroke-linecap="round"><path d="M32 6v10M32 48v10M6 32h10M48 32h10M13 13l7 7M44 44l7 7M51 13l-7 7M20 44l-7 7"/></g><g fill="#e07a10"><circle cx="32" cy="5" r="3.5"/><circle cx="32" cy="59" r="3.5"/><circle cx="5" cy="32" r="3.5"/><circle cx="59" cy="32" r="3.5"/><circle cx="12" cy="12" r="3.5"/><circle cx="52" cy="52" r="3.5"/><circle cx="52" cy="12" r="3.5"/><circle cx="12" cy="52" r="3.5"/></g><circle cx="32" cy="32" r="17" fill="#ffb347" stroke="#fff" stroke-width="3"/><circle cx="32" cy="32" r="17" fill="none" stroke="#e07a10" stroke-width="2"/><circle cx="26" cy="28" r="3" fill="#e07a10"/><circle cx="37" cy="36" r="2.4" fill="#e07a10"/><circle cx="36" cy="25" r="1.8" fill="#e07a10"/></svg>`,
 micro:`<svg viewBox="0 0 64 64"><rect x="14" y="52" width="36" height="6" rx="3" fill="#0e7c72"/><path d="M38 10l7 4-12 21-7-4z" fill="#119c8f"/><rect x="34" y="6" width="10" height="7" rx="2" transform="rotate(30 39 9)" fill="#0e7c72"/><path d="M22 40h20a10 10 0 0 1-20 0z" fill="#9ad9cf"/><path d="M30 48v4M24 33l6 4" stroke="#0e7c72" stroke-width="4" stroke-linecap="round"/><circle cx="46" cy="38" r="8" fill="#fff" stroke="#119c8f" stroke-width="3"/><circle cx="44" cy="36" r="1.8" fill="#ef8a17"/><circle cx="48.5" cy="40" r="1.5" fill="#d9467a"/></svg>`,
 cell:`<svg viewBox="0 0 64 64"><ellipse cx="32" cy="32" rx="26" ry="22" fill="#cfe7fb" stroke="#fff" stroke-width="3"/><ellipse cx="32" cy="32" rx="26" ry="22" fill="none" stroke="#2f6fd6" stroke-width="2"/><circle cx="34" cy="30" r="8" fill="#2f6fd6"/><circle cx="32" cy="28" r="2.5" fill="#cfe7fb"/><ellipse cx="17" cy="38" rx="4" ry="2.5" fill="#7aa9ec"/><ellipse cx="47" cy="42" rx="4" ry="2.5" fill="#7aa9ec"/></svg>`,
 key:`<svg viewBox="0 0 64 64"><circle cx="20" cy="30" r="13" fill="#ffd34d" stroke="#fff" stroke-width="3"/><circle cx="20" cy="30" r="13" fill="none" stroke="#c99a00" stroke-width="2"/><circle cx="20" cy="30" r="5" fill="#fbf7ef" stroke="#c99a00" stroke-width="2"/><path d="M32 27h26v7h-5v6h-6v-6h-4v4h-5v-4h-6z" fill="#ffd34d" stroke="#c99a00" stroke-width="2" stroke-linejoin="round"/></svg>`,
-coco:`<svg viewBox="0 0 80 64"><g fill="#8fd16f" stroke="#3c9a3c" stroke-width="2.5"><circle cx="24" cy="24" r="11"/><circle cx="46" cy="22" r="11"/><circle cx="35" cy="42" r="11"/><circle cx="58" cy="42" r="9"/></g><g fill="#2c6f2c"><circle cx="22" cy="22" r="2"/><circle cx="47" cy="20" r="2"/><circle cx="34" cy="44" r="2"/></g></svg>`,
-bacilo:`<svg viewBox="0 0 80 64"><g fill="#8fd16f" stroke="#3c9a3c" stroke-width="2.5"><rect x="6" y="14" width="44" height="16" rx="8"/><rect x="28" y="36" width="44" height="16" rx="8"/></g><path d="M16 22c5-4 9 4 14 0s8 2 12-1M38 44c5-4 9 4 14 0s8 2 12-1" fill="none" stroke="#2c6f2c" stroke-width="2" stroke-linecap="round"/></svg>`,
-vibrio:`<svg viewBox="0 0 80 64"><path d="M18 18c18-10 40-4 46 14 2 8-6 10-9 4-6-12-20-14-32-8-7 3-12-6-5-10z" fill="#8fd16f" stroke="#3c9a3c" stroke-width="2.5"/><path class="flag" d="M60 40c4 8 10 6 14 12" fill="none" stroke="#3c9a3c" stroke-width="2.5" stroke-linecap="round"/><circle cx="34" cy="20" r="2" fill="#2c6f2c"/><circle cx="48" cy="22" r="2" fill="#2c6f2c"/></svg>`,
-espirilo:`<svg viewBox="0 0 80 64"><path d="M8 34c5-16 12-16 16 0s11 16 16 0 11-16 16 0 10 14 16 2" fill="none" stroke="#3c9a3c" stroke-width="11" stroke-linecap="round"/><path d="M8 34c5-16 12-16 16 0s11 16 16 0 11-16 16 0 10 14 16 2" fill="none" stroke="#8fd16f" stroke-width="6.5" stroke-linecap="round"/></svg>`
+trophy:`<svg viewBox="0 0 64 64"><path d="M18 8h28v14a14 14 0 0 1-28 0z" fill="#ffd34d" stroke="#fff" stroke-width="3"/><path d="M18 8h28v14a14 14 0 0 1-28 0z" fill="none" stroke="#c99a00" stroke-width="2"/><path d="M18 13H9c0 9 5 13 10 13M46 13h9c0 9-5 13-10 13" fill="none" stroke="#c99a00" stroke-width="3"/><rect x="28" y="36" width="8" height="10" fill="#e0b030"/><rect x="18" y="46" width="28" height="9" rx="3" fill="#8a6200"/><path d="M32 14l2 4 4 .5-3 3 1 4-4-2-4 2 1-4-3-3 4-.5z" fill="#fff"/></svg>`,
+coco:`<svg viewBox="0 0 80 64"><g fill="${GL}" stroke="${G}" stroke-width="2.5"><circle cx="24" cy="24" r="11"/><circle cx="46" cy="22" r="11"/><circle cx="35" cy="42" r="11"/><circle cx="58" cy="42" r="9"/></g><g fill="${GD}"><circle cx="22" cy="22" r="2"/><circle cx="47" cy="20" r="2"/><circle cx="34" cy="44" r="2"/></g></svg>`,
+bacilo:`<svg viewBox="0 0 80 64"><g fill="${GL}" stroke="${G}" stroke-width="2.5"><rect x="6" y="14" width="44" height="16" rx="8"/><rect x="28" y="36" width="44" height="16" rx="8"/></g><path d="M16 22c5-4 9 4 14 0s8 2 12-1M38 44c5-4 9 4 14 0s8 2 12-1" fill="none" stroke="${GD}" stroke-width="2" stroke-linecap="round"/></svg>`,
+vibrio:`<svg viewBox="0 0 80 64"><path d="M18 18c18-10 40-4 46 14 2 8-6 10-9 4-6-12-20-14-32-8-7 3-12-6-5-10z" fill="${GL}" stroke="${G}" stroke-width="2.5"/><path class="flag" d="M60 40c4 8 10 6 14 12" fill="none" stroke="${G}" stroke-width="2.5" stroke-linecap="round"/><circle cx="34" cy="20" r="2" fill="${GD}"/><circle cx="48" cy="22" r="2" fill="${GD}"/></svg>`,
+espirilo:`<svg viewBox="0 0 80 64"><path d="M8 34c5-16 12-16 16 0s11 16 16 0 11-16 16 0 10 14 16 2" fill="none" stroke="${G}" stroke-width="11" stroke-linecap="round"/><path d="M8 34c5-16 12-16 16 0s11 16 16 0 11-16 16 0 10 14 16 2" fill="none" stroke="${GL}" stroke-width="6.5" stroke-linecap="round"/></svg>`,
+paramecio:`<svg viewBox="0 0 80 64"><g stroke="${P}" stroke-width="1.6" stroke-linecap="round">${Array.from({length:22},(_,i)=>{const a=i/22*Math.PI*2,x=40+33*Math.cos(a),y=32+17*Math.sin(a),x2=40+39*Math.cos(a),y2=32+21*Math.sin(a);return`<line class="cil" style="animation-delay:${(i%4)*.12}s" x1="${x.toFixed(1)}" y1="${y.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`}).join('')}</g><ellipse cx="40" cy="32" rx="32" ry="16" fill="${PL}" stroke="${P}" stroke-width="2.5"/><path d="M30 30q8 8 16 0" fill="none" stroke="${P}" stroke-width="2"/><circle cx="52" cy="30" r="5" fill="${P}"/><circle cx="24" cy="34" r="3" fill="#9f82dc"/></svg>`,
+ameba:`<svg viewBox="0 0 80 64"><path class="blob" d="M14 34c-10-10 2-22 14-16 4-10 20-10 22 0 12-4 20 8 12 14 10 6 2 18-10 16-2 10-18 10-22 2-8 4-20-2-16-10-6-2-6-6 0-6z" fill="${PL}" stroke="${P}" stroke-width="2.5"/><circle cx="40" cy="32" r="7" fill="${P}"/><circle cx="38" cy="30" r="2" fill="#e4d9fb"/><circle cx="26" cy="38" r="2.5" fill="#9f82dc"/></svg>`,
+tripanosoma:`<svg viewBox="0 0 80 64"><path d="M8 36c8-14 18-14 28-6s18 8 28-2" fill="none" stroke="${P}" stroke-width="13" stroke-linecap="round"/><path d="M8 36c8-14 18-14 28-6s18 8 28-2" fill="none" stroke="${PL}" stroke-width="8" stroke-linecap="round"/><path class="flag" d="M64 28c4-6 8 2 14-4" fill="none" stroke="${P}" stroke-width="2.5" stroke-linecap="round"/><circle cx="30" cy="30" r="3.5" fill="${P}"/></svg>`,
+plasmodium:`<svg viewBox="0 0 80 64"><circle cx="40" cy="32" r="22" fill="#fde0e0" stroke="#d9467a" stroke-width="2.5"/><g fill="${PL}" stroke="${P}" stroke-width="1.8"><circle cx="32" cy="26" r="6"/><circle cx="46" cy="28" r="6"/><circle cx="38" cy="40" r="6"/></g><g fill="${P}"><circle cx="32" cy="26" r="2"/><circle cx="46" cy="28" r="2"/><circle cx="38" cy="40" r="2"/></g></svg>`,
+euglena:`<svg viewBox="0 0 80 64"><path d="M14 32c0-10 14-16 32-14 14 2 20 8 20 14s-6 12-20 14c-18 2-32-4-32-14z" fill="#9be39d" stroke="#2e9c5c" stroke-width="2.5"/><path class="flag" d="M66 30c6-8 8 4 13-4" fill="none" stroke="#2e9c5c" stroke-width="2.5" stroke-linecap="round"/><g fill="#2e9c5c"><ellipse cx="30" cy="30" rx="4" ry="2.5"/><ellipse cx="40" cy="36" rx="4" ry="2.5"/><ellipse cx="48" cy="28" rx="4" ry="2.5"/></g><circle cx="58" cy="30" r="3" fill="#e0484d"/></svg>`,
+volvox:`<svg viewBox="0 0 80 64"><circle cx="40" cy="32" r="26" fill="#d6f5d3" stroke="#2e9c5c" stroke-width="2.5"/><g fill="#4fbf7a">${Array.from({length:18},(_,i)=>{const a=i/18*Math.PI*2;return`<circle cx="${(40+21*Math.cos(a)).toFixed(1)}" cy="${(32+21*Math.sin(a)).toFixed(1)}" r="2.8"/>`}).join('')}</g><g fill="#2e9c5c"><circle cx="34" cy="28" r="5"/><circle cx="46" cy="38" r="4"/></g></svg>`,
+algaverde:`<svg viewBox="0 0 80 64"><path d="M40 62C20 50 8 36 14 20c4-10 14-14 18-8 2-10 14-12 16-2 8-6 18 0 16 10 10 4 6 20-6 22 2 12-8 18-18 20z" fill="#7fd59a" stroke="#2e9c5c" stroke-width="2.5"/><path d="M40 62c0-14-4-28-10-40M40 50c6-8 12-14 20-18M38 40c-8-4-14-10-18-16" fill="none" stroke="#2e9c5c" stroke-width="2" stroke-linecap="round"/></svg>`,
+algaroja:`<svg viewBox="0 0 80 64"><g fill="none" stroke-linecap="round"><path d="M40 62V36M40 44l-14-14M40 40l14-16M26 30l-8-10M26 30l2-12M54 24l-2-12M54 24l10-6M40 36l-4-16M40 36l6-18" stroke="#b3203a" stroke-width="5"/><path d="M40 62V36M40 44l-14-14M40 40l14-16M26 30l-8-10M26 30l2-12M54 24l-2-12M54 24l10-6M40 36l-4-16M40 36l6-18" stroke="#f0627b" stroke-width="2.5"/></g></svg>`,
+algaparda:`<svg viewBox="0 0 80 64"><path d="M40 62c-2-16 0-30-4-44" fill="none" stroke="#7a5524" stroke-width="4" stroke-linecap="round"/><g fill="#b98a4a" stroke="#7a5524" stroke-width="2"><ellipse cx="28" cy="20" rx="10" ry="5" transform="rotate(-30 28 20)"/><ellipse cx="50" cy="26" rx="11" ry="5" transform="rotate(25 50 26)"/><ellipse cx="28" cy="40" rx="11" ry="5" transform="rotate(-20 28 40)"/><ellipse cx="52" cy="46" rx="11" ry="5" transform="rotate(20 52 46)"/><ellipse cx="38" cy="10" rx="8" ry="4" transform="rotate(-70 38 10)"/></g></svg>`,
+levadura:`<svg viewBox="0 0 80 64"><g fill="#fff1c9" stroke="#c9a14a" stroke-width="2.5"><ellipse cx="30" cy="36" rx="16" ry="13"/><ellipse cx="50" cy="24" rx="10" ry="8"/><ellipse cx="58" cy="44" rx="7" ry="6"/></g><g fill="#c9a14a"><circle cx="30" cy="36" r="4"/><circle cx="50" cy="24" r="2.6"/></g></svg>`,
+moho:`<svg viewBox="0 0 80 64"><path d="M6 50c0-14 10-22 34-22s34 8 34 22z" fill="#e8c48a" stroke="#b78a45" stroke-width="2.5"/><g stroke="#6aa08a" stroke-width="1.6" stroke-linecap="round">${Array.from({length:14},(_,i)=>{const x=16+i*3.6,h=8+((i*7)%9);return`<line x1="${x}" y1="${34}" x2="${x+(i%2?2:-2)}" y2="${34-h}"/>`}).join('')}</g><g fill="#3f7d66">${Array.from({length:14},(_,i)=>{const x=16+i*3.6,h=8+((i*7)%9);return`<circle cx="${x+(i%2?2:-2)}" cy="${34-h}" r="2.4"/>`}).join('')}</g></svg>`,
+champi:`<svg viewBox="0 0 64 64"><path d="M25 34h14l3 22c0 3-20 3-20 0z" fill="#f6ead2" stroke="#c9a978" stroke-width="2.5"/><path d="M6 34C6 18 18 8 32 8s26 10 26 26z" fill="#c9a37a" stroke="#8a6440" stroke-width="2.5"/><ellipse cx="24" cy="20" rx="5" ry="3" fill="#e2c7a6"/></svg>`,
+liquen:`<svg viewBox="0 0 80 64"><rect x="4" y="40" width="72" height="20" rx="8" fill="#b8b2a6" stroke="#8a8478" stroke-width="2"/><g fill="#c7d96b" stroke="#8aa034" stroke-width="2"><path d="M14 42c0-10 8-14 14-10 4-8 14-6 14 2 6-4 14 0 12 8z"/><path d="M48 42c0-8 6-12 12-8 4-4 12 0 10 8z"/></g><g fill="#8aa034"><circle cx="24" cy="36" r="2"/><circle cx="36" cy="34" r="2"/><circle cx="60" cy="37" r="2"/></g></svg>`
 };
+function setaFig(hl){
+  const parts={
+    sombrerillo:`<path d="M30 60C30 30 60 14 100 14s70 16 70 46z" fill="#e0484d" stroke="#a82c31" stroke-width="2.5"/><g fill="#fff"><circle cx="70" cy="34" r="6"/><circle cx="104" cy="26" r="5"/><circle cx="134" cy="38" r="6"/></g>`,
+    laminillas:`<path d="M34 60h132l-8 8H42z" fill="#f4d2a8" stroke="#c9a978" stroke-width="2"/><g stroke="#c9a978" stroke-width="1.5">${Array.from({length:14},(_,i)=>`<line x1="${46+i*8.5}" y1="61" x2="${48+i*8}" y2="67"/>`).join('')}</g>`,
+    anillo:`<path d="M84 80q16 8 32 0l-3 8q-13 5-26 0z" fill="#fff" stroke="#b9a07a" stroke-width="2"/>`,
+    pie:`<path d="M88 68h24l4 56H84z" fill="#f6ead2" stroke="#c9a978" stroke-width="2.5"/>`,
+    volva:`<path d="M76 124c0-12 48-12 48 0 0 10-48 10-48 0z" fill="#efe1c6" stroke="#b9a07a" stroke-width="2.5"/>`,
+    hifas:`<g stroke="#a58a5e" stroke-width="2" fill="none" stroke-linecap="round"><path d="M86 130c-8 8-20 6-30 14M94 132c-2 8-10 12-12 20M106 132c4 8 0 14 8 20M114 130c10 6 20 4 30 12"/></g>`};
+  const order=['hifas','volva','pie','anillo','laminillas','sombrerillo'];
+  return `<svg viewBox="0 0 200 160"><rect x="0" y="122" width="200" height="38" fill="#e9dcc3" opacity=".7"/>${order.map(k=>`<g class="part ${hl&&hl!==k?'':hl?'hl':''}" ${hl&&hl!==k?'opacity=".35"':''}>${parts[k]}</g>`).join('')}
+  ${hl?`<g><circle cx="${{sombrerillo:100,laminillas:62,anillo:124,pie:100,volva:132,hifas:64}[hl]}" cy="${{sombrerillo:30,laminillas:72,anillo:84,pie:104,volva:124,hifas:146}[hl]}" r="9" fill="#ffd34d" stroke="#1f2a37" stroke-width="2"/><text x="${{sombrerillo:100,laminillas:62,anillo:124,pie:100,volva:132,hifas:64}[hl]}" y="${{sombrerillo:34,laminillas:76,anillo:88,pie:108,volva:128,hifas:150}[hl]}" font-family="Fredoka,sans-serif" font-weight="700" font-size="12" text-anchor="middle">?</text></g>`:''}</svg>`}
+const icon=k=>{if(!k)return '';if(k.startsWith('seta:'))return setaFig(k.slice(5));if(k==='MIC')return MIC('happy');return IC[k]||''};
 
 /* ---------- figuras de Aprender ---------- */
-const cells=(arr,cls)=>`<div class="row ${cls||''}">${arr.map(([v,n,s],i)=>`<div class="cell" ${arr.style?arr.style(i):''}>${IC[v]?IC[v]:`<span class="e">${v}</span>`}${n}<small>${s}</small></div>`).join('')}</div>`;
+const cells=(arr,cls,style)=>`<div class="row ${cls||''}">${arr.map(([v,n,s],i)=>`<div class="cell" ${style?style(i):''}>${IC[v]?IC[v]:`<span class="e">${v}</span>`}${n}<small>${s}</small></div>`).join('')}</div>`;
+const lab=t=>`<div class="lab">${t}</div>`;
 const FIG={
-mapa:()=>cells([['bact','Monera','bacterias'],['proto','Protoctista','protozoos y algas'],['hongo','Fungi','hongos'],['virus','Virus','¡no está vivo!']])+
-  `<div class="lab">⬅️ seres vivos (con células) · · · · ser no vivo ➡️</div>`,
-bacteria:()=>`<svg viewBox="0 0 320 130"><path class="flag" d="M262 66c14-14 22 10 36-6s14 6 18 0" fill="none" stroke="#3c9a3c" stroke-width="3" stroke-linecap="round"/>
-  <rect x="40" y="30" width="226" height="74" rx="37" fill="#8fd16f" stroke="#3c9a3c" stroke-width="3"/>
-  <rect x="48" y="38" width="210" height="58" rx="29" fill="#c4ebb1"/>
-  <path d="M90 68c10-16 20 12 30-4s18 10 28-6 18 10 26-2 14 8 22 0" fill="none" stroke="#2c6f2c" stroke-width="3.5" stroke-linecap="round"/>
+mapa:()=>cells([['bact','Monera','bacterias'],['proto','Protoctista','protozoos y algas'],['hongo','Fungi','hongos'],['virus','Virus','¡no está vivo!']])+lab('⬅️ seres vivos (con células) · · · · ser no vivo ➡️'),
+bacteria:()=>`<svg viewBox="0 0 320 130"><path class="flag" d="M262 66c14-14 22 10 36-6s14 6 18 0" fill="none" stroke="${G}" stroke-width="3" stroke-linecap="round"/>
+  <rect x="40" y="30" width="226" height="74" rx="37" fill="${GL}" stroke="${G}" stroke-width="3"/><rect x="48" y="38" width="210" height="58" rx="29" fill="#c4ebb1"/>
+  <path d="M90 68c10-16 20 12 30-4s18 10 28-6 18 10 26-2 14 8 22 0" fill="none" stroke="${GD}" stroke-width="3.5" stroke-linecap="round"/>
   <g font-family="Nunito,sans-serif" font-weight="800" font-size="13" fill="#1f2a37"><text x="92" y="18">ADN libre (¡no hay núcleo!)</text><text x="262" y="124">flagelo</text><text x="2" y="126">citoplasma</text></g>
   <path d="M140 23l2 34M276 112l10-38M44 114l22-20" stroke="#6b7280" stroke-width="1.5"/></svg>`,
 formas:()=>cells([['coco','Coco','esfera'],['bacilo','Bacilo','bastón'],['vibrio','Vibrio','coma'],['espirilo','Espirilo','espiral']]),
-nutri:()=>cells([['☀️','Autótrofa','fabrica su alimento'],['🍂','Saprófita','come restos'],['🤝','Simbiótica','todos ganan'],['🤒','Patógena','causa enfermedad']])+
-  `<div class="lab">☀️ autótrofa · · · · · · heterótrofas: 🍂 🤝 🤒</div>`,
-resp:()=>cells([['😮‍💨','Aerobia','«¡Necesito O₂!»'],['🤷','Facultativa','«Con O₂ o sin él, sobrevivo»'],['☠️','Estricta','«¡El O₂ me mata!»']],'r3')+
-  `<div class="lab">aerobia · · · · · · anaerobias (no usan el O₂)</div>`,
-biparticion:()=>`<svg viewBox="0 0 320 96"><g class="bipL"><ellipse cx="140" cy="50" rx="34" ry="30" fill="#8fd16f" stroke="#3c9a3c" stroke-width="3"/><path d="M126 50c5-8 10 6 16-2" fill="none" stroke="#2c6f2c" stroke-width="3" stroke-linecap="round"/></g>
-  <g class="bipR"><ellipse cx="180" cy="50" rx="34" ry="30" fill="#8fd16f" stroke="#3c9a3c" stroke-width="3"/><path d="M172 50c5-8 10 6 16-2" fill="none" stroke="#2c6f2c" stroke-width="3" stroke-linecap="round"/></g>
-  </svg><div class="lab">① crece y duplica su ADN ➜ ② se estrangula ➜ ③ dos hijas</div>`,
-impo:()=>{const a=[['🌱','Suelos','los fertilizan'],['🧀','Alimentos','queso, yogur, vinagre'],['💊','Medicinas','insulina, hormonas'],['💧','Aguas','las depuran'],['🫧','Oxígeno','las fotosintéticas'],['🛡️','Flora','defensas y nutrientes'],['🤢','Alimentos','los contaminan'],['🤒','Enfermedades','e intoxicaciones']];
-  a.style=i=>`style="background:${i>5?'#fdecec':'#e9f7ee'}"`;return cells(a)+`<div class="lab">😇 verdes: beneficiosas · 😈 rojas: perjudiciales</div>`}
+nutri:()=>cells([['☀️','Autótrofa','fabrica su alimento'],['🍂','Saprófita','come restos'],['🤝','Simbiótica','todos ganan'],['🤒','Patógena','causa enfermedad']])+lab('☀️ autótrofa · · · · · · heterótrofas: 🍂 🤝 🤒'),
+resp:()=>cells([['😮‍💨','Aerobia','«¡Necesito O₂!»'],['🤷','Facultativa','«Con O₂ o sin él, sobrevivo»'],['☠️','Estricta','«¡El O₂ me mata!»']],'r3')+lab('aerobia · · · · · · anaerobias (no usan el O₂)'),
+biparticion:()=>`<svg viewBox="0 0 320 96"><g class="bipL"><ellipse cx="140" cy="50" rx="34" ry="30" fill="${GL}" stroke="${G}" stroke-width="3"/><path d="M126 50c5-8 10 6 16-2" fill="none" stroke="${GD}" stroke-width="3" stroke-linecap="round"/></g>
+  <g class="bipR"><ellipse cx="180" cy="50" rx="34" ry="30" fill="${GL}" stroke="${G}" stroke-width="3"/><path d="M172 50c5-8 10 6 16-2" fill="none" stroke="${GD}" stroke-width="3" stroke-linecap="round"/></g></svg>`+lab('① crece y duplica su ADN ➜ ② se estrangula ➜ ③ dos hijas'),
+impo:()=>cells([['🌱','Suelos','los fertilizan'],['🧀','Alimentos','queso, yogur, vinagre'],['💊','Medicinas','insulina, hormonas'],['💧','Aguas','las depuran'],['🫧','Oxígeno','las fotosintéticas'],['🛡️','Flora','defensas y nutrientes'],['🤢','Alimentos','los contaminan'],['🤒','Enfermedades','e intoxicaciones']],'',i=>`style="background:${i>5?'#fdecec':'#e9f7ee'}"`)+lab('😇 verdes: beneficiosas · 😈 rojas: perjudiciales'),
+protozoo:()=>`<svg viewBox="0 0 320 120"><path class="blob" d="M14 34c-10-10 2-22 14-16 4-10 20-10 22 0 12-4 20 8 12 14 10 6 2 18-10 16-2 10-18 10-22 2-8 4-20-2-16-10-6-2-6-6 0-6z" transform="translate(90 6) scale(1.7)" fill="${PL}" stroke="${P}" stroke-width="1.6"/>
+  <circle cx="160" cy="60" r="13" fill="${P}"/><circle cx="156" cy="56" r="3.5" fill="#e4d9fb"/>
+  <g font-family="Nunito,sans-serif" font-weight="800" font-size="13" fill="#1f2a37"><text x="226" y="28">núcleo</text><text x="6" y="112">citoplasma</text><text x="200" y="112">💧 vive en agua</text></g>
+  <path d="M224 26l-52 30M60 104l56-34" stroke="#6b7280" stroke-width="1.5"/></svg>`+lab('1 célula · eucariota (con núcleo) · tipo animal · heterótrofo'),
+movers:()=>cells([['paramecio','Ciliados','cilios · paramecio'],['tripanosoma','Flagelados','flagelo · tripanosoma'],['ameba','Rizópodos','pseudópodos · ameba'],['plasmodium','Esporozoos','inmóviles · Plasmodium']]),
+nutriproto:()=>cells([['🦠','Parásitos','causan enfermedad'],['🍂','Saprófitos','restos en descomposición'],['🦈','Depredadores','cazan']],'r3')+lab('todos heterótrofos'),
+impoproto:()=>cells([['💧','Aguas','las depuran'],['🌱','Suelos','ayudan a fertilizarlos'],['🐟','Zooplancton','cadena alimentaria'],['🧠','Ameba','→ amebiosis'],['🦟','Plasmodium','→ malaria (mosquito Anopheles)'],['🐱','Toxoplasma','→ toxoplasmosis']],'r3',i=>`style="background:${i>2?'#fdecec':'#e9f7ee'}"`)+lab('😇 verdes: beneficiosos · 😈 rojos: perjudiciales'),
+celulasalga:()=>cells([['euglena','Euglena','unicelular'],['volvox','Volvox','unicelular en colonia'],['algaverde','Lechuga de mar','pluricelular'],['🍣','Nori, wakame','pluricelulares']]),
+coloresalga:()=>cells([['algaverde','Verdes','clorofitas'],['algaroja','Rojas','rodofitas'],['algaparda','Pardas','feofitas']],'r3')+lab('el color lo da el pigmento que más tienen'),
+profundidad:()=>`<svg viewBox="0 0 320 170"><defs><linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfe6f5"/><stop offset="1" stop-color="#2b5d8f"/></linearGradient></defs>
+  <rect x="0" y="16" width="320" height="154" fill="url(#sea)"/><path d="M0 16q20-6 40 0t40 0 40 0 40 0 40 0 40 0 40 0 40 0" fill="none" stroke="#fff" stroke-width="2"/>
+  <g class="sun"><circle cx="290" cy="10" r="9" fill="#ffd34d"/></g>
+  <path d="M0 60L70 62 120 104 190 112 250 156 320 162V170H0z" fill="#e8d3a6"/>
+  <g transform="translate(20 22) scale(.55)">${IC.algaverde.replace(/<\/?svg[^>]*>/g,'')}</g>
+  <g transform="translate(130 66) scale(.6)">${IC.algaparda.replace(/<\/?svg[^>]*>/g,'')}</g>
+  <g transform="translate(238 118) scale(.55)">${IC.algaroja.replace(/<\/?svg[^>]*>/g,'')}</g>
+  <g font-family="Nunito,sans-serif" font-weight="800" font-size="12"><text x="72" y="40" fill="#1d6b3e">🟢 verdes: arriba</text><text x="176" y="84" fill="#5a3d14">🟤 pardas: en medio</text><text x="146" y="150" fill="#fff">🔴 rojas: abajo</text></g></svg>`,
+fotosintesis:()=>`<svg viewBox="0 0 320 120"><g class="sun"><circle cx="160" cy="22" r="14" fill="#ffd34d"/>${Array.from({length:8},(_,i)=>{const a=i/8*Math.PI*2;return`<line x1="${(160+18*Math.cos(a)).toFixed(1)}" y1="${(22+18*Math.sin(a)).toFixed(1)}" x2="${(160+24*Math.cos(a)).toFixed(1)}" y2="${(22+24*Math.sin(a)).toFixed(1)}" stroke="#f0b400" stroke-width="3" stroke-linecap="round"/>`}).join('')}</g>
+  <g font-family="Fredoka,Nunito,sans-serif" font-weight="600" font-size="14" text-anchor="middle"><rect x="6" y="56" width="96" height="44" rx="12" fill="#fff" stroke="#d8cfbf"/><text x="54" y="76">materia</text><text x="54" y="92">inorgánica</text>
+  <path d="M108 78h92" stroke="#3c9a3c" stroke-width="4" marker-end="url(#ar)"/><defs><marker id="ar" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto"><path d="M0 0L8 4L0 8z" fill="#3c9a3c"/></marker></defs>
+  <text x="154" y="70" font-size="11" fill="#3c9a3c">fotosíntesis</text><path d="M160 40v26" stroke="#f0b400" stroke-width="2" stroke-dasharray="3 3"/>
+  <rect x="206" y="50" width="108" height="56" rx="12" fill="#e9f7ee" stroke="#9ad3ac"/><text x="260" y="72">materia</text><text x="260" y="88">orgánica</text><text x="260" y="102" font-size="13" fill="#1e4fa8">+ O₂</text></g>
+  <g fill="#9fd0f0"><circle class="bubbleup" cx="300" cy="50" r="4"/><circle class="bubbleup" style="animation-delay:.8s" cx="290" cy="50" r="3"/><circle class="bubbleup" style="animation-delay:1.6s" cx="306" cy="50" r="3"/></g></svg>`,
+impoalga:()=>cells([['🐟','Hábitat','de peces'],['🫧','Oxígeno','fotosíntesis'],['🔗','Fitoplancton','base de la cadena'],['🥗','Alimento','personas y ganado'],['🌱','Fertilizantes',''],['🍮','Agar-agar','cultivos y gelatinas'],['🌊','Mareas rojas','toxinas']],'',i=>`style="background:${i>5?'#fdecec':'#e9f7ee'}"`),
+tiposhongo:()=>cells([['levadura','Levaduras','unicelulares'],['moho','Mohos','pan y fruta'],['champi','Setas','champiñón…'],['liquen','Líquenes','hongo + alga']])+lab('levaduras = unicelulares · mohos y setas = pluricelulares (hifas → micelio)'),
+seta:()=>`<div style="display:grid;grid-template-columns:1.1fr 1fr;gap:8px;align-items:center">${setaFig()}<div style="font-weight:800;font-size:13.5px;line-height:1.7">
+  <span style="color:#a82c31">● Sombrerillo</span><br><span style="color:#b9874c">● Laminillas (esporas)</span><br><span style="color:#8a7350">● Anillo</span><br><span style="color:#b39565">● Pie</span><br><span style="color:#9a8258">● Volva</span><br><span style="color:#7d6640">● Hifas → micelio</span></div></div>`,
+ciclohongo:()=>`<svg viewBox="0 0 320 130"><rect x="0" y="86" width="320" height="44" fill="#e9dcc3"/>
+  <g stroke="#a58a5e" stroke-width="2" fill="none" stroke-linecap="round"><path d="M40 96c-10 8-20 6-30 14M50 98c4 8 0 14 8 20M60 96c10 6 20 4 30 12"/><path d="M160 96c-10 8-20 6-30 14M170 98c4 8 0 14 8 20M180 96c10 6 20 4 30 12"/></g>
+  <g transform="translate(138 30) scale(.8)">${IC.hongo.replace(/<\/?svg[^>]*>/g,'')}</g>
+  <g transform="translate(250 30) scale(.8)">${IC.hongo.replace(/<\/?svg[^>]*>/g,'')}</g>
+  <g fill="#8a6440">${[-18,-8,4,14,24].map((dx,i)=>`<circle class="spore" style="--dx:${dx}px;animation-delay:${i*.5}s" cx="276" cy="64" r="2.5"/>`).join('')}</g>
+  <g font-family="Fredoka,sans-serif" font-weight="700" font-size="15" fill="#1f2a37"><text x="40" y="78">①</text><text x="164" y="22">②</text><text x="280" y="22">③</text></g>
+  <path d="M92 70l36-12M206 46h34" stroke="#6b7280" stroke-width="2" stroke-dasharray="4 4"/></svg>`+lab('① micelio bajo tierra ➜ ② se forma la seta ➜ ③ libera esporas'),
+globos:()=>`<div style="text-align:center;font-weight:800;font-size:14px;margin-bottom:6px">🧪 El experimento de los globos (¡como el de tu proyecto!)</div>
+  <svg viewBox="0 0 320 180" id="gsvg">${[['A','con levadura','50 g de azúcar',60],['B','con levadura','100 g de azúcar',160],['C','SIN levadura','50 g de azúcar',260]].map(([l,a,b,x])=>`
+  <g><path class="balloon" id="bal${l}" d="M${x} 66c-22 0-26-40 0-40s22 40 0 40z" fill="${{A:'#ff8fa3',B:'#7cc4ff',C:'#ffd34d'}[l]}" stroke="#fff" stroke-width="2"/>
+  <rect x="${x-9}" y="64" width="18" height="12" rx="3" fill="#cfe3ef"/><path d="M${x-14} 76h28v70a8 8 0 0 1-8 8h-12a8 8 0 0 1-8-8z" fill="#e8f4fb" stroke="#9cc3d8" stroke-width="2"/>
+  <rect x="${x-13}" y="112" width="26" height="40" rx="6" fill="#f6e6b8" opacity=".85"/>
+  <text x="${x}" y="134" font-family="Fredoka,sans-serif" font-weight="700" font-size="18" text-anchor="middle" fill="#1f2a37">${l}</text>
+  <text x="${x}" y="164" font-family="Nunito,sans-serif" font-weight="800" font-size="10" text-anchor="middle" fill="#6b7280">${a}</text><text x="${x}" y="176" font-family="Nunito,sans-serif" font-weight="800" font-size="10" text-anchor="middle" fill="#6b7280">${b}</text></g>`).join('')}</svg>
+  <div id="gq" style="text-align:center;font-weight:800;font-size:14px">¿Qué globo crees que <u>no</u> se hinchará?</div>
+  <div class="lab2" id="gbtn"><button data-g="A">A</button><button data-g="B">B</button><button data-g="C">C</button></div>`,
+impohongo:()=>cells([['🍄','Comestibles','trufas, champiñón'],['🌱','Humus','del suelo'],['💊','Penicilina','de algunos mohos'],['🍞','Pan, vino','levaduras'],['🏭','Líquenes','indican contaminación'],['🦶','Pie de atleta','enfermedad']],'r3',i=>`style="background:${i>4?'#fdecec':'#e9f7ee'}"`)
+};
+const FIG_INIT={
+globos:()=>{document.querySelectorAll('#gbtn button').forEach(b=>b.onclick=()=>{
+  const ok=b.dataset.g==='C';tone(ok);
+  document.querySelectorAll('#gbtn button').forEach(x=>{x.disabled=true;if(x.dataset.g==='C')x.classList.add('ok');else if(x===b)x.classList.add('bad');else x.classList.add('dim')});
+  $('#gq').textContent='⏳ Esperamos un rato…';
+  setTimeout(()=>{$('#balA').style.transform='scale(1)';$('#balB').style.transform='scale(1.15)';$('#balC').style.transform='scale(.25)'},300);
+  setTimeout(()=>{$('#gq').innerHTML=(ok?'✅ ¡Bien pensado! ':'🤔 ')+'Sin levadura (C) no hay fermentación: no se libera <b>CO₂</b> y el globo no se hincha. En A y B las levaduras fermentan el azúcar y sueltan CO₂.'},2600)})}
 };
 
 /* ---------- estado ---------- */
-const PASS=0.75;
+const PASS=0.75,FINAL_N=20,LIVES=3;
 const KEY='laura-bio-t2-v1';
-let S={stars:{},best:{},seen:{},unlockAll:false};
+let S={stars:{},best:{},seen:{},unlockAll:false,cards:{},hi:0};
 try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 const has=(b,m)=>!!S.stars[b+'-'+m];
-function unlocked(i){if(BLOCKS[i].soon)return false;if(S.unlockAll||i===0)return true;const p=BLOCKS[i-1];return has(p.id,'sort')&&has(p.id,'exam')}
+const done=b=>has(b,'sort')&&has(b,'exam');
+const NB=BLOCKS.filter(b=>!b.final);
+function unlocked(i){const b=BLOCKS[i];if(S.unlockAll||i===0)return true;
+  if(b.final)return NB.every(x=>done(x.id));return done(BLOCKS[i-1].id)}
+const cardOwned=c=>c.b==='final'?has('final','run'):done(c.b);
+const totalStars=()=>Object.values(S.stars).filter(Boolean).length;
+const TSTARS=NB.length*2+1;
 
 /* ---------- utilidades ---------- */
 const $=s=>document.querySelector(s);
-const md=t=>t.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');
+const md=t=>t.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\*(.+?)\*/g,'<i>$1</i>');
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 const pick=a=>a[Math.random()*a.length|0];
 const cssv=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
@@ -297,49 +452,74 @@ function confetti(){const c=document.createElement('div');c.className='confetti'
   for(let i=0;i<60;i++){const e=document.createElement('i');e.style.left=Math.random()*100+'%';e.style.background=cols[i%6];
     e.style.animationDelay=Math.random()*.5+'s';e.style.animationDuration=1.2+Math.random()*.9+'s';c.appendChild(e)}
   document.body.appendChild(c);setTimeout(()=>c.remove(),2600)}
-const OK_MSG=['¡Bien!','¡Eso es!','¡Correcto!','¡Genial!','¡Muy bien!','¡Exacto!'];
+const OK_MSG=['¡Bien!','¡Eso es!','¡Correcto!','¡Genial!','¡Muy bien!','¡Exacto!','¡Crack!'];
 const NO_MSG=['¡Casi!','Uy, no era esa','No pasa nada','¡Ups!'];
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id))}
 
-/* ---------- portada del tema ---------- */
+/* ---------- portada: camino ---------- */
 function renderHome(){
-  const n=Object.values(S.stars).filter(Boolean).length,T=10;
-  $('#tot').textContent=n+'/'+T;$('#totbar').style.width=(100*n/T)+'%';
-  const msg=n===0?'¡Hola, Laura! Soy <b>Micro</b> 👋 Te acompaño por el mundo de lo diminuto. Empieza por el bloque 1.':
-    n<T?`¡Llevas <b>${n} ${n===1?'estrella':'estrellas'}</b>! Sigue así, que el examen está cada vez más cerca. 💪`:'¡Tienes todas las estrellas! Eres una experta en microorganismos. 🏆';
+  const n=totalStars(),owned=ALBUM.filter(cardOwned).length;
+  $('#tot').textContent=n+'/'+TSTARS;$('#totbar').style.width=(100*n/TSTARS)+'%';$('#albc').textContent=owned+'/'+ALBUM.length;
+  const curI=BLOCKS.findIndex((b,i)=>unlocked(i)&&!(b.final?has('final','run'):done(b.id)));
+  const msg=n===0?'¡Hola, Laura! Soy <b>Micro</b> 👋 Sigue el camino: cada bloque completo te da <b>cromos</b> para tu álbum. ¡Empieza por el 1!':
+    n<TSTARS?`¡Llevas <b>${n} ${n===1?'estrella':'estrellas'}</b> y <b>${owned} cromos</b>! ${curI>=0?`Te toca: <b>${BLOCKS[curI].name}</b>.`:''} 💪`:'¡Lo tienes TODO! Eres una experta en microorganismos. 🏆';
   $('#hguide').outerHTML=`<div class="guide" id="hguide">${MIC(n?'wow':'happy')}<div class="bubble">${msg}</div></div>`;
-  $('#blocks').innerHTML=BLOCKS.map((b,i)=>{
-    const u=unlocked(i);
-    const st=b.soon?`<div class="stars"><span>Próximamente</span></div>`:
+  $('#path').innerHTML=`<svg class="trail" id="trail"></svg>`+BLOCKS.map((b,i)=>{
+    const u=unlocked(i),r=i%2===1;
+    const p=b.final?(has('final','run')?100:0):((has(b.id,'sort')?50:0)+(has(b.id,'exam')?50:0));
+    const st=b.final?`<div class="stars"><span class="${has('final','run')?'got':''}">${has('final','run')?'🏆':'🏁'} ${S.hi?'Récord: '+S.hi+' pts':'20 preguntas · ❤️❤️❤️'}</span></div>`:
       `<div class="stars"><span class="${has(b.id,'sort')?'got':''}">${has(b.id,'sort')?'⭐':'☆'} Clasificar</span><span class="${has(b.id,'exam')?'got':''}">${has(b.id,'exam')?'⭐':'☆'} Examen</span></div>`;
-    return `<button class="bcard ${b.soon?'soon':u?'':'locked'}" data-i="${i}">
-      <div class="bnum" style="background:color-mix(in srgb,var(${b.c}) 16%,white)">${IC[b.ic]}</div>
-      <div class="binfo"><h3>${b.final?'':(i+1)+'. '}${b.name}</h3><p>${b.desc}</p>${st}</div>
-      <span class="side">${b.soon?'🕓':u?'›':'🔒'}</span></button>`}).join('');
-  document.querySelectorAll('.bcard').forEach(el=>el.onclick=()=>{
+    return `<div class="stop ${r?'r':''} ${u?'':'locked'} ${i===curI?'cur':''}" data-i="${i}">
+      <button class="node" style="--c:var(${b.c});--p:${p}" aria-label="${b.name}">${IC[b.final?'trophy':b.ic]}${u?(p===100?'<span class="lk">✅</span>':''):'<span class="lk">🔒</span>'}</button>
+      ${i===curI&&n>0?`<div class="here">${MIC('happy')}</div>`:''}
+      <div class="plabel"><h3>${b.final?'🏁 ':(i+1)+'. '}${b.name}</h3><p>${b.desc}</p>${st}</div></div>`}).join('');
+  requestAnimationFrame(drawTrail);
+  document.querySelectorAll('.stop').forEach(el=>el.onclick=()=>{
     const i=+el.dataset.i,b=BLOCKS[i];
-    if(b.soon)return msgSheet('think','Muy pronto','Este bloque todavía se está preparando.');
-    if(!unlocked(i))return msgSheet('think','Bloque cerrado','Consigue las dos estrellas del bloque anterior para abrirlo.');
+    if(!unlocked(i))return msgSheet('think','Bloque cerrado',b.final?'Completa los 5 bloques (las dos estrellas de cada uno) para abrir el Desafío.':'Consigue las dos estrellas del bloque anterior para abrirlo.');
+    if(b.final)return openFinal();
     openBlock(i,'learn')});
 }
+function drawTrail(){const path=$('#path'),svg=$('#trail');if(!svg)return;const R=path.getBoundingClientRect();
+  const pts=[...document.querySelectorAll('.node')].map(n=>{const r=n.getBoundingClientRect();return[r.left-R.left+r.width/2,r.top-R.top+r.height/2]});
+  let d='';pts.forEach((p,i)=>{if(!i){d=`M${p[0]} ${p[1]}`;return}const q=pts[i-1],my=(q[1]+p[1])/2;d+=` C${q[0]} ${my} ${p[0]} ${my} ${p[0]} ${p[1]}`});
+  svg.innerHTML=`<path d="${d}" fill="none" stroke="#d9cfbd" stroke-width="6" stroke-dasharray="2 12" stroke-linecap="round"/>`}
+addEventListener('resize',()=>{if($('#home').classList.contains('on'))drawTrail()});
 function msgSheet(m,h,p){sheet(`${MIC(m)}<h2>${h}</h2><p>${p}</p><button class="big" onclick="closeSheet()">Vale</button>`)}
 $('#unlockAll').onclick=()=>{S.unlockAll=true;save();renderHome()};
-$('#reset').onclick=()=>{sheet(`${MIC('oops')}<h2>¿Empezar de cero?</h2><p>Se borrarán las estrellas de este tema.</p>
+$('#reset').onclick=()=>{sheet(`${MIC('oops')}<h2>¿Empezar de cero?</h2><p>Se borrarán las estrellas, los cromos y el récord de este tema.</p>
   <button class="big" id="rs">Sí, borrar</button><button class="big alt" onclick="closeSheet()">Cancelar</button>`);
-  $('#rs').onclick=()=>{S={stars:{},best:{},seen:{},unlockAll:false};save();closeSheet();renderHome()}};
+  $('#rs').onclick=()=>{S={stars:{},best:{},seen:{},unlockAll:false,cards:{},hi:0};save();closeSheet();renderHome()}};
+
+/* ---------- álbum ---------- */
+function cromo(c,i,forceOpen){const own=forceOpen||cardOwned(c);const B=BLOCKS.find(b=>b.id===c.b);
+  return `<div class="cromo ${own?'':'locked'}" style="--c:${cssv(B.c)}" data-id="${c.id}"><div class="in">
+    <div class="f"><span class="num">${i+1}</span>${c.hue&&own?icon(c.ic).replace('<svg ',`<svg style="filter:hue-rotate(${c.hue}deg)" `):icon(c.ic)}<b>${own?c.n:'???'}</b><small>${own?c.r:(B.final?'Desafío':B.name)}</small></div>
+    <div class="b"><b>${c.n}</b>${c.d.map(x=>`<div>${x}</div>`).join('')}</div></div></div>`}
+function renderAlbum(){const owned=ALBUM.filter(cardOwned).length;
+  $('#asub').textContent=`${owned} de ${ALBUM.length} cromos`;
+  $('#grid').innerHTML=ALBUM.map((c,i)=>cromo(c,i)).join('');
+  document.querySelectorAll('#grid .cromo').forEach(el=>el.onclick=()=>{
+    if(el.classList.contains('locked')){const c=ALBUM.find(x=>x.id===el.dataset.id),B=BLOCKS.find(b=>b.id===c.b);
+      return msgSheet('think','Cromo bloqueado',B.final?'Gana el Desafío del tema para conseguirlo.':`Consigue las dos estrellas de <b>${B.name}</b> para conseguirlo.`)}
+    el.classList.toggle('flip')})}
+$('#openAlbum').onclick=()=>{renderAlbum();show('album')};
+$('#aback').onclick=()=>{show('home');renderHome()};
+document.querySelector('#album .guide').innerHTML=document.querySelector('#album .guide').innerHTML.replace('__MIC__',MIC('wow'));
 
 /* ---------- bloque ---------- */
 let CUR=0,MODE='learn';
 function openBlock(i,mode){CUR=i;const b=BLOCKS[i];
   document.documentElement.style.setProperty('--blk',cssv(b.c));
   $('#btitle').textContent=(i+1)+'. '+b.name;$('#bsub').textContent=b.desc;
-  $('#home').classList.remove('on');$('#block').classList.add('on');setMode(mode)}
+  $('#tabs').style.display='';show('block');setMode(mode)}
 function setMode(m){MODE=m;const b=BLOCKS[CUR];
   document.querySelectorAll('.tab').forEach(t=>{t.classList.toggle('on',t.dataset.m===m);
     const st=t.querySelector('.st');if(st)st.textContent=has(b.id,t.dataset.m)?'⭐':''});
   $('#body').scrollTop=0;
   if(m==='learn')learn(0);else startQuiz(m)}
 document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>setMode(t.dataset.m));
-$('#back').onclick=()=>{$('#block').classList.remove('on');$('#home').classList.add('on');renderHome()};
+$('#back').onclick=()=>{if(Q&&Q.kind==='final'&&Q.live&&!confirm('¿Salir del Desafío? Perderás esta partida.'))return;Q=null;show('home');renderHome()};
 
 /* aprender */
 function learn(k){const b=BLOCKS[CUR],L=b.learn,c=L[k];
@@ -350,6 +530,7 @@ function learn(k){const b=BLOCKS[CUR],L=b.learn,c=L[k];
     ${c.fig?`<div class="fig">${FIG[c.fig]()}</div>`:''}
     <ul>${c.p.map(x=>`<li>${md(x)}</li>`).join('')}</ul>
     <div class="tip"><span>💡</span><div>${c.tip}</div></div>
+    ${c.links?`<div class="links">${c.links.map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener"><span>${u.includes('youtu')?'▶️':'📝'}</span>${t}</a>`).join('')}</div>`:''}
     ${c.check?`<div class="check"><div class="cq"><em>¿Te acuerdas?</em> ${c.check[0]}</div><div class="copts">${shuffle(c.check[1].map((o,i)=>[o,i])).map(([o,i])=>`<button data-i="${i}">${o}</button>`).join('')}</div><div class="cfb"></div></div>`:''}
     <button class="pz" id="pz"><img src="img/pizarra/p${c.pz}.webp" alt="">📷 Ver lo que escribió la profesora en la pizarra</button>
   </div>
@@ -357,6 +538,7 @@ function learn(k){const b=BLOCKS[CUR],L=b.learn,c=L[k];
     <div class="dots">${L.map((_,j)=>`<i class="${j===k?'on':S.seen[b.id+'-'+j]?'seen':''}"></i>`).join('')}</div>
     <button class="arrow" id="next" ${k===L.length-1?'disabled':''}>›</button></div>
   ${k===L.length-1?`<button class="big" id="tosort">¡Ya lo tengo! A clasificar 🧺</button>`:''}`;
+  if(c.fig&&FIG_INIT[c.fig])FIG_INIT[c.fig]();
   $('#prev').onclick=()=>learn(k-1);$('#next').onclick=()=>learn(k+1);
   $('#pz').onclick=()=>openPhoto(c.pz);
   if($('#tosort'))$('#tosort').onclick=()=>setMode('sort');
@@ -373,28 +555,33 @@ function openPhoto(n){$('#pimg').src='img/pizarra/p'+n+'.webp';$('#photo').class
 $('#pclose').onclick=()=>$('#photo').classList.remove('on');
 $('#pzoom').onclick=()=>$('#photo').classList.toggle('zoom');
 
-/* clasificar + examen */
-let Q;
+/* ---------- motor de preguntas (clasificar, examen y desafío) ---------- */
+let Q=null;
+const asItems=(b,t)=>(t==='sort'?b.sort:b.exam).map((x,i)=>({i,x,t,b:b.id,uid:b.id+t+i}));
 function startQuiz(kind){const b=BLOCKS[CUR];
-  const items=(kind==='sort'?b.sort:b.exam).map((x,i)=>({i,x}));
+  const items=asItems(b,kind);
   Q={kind,queue:shuffle(items),total:items.length,done:0,first:new Set(),missed:new Set(),tried:new Set(),streak:0,best:0};
   nextQ()}
 function head(){const pct=100*Q.done/Q.total;
+  if(Q.kind==='final')return `<div class="qtop"><span class="hearts">${'❤️'.repeat(Q.lives)}${'🤍'.repeat(LIVES-Q.lives)}</span>
+    ${Q.streak>=2?`<span class="streak ${Q.streak%3===0?'hot':''}">🔥 ${Q.streak}</span>`:''}<span class="pts">${Q.pts} pts</span><span>${Q.done+Q.wrong}/${Q.total}</span></div>
+    <div class="pbar"><i style="width:${100*(Q.done+Q.wrong)/Q.total}%"></i></div>`;
   return `<div class="qtop"><span>${Q.kind==='sort'?'🧺 Clasificar':'✏️ Preguntas de examen'}</span>
    ${Q.streak>=2?`<span class="streak ${Q.streak%3===0?'hot':''}">🔥 ${Q.streak} seguidas</span>`:''}<span>${Q.done}/${Q.total}</span></div>
    <div class="pbar"><i style="width:${pct}%"></i></div>`}
-function nextQ(){if(!Q.queue.length)return finish();const it=Q.queue[0];
-  if(Q.kind==='sort'){const [n,d,set,,,ex]=it.x,SET=SETS[set],ks=Object.keys(SET.opts);
-    const shown=ex&&ex.fig?`<div class="ifig">${IC[ex.fig]}</div>`:`<div class="name">${n}</div>${d?`<div class="desc">${d}</div>`:''}`;
-    $('#body').innerHTML=`<div class="qbox"><div class="qh">${head()}</div><div class="qtext" style="text-align:center;font-size:16px;color:var(--muted)">${SET.q}</div>
+function nextQ(){if(!Q)return;if(!Q.queue.length||(Q.kind==='final'&&Q.lives<=0))return finish();const it=Q.queue[0];
+  const tag=Q.kind==='final'?(()=>{const B=BLOCKS.find(x=>x.id===it.b);return `<div style="font-size:12px;font-weight:800;color:${cssv(B.c)};margin-bottom:4px">${B.name}</div>`})():'';
+  if(it.t==='sort'){const [n,d,set,,,ex]=it.x,SET=SETS[set],ks=Object.keys(SET.opts);
+    const shown=ex&&ex.fig?`<div class="ifig">${icon(ex.fig)}</div>`:`<div class="name">${n}</div>${d?`<div class="desc">${d}</div>`:''}`;
+    $('#body').innerHTML=`<div class="qbox"><div class="qh">${head()}</div>${tag}<div class="qtext" style="text-align:center;font-size:16px;color:var(--muted)">${SET.q}</div>
       <div class="item">${shown}</div></div>
       <div class="bins ${ks.length===3?'n3':''}">${ks.map(k=>{const g=SET.opts[k];
-        const vis=g.ic?IC[g.ic]:g.fig?IC[g.fig]:`<span class="e">${g.e}</span>`;
+        const vis=g.ic?IC[g.ic]:g.fig?icon(g.fig):`<span class="e">${g.e}</span>`;
         return `<button class="bin" data-k="${k}">${vis}${g.n}<small>${g.s}</small></button>`}).join('')}</div><div id="fbx"></div>`;
     document.querySelectorAll('.bin').forEach(el=>el.onclick=()=>answerSort(el));return}
   const [q,opts,,ex={}]=it.x;
   if(ex.order){
-    $('#body').innerHTML=`<div class="qbox"><div class="qh">${head()}</div><div class="qtext">🔢 ${q}</div><div style="font-size:13px;color:var(--muted);font-weight:700;margin-top:4px">Toca los pasos en orden.</div></div>
+    $('#body').innerHTML=`<div class="qbox"><div class="qh">${head()}</div>${tag}<div class="qtext">🔢 ${q}</div><div style="font-size:13px;color:var(--muted);font-weight:700;margin-top:4px">Toca los pasos en orden.</div></div>
       <div class="slots">${opts.map((_,i)=>`<div class="slot" data-s="${i}"><b>${i+1}</b><span></span></div>`).join('')}</div>
       <div class="opts">${shuffle(opts.map((o,i)=>[o,i])).map(([o,i])=>`<button class="opt" data-i="${i}">${o}</button>`).join('')}</div><div id="fbx"></div>`;
     const seq=[];document.querySelectorAll('.opt').forEach(el=>el.onclick=()=>{
@@ -404,8 +591,8 @@ function nextQ(){if(!Q.queue.length)return finish();const it=Q.queue[0];
         document.querySelectorAll('.slot').forEach((sl,i)=>{sl.classList.add(seq[i]===i?'ok':'bad')});
         answer(ok,ok?'':`El orden es: ${opts.map((o,i)=>`<b>${i+1}.</b> ${o}`).join(' · ')}.`)}});return}
   const order=ex.vf?[0,1].sort((a,b)=>opts[a]==='Verdadero'?-1:1):shuffle(opts.map((o,i)=>i));
-  $('#body').innerHTML=`<div class="qbox"><div class="qh">${head()}</div><div class="qtext">${ex.vf?'¿Verdadero o falso?<br><span style="font-size:19px;font-weight:600">'+q+'</span>':q}</div>
-      ${ex.fig?`<div class="qfig">${IC[ex.fig]}</div>`:''}</div>
+  $('#body').innerHTML=`<div class="qbox"><div class="qh">${head()}</div>${tag}<div class="qtext">${ex.vf?'¿Verdadero o falso?<br><span style="font-size:19px;font-weight:600">'+q+'</span>':q}</div>
+      ${ex.fig?`<div class="qfig">${icon(ex.fig)}</div>`:''}</div>
     <div class="opts ${ex.vf?'vf':''}">${order.map(i=>`<button class="opt" data-i="${i}">${opts[i]}</button>`).join('')}</div><div id="fbx"></div>`;
   document.querySelectorAll('.opt').forEach(el=>el.onclick=()=>{const ok=el.dataset.i==='0';
     document.querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(b.dataset.i==='0')b.classList.add('ok');else if(b===el)b.classList.add('bad');else b.classList.add('dim')});
@@ -414,36 +601,76 @@ function nextQ(){if(!Q.queue.length)return finish();const it=Q.queue[0];
 function answerSort(el){const it=Q.queue[0],g=it.x[3],ok=el.dataset.k===g;
   document.querySelectorAll('.bin').forEach(b=>{b.disabled=true;if(b.dataset.k===g)b.classList.add('ok');else if(b===el)b.classList.add('bad');else b.classList.add('dim')});
   answer(ok)}
-function answer(ok,extra){const it=Q.queue[0],why=Q.kind==='sort'?it.x[4]:it.x[2];
-  if(!Q.tried.has(it.i)){Q.tried.add(it.i);if(ok)Q.first.add(it.i);else Q.missed.add(it.i)}
-  Q.queue.shift();if(ok){Q.done++;Q.streak++;Q.best=Math.max(Q.best,Q.streak)}else{Q.queue.push(it);Q.streak=0}
+function answer(ok,extra){const it=Q.queue[0],why=it.t==='sort'?it.x[4]:it.x[2];
+  if(!Q.tried.has(it.uid)){Q.tried.add(it.uid);if(ok)Q.first.add(it.uid);else Q.missed.add(it.uid)}
+  Q.queue.shift();
+  let gain=0;
+  if(ok){Q.done++;Q.streak++;Q.best=Math.max(Q.best,Q.streak);if(Q.kind==='final'){gain=10+5*Math.min(Q.streak-1,4);Q.pts+=gain}}
+  else{Q.streak=0;if(Q.kind==='final'){Q.lives--;Q.wrong++}else Q.queue.push(it)}
   const milestone=ok&&Q.streak%5===0;
   tone(ok,milestone);if(milestone)confetti();
-  const h=ok?(milestone?`¡${Q.streak} seguidas! 🔥`:pick(OK_MSG)):pick(NO_MSG);
-  $('#fbx').innerHTML=`<div class="fb ${ok?'okk':'no'}">${MIC(ok?(milestone?'wow':'happy'):'oops')}<div class="t"><strong>${h}</strong>${extra?extra+'<br>':''}${why}${ok?'':'<br><small style="color:#6b7280">Te la volveré a preguntar al final.</small>'}</div></div>
-  <button class="big" id="nx">${Q.queue.length?'Siguiente →':'Ver resultado'}</button>`;
+  const h=ok?(milestone?`¡${Q.streak} seguidas! 🔥`:pick(OK_MSG))+(gain?` <span class="pts">+${gain}</span>`:''):(Q.kind==='final'?(Q.lives>0?'¡Pierdes una vida! 💔':'¡Sin vidas! 💔'):pick(NO_MSG));
+  const later=Q.kind==='final'?'':'<br><small style="color:#6b7280">Te la volveré a preguntar al final.</small>';
+  const last=!Q.queue.length||(Q.kind==='final'&&Q.lives<=0);
+  $('#fbx').innerHTML=`<div class="fb ${ok?'okk':'no'}">${MIC(ok?(milestone?'wow':'happy'):'oops')}<div class="t"><strong>${h}</strong>${extra?extra+'<br>':''}${why}${ok?'':later}</div></div>
+  <button class="big" id="nx">${last?'Ver resultado':'Siguiente →'}</button>`;
   $('.qh').innerHTML=head();
   $('#nx').onclick=nextQ;$('#nx').scrollIntoView({behavior:'smooth',block:'end'})}
-function label(kind,x){if(kind==='sort'){const ex=x[5];return ex&&ex.fig?SETS[x[2]].opts[x[3]].n:x[0]}return x[0].length>38?x[0].slice(0,36)+'…':x[0]}
-function finish(){const b=BLOCKS[CUR],sc=Q.first.size/Q.total,key=b.id+'-'+Q.kind;
+function label(it){const x=it.x;if(it.t==='sort'){const ex=x[5];return ex&&ex.fig?SETS[x[2]].opts[x[3]].n:x[0]}return x[0].length>38?x[0].slice(0,36)+'…':x[0]}
+function finish(){
+  if(Q.kind==='final')return finishFinal();
+  const b=BLOCKS[CUR],sc=Q.first.size/Q.total,key=b.id+'-'+Q.kind;
+  const wasDone=done(b.id);
   S.best[key]=Math.max(S.best[key]||0,sc);const got=sc>=PASS,was=!!S.stars[key];if(got)S.stars[key]=1;save();
-  const names=[...new Set([...Q.missed].map(i=>label(Q.kind,(Q.kind==='sort'?b.sort:b.exam)[i])))];
+  const all=asItems(b,Q.kind),names=[...new Set(all.filter(it=>Q.missed.has(it.uid)).map(label))];
   const other=Q.kind==='sort'?'exam':'sort';
   if(got)confetti();
   const perfect=Q.first.size===Q.total;
+  const newCards=!wasDone&&done(b.id)?ALBUM.filter(c=>c.b===b.id):[];
   sheet(`${MIC(got?'wow':'think')}<h2>${perfect?'¡Pleno! 🏆':got?(was?'¡Otra vez genial!':'¡Estrella conseguida! ⭐'):'¡Casi lo tienes!'}</h2>
     <p>${Q.first.size} de ${Q.total} a la primera · mejor racha 🔥 ${Q.best}.${got?'':' Necesitas '+Math.ceil(PASS*Q.total)+' para la estrella.'}</p>
+    ${newCards.length?`<p style="margin-bottom:8px;color:var(--ink)">🃏 ¡Bloque completo! Has ganado ${newCards.length===1?'un cromo nuevo':newCards.length+' cromos nuevos'}:</p><div class="newc">${newCards.map(c=>cromo(c,ALBUM.indexOf(c),true)).join('')}</div>`:''}
     ${names.length?`<p style="margin-bottom:8px">Micro te recomienda repasar:</p><div class="miss">${names.map(n=>`<span>${n}</span>`).join('')}</div>`:''}
     ${got&&!has(b.id,other)?`<button class="big" id="s1">${other==='exam'?'Ir al examen ✏️':'Ir a clasificar 🧺'}</button>`:''}
-    ${got&&has(b.id,other)?`<button class="big" id="s3">Volver a los bloques</button>`:''}
+    ${got&&has(b.id,other)?`<button class="big" id="s3">Volver al camino 🗺️</button>`:''}
     ${!got?`<button class="big" id="s4">Repasar en Aprender 📖</button>`:''}
     <button class="big alt" id="s2">Repetir</button>`);
+  document.querySelectorAll('.newc .cromo').forEach(el=>el.onclick=()=>el.classList.toggle('flip'));
   if($('#s1'))$('#s1').onclick=()=>{closeSheet();setMode(other)};
-  if($('#s3'))$('#s3').onclick=()=>{closeSheet();$('#back').click()};
+  if($('#s3'))$('#s3').onclick=()=>{closeSheet();Q=null;show('home');renderHome()};
   if($('#s4'))$('#s4').onclick=()=>{closeSheet();setMode('learn')};
   $('#s2').onclick=()=>{closeSheet();setMode(Q.kind)};
   document.querySelectorAll('.tab').forEach(t=>{const st=t.querySelector('.st');if(st)st.textContent=has(b.id,t.dataset.m)?'⭐':''});
 }
+
+/* ---------- Desafío final ---------- */
+function openFinal(){CUR=BLOCKS.length-1;const b=BLOCKS[CUR];
+  document.documentElement.style.setProperty('--blk',cssv(b.c));
+  $('#btitle').textContent='🏁 '+b.name;$('#bsub').textContent=b.desc;$('#tabs').style.display='none';show('block');Q=null;
+  $('#body').innerHTML=`<div class="intro">${MIC('wow')}<h2>¡El Desafío del tema!</h2>
+    <p>Preguntas de <b>todos los bloques</b> mezcladas, como en un examen de verdad.</p>
+    <div class="rules"><div><span>❓</span>${FINAL_N} preguntas</div><div><span>❤️</span>${LIVES} vidas</div><div><span>🔥</span>Rachas = más puntos</div></div>
+    <p>Termina con al menos una vida para ganar el 🏆 y el último cromo.${S.hi?`<br>Tu récord: <b>${S.hi} puntos</b>.`:''}</p>
+    <button class="big" id="go">¡Empezar!</button></div>`;
+  $('#go').onclick=startFinal}
+function startFinal(){const per=Math.ceil(FINAL_N/NB.length);let pool=[];
+  NB.forEach(b=>{const ex=shuffle(asItems(b,'exam')),so=shuffle(asItems(b,'sort'));pool=pool.concat(shuffle(ex.slice(0,Math.ceil(per/2)+1).concat(so.slice(0,Math.floor(per/2)))).slice(0,per))});
+  Q={kind:'final',queue:shuffle(pool).slice(0,FINAL_N),total:FINAL_N,done:0,wrong:0,lives:LIVES,pts:0,first:new Set(),missed:new Set(),tried:new Set(),streak:0,best:0,live:true};
+  Q.total=Q.queue.length;nextQ()}
+function finishFinal(){Q.live=false;const won=Q.lives>0,first=!has('final','run');
+  if(won)S.stars['final-run']=1;const rec=Q.pts>(S.hi||0);if(rec)S.hi=Q.pts;save();
+  if(won)confetti();
+  const card=won&&first?ALBUM.filter(c=>c.b==='final'):[];
+  const missed=[...Q.tried].filter(u=>Q.missed.has(u));
+  sheet(`${MIC(won?'wow':'oops')}<h2>${won?'¡Desafío superado! 🏆':'¡Sin vidas!'}</h2>
+    <p>${Q.done} aciertos · <b>${Q.pts} puntos</b>${rec?' · ¡nuevo récord! 🎉':` · récord: ${S.hi}`}<br>mejor racha 🔥 ${Q.best}</p>
+    ${card.length?`<p style="margin-bottom:8px;color:var(--ink)">🃏 ¡Has ganado el último cromo!</p><div class="newc">${card.map(c=>cromo(c,ALBUM.indexOf(c),true)).join('')}</div>`:''}
+    ${!won?'<p>Repasa los bloques donde fallaste y vuelve a intentarlo. ¡Tú puedes! 💪</p>':''}
+    <button class="big" id="f1">Jugar otra vez</button><button class="big alt" id="f2">Volver al camino 🗺️</button>`);
+  document.querySelectorAll('.newc .cromo').forEach(el=>el.onclick=()=>el.classList.toggle('flip'));
+  $('#f1').onclick=()=>{closeSheet();startFinal()};
+  $('#f2').onclick=()=>{closeSheet();Q=null;show('home');renderHome()}}
+
 function sheet(h){$('#sheet').innerHTML=h;$('#over').classList.add('on')}
 function closeSheet(){$('#over').classList.remove('on')}
 $('#over').onclick=e=>{if(e.target.id==='over')closeSheet()};
