@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Matemáticas · Estudia con Laura</title>
+<meta name="theme-color" content="#e07a10">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../motor.css">
+</head>
+<body>
+<section id="home" class="screen on">
+  <a class="tohub" href="../../#matematicas">← Matemáticas</a>
+  <h1 id="htitle"></h1>
+  <div id="hguide"></div>
+  <div class="total"><span>⭐</span><div class="bar"><i id="totbar"></i></div><b id="tot">0</b></div>
+  <div class="path" id="path"></div>
+  <div class="foot"><button id="unlockAll">Abrir todos los bloques</button><button id="reset">Empezar de cero</button></div>
+</section>
+<section id="block" class="screen">
+  <div class="top"><button class="back" id="back" aria-label="Volver">←</button><div class="ttl"><h2 id="btitle"></h2><small id="bsub"></small></div></div>
+  <div class="tabs" id="tabs">
+    <button class="tab" data-m="learn">💡 Entiende</button>
+    <button class="tab" data-m="prac">✏️ Practica</button>
+    <button class="tab" data-m="reto">⭐ Reto<span class="st"></span></button>
+  </div>
+  <div class="body" id="body"></div>
+</section>
+<div class="overlay" id="over"><div class="sheet" id="sheet"></div></div>
+<script src="/shared/cuenta.js"></script>
+<script src="../motor.js"></script>
+<script src="contenido.js"></script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 (function () {
   const API = '/api/';
   const TK = 'estudia:token', UK = 'estudia:user', OWN = 'estudia:owner';
-  const APP_KEYS = { 'europa': 'laura-europa-v1', 'bio-t2': 'laura-bio-t2-v1' };
+  const APP_KEYS = { 'europa': 'laura-europa-v1', 'bio-t2': 'laura-bio-t2-v1', 'mat-nat': 'laura-mat-nat-v1', 'mat-pot': 'laura-mat-pot-v1' };
   const ls = { get: k => { try { return localStorage.getItem(k) } catch (e) { return null } }, set: (k, v) => { try { localStorage.setItem(k, v) } catch (e) { } }, del: k => { try { localStorage.removeItem(k) } catch (e) { } } };
   let me = null, offline = false, curApp = null;
   const q = [], saveT = {};

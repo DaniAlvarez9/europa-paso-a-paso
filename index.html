@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#1f2a37;--muted:#6b7280;--paper:#fbf7ef;--card:#fff;--line:#e7e0d2;--geo:#2f6fd6;--bio:#119c8f}
+:root{--ink:#1f2a37;--muted:#6b7280;--paper:#fbf7ef;--card:#fff;--line:#e7e0d2;--geo:#2f6fd6;--bio:#119c8f;--mat:#e0603a}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font-family:Nunito,system-ui,sans-serif}
 button,a{font:inherit;color:inherit;cursor:pointer;border:0;background:none;text-decoration:none}
@@ -59,7 +59,8 @@ h1 span{color:var(--c,var(--geo))}
 <script>
 const ICON={
 geo:`<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="24" fill="#cfe3f7" stroke="#fff" stroke-width="3"/><path d="M17 22c5-3 9 1 13-1s4 6 9 6 4 7-1 9-6 8-11 6-4-6-8-7-6-9-2-14z" fill="#5cb85c"/><path d="M41 15c3 1 6 4 7 7-3 1-6-1-7-3z" fill="#5cb85c"/><circle cx="32" cy="32" r="24" fill="none" stroke="#2f6fd6" stroke-width="2.5"/></svg>`,
-bio:`<svg viewBox="0 0 64 64"><rect x="14" y="52" width="36" height="6" rx="3" fill="#0e7c72"/><path d="M38 10l7 4-12 21-7-4z" fill="#119c8f"/><rect x="34" y="6" width="10" height="7" rx="2" transform="rotate(30 39 9)" fill="#0e7c72"/><path d="M22 40h20a10 10 0 0 1-20 0z" fill="#9ad9cf"/><path d="M30 48v4M24 33l6 4" stroke="#0e7c72" stroke-width="4" stroke-linecap="round"/><circle cx="46" cy="38" r="8" fill="#fff" stroke="#119c8f" stroke-width="3"/><circle cx="44" cy="36" r="1.8" fill="#ef8a17"/><circle cx="48.5" cy="40" r="1.5" fill="#d9467a"/></svg>`
+bio:`<svg viewBox="0 0 64 64"><rect x="14" y="52" width="36" height="6" rx="3" fill="#0e7c72"/><path d="M38 10l7 4-12 21-7-4z" fill="#119c8f"/><rect x="34" y="6" width="10" height="7" rx="2" transform="rotate(30 39 9)" fill="#0e7c72"/><path d="M22 40h20a10 10 0 0 1-20 0z" fill="#9ad9cf"/><path d="M30 48v4M24 33l6 4" stroke="#0e7c72" stroke-width="4" stroke-linecap="round"/><circle cx="46" cy="38" r="8" fill="#fff" stroke="#119c8f" stroke-width="3"/><circle cx="44" cy="36" r="1.8" fill="#ef8a17"/><circle cx="48.5" cy="40" r="1.5" fill="#d9467a"/></svg>`,
+mat:`<svg viewBox="0 0 64 64"><rect x="10" y="10" width="44" height="44" rx="12" fill="#ffe3d6"/><path d="M20 22h10M25 17v10M36 22h9M20 42l8-8M28 42l-8-8M36 38h9M36 44h9" stroke="#e0603a" stroke-width="4" stroke-linecap="round"/><text x="44" y="30" font-family="Fredoka,sans-serif" font-size="11" font-weight="700" fill="#e0603a">2</text></svg>`
 };
 const REMOTE={};
 const read=k=>{let l=null;try{l=JSON.parse(localStorage.getItem(k)||'null')}catch(e){}const r=REMOTE[k];if(!r)return l;if(!l)return r;const out={...l};for(const f of ['best','stars'])out[f]={...(r[f]||{}),...(l[f]||{})};return out};
@@ -71,7 +72,10 @@ const MATERIAS=[
  {id:'geografia',name:'Geografía',c:'var(--geo)',bg:'#e4eefc',icon:'geo',sub:'Mapas, países y capitales',
   temas:[{n:'🌍',name:'Europa: países y capitales',desc:'36 países en 5 bloques',href:'geografia/europa/',stars:europaStars,total:10}]},
  {id:'biologia',name:'Biología',c:'var(--bio)',bg:'#dff4f1',icon:'bio',sub:'Biología y Geología · 1º ESO',
-  temas:[{n:'2',name:'Microorganismos',desc:'5 bloques, Desafío final y álbum de cromos',href:'biologia/tema-2/',stars:()=>bioStars('laura-bio-t2-v1'),total:11}]}
+  temas:[{n:'2',name:'Microorganismos',desc:'5 bloques, Desafío final y álbum de cromos',href:'biologia/tema-2/',stars:()=>bioStars('laura-bio-t2-v1'),total:11}]},
+ {id:'matematicas',name:'Matemáticas',c:'var(--mat)',bg:'#fde9e0',icon:'mat',sub:'Matemáticas · 1º ESO',
+  temas:[{n:'ℕ',name:'Los números naturales',desc:'Orden de operaciones, combinadas, divisiones y problemas',href:'matematicas/naturales/',stars:()=>bioStars('laura-mat-nat-v1'),total:5},
+         {n:'aⁿ',name:'Potencias y raíces',desc:'Propiedades, raíces, método fiesta y operaciones',href:'matematicas/potencias/',stars:()=>bioStars('laura-mat-pot-v1'),total:7}]}
 ];
 
 function bar(t){const s=t.stars(),p=Math.round(100*s/t.total);return `<div class="bar"><i style="width:${p}%"></i></div><p>⭐ ${s} de ${t.total} estrellas</p>`}
@@ -103,7 +107,7 @@ addEventListener('hashchange',route);addEventListener('pageshow',route);route();
 (async()=>{const me=await Cuenta.gate();if(!me)return;
   document.getElementById('hello').textContent=`¡Hola, ${me.name||me.user}! 👋`;
   const w=document.getElementById('who');w.style.display='inline';w.textContent=`¿No eres ${me.name||me.user}? Cambiar de usuario`;w.onclick=()=>Cuenta.logout();
-  const [e,b]=await Promise.all([Cuenta.remote('europa'),Cuenta.remote('bio-t2')]);if(e)REMOTE['laura-europa-v1']=e;if(b)REMOTE['laura-bio-t2-v1']=b;route()})();
+  const [e,b,mn,mp]=await Promise.all([Cuenta.remote('europa'),Cuenta.remote('bio-t2'),Cuenta.remote('mat-nat'),Cuenta.remote('mat-pot')]);if(e)REMOTE['laura-europa-v1']=e;if(b)REMOTE['laura-bio-t2-v1']=b;if(mn)REMOTE['laura-mat-nat-v1']=mn;if(mp)REMOTE['laura-mat-pot-v1']=mp;route()})();
 </script>
 </body>
 </html>
