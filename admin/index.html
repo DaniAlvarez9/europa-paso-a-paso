@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Panel del tutor · Estudia con Laura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1f2a37;--muted:#6b7280;--paper:#f6f3ec;--card:#fff;--line:#e7e0d2;--ok:#2fa866;--bad:#e0484d;--acc:#1f3a5f;--bio:#119c8f;--geo:#2f6fd6;--warn:#ef8a17}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:Nunito,system-ui,sans-serif}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+h1,h2,h3{font-family:Fredoka,Nunito,sans-serif;margin:0}
+.wrap{max-width:980px;margin:0 auto;padding:18px 14px 40px}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.top h1{font-size:24px;flex:1}
+.top h1 small{display:block;font-family:Nunito;font-size:13px;color:var(--muted);font-weight:700}
+.btn{padding:9px 14px;border-radius:12px;background:var(--acc);color:#fff;font-weight:800;font-size:14px}
+.btn.alt{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn.danger{background:#fdecec;color:#9b1c1f;border:1px solid #f5c2c3}
+.btn.small{padding:6px 10px;font-size:13px;border-radius:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:12px}
+.card h2{font-size:18px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.card h2 .sp{flex:1}
+.grid{display:grid;gap:12px}
+.g4{grid-template-columns:1fr 1fr}
+@media(min-width:760px){.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+.kpi b{display:block;font-family:Fredoka;font-size:26px;line-height:1.1}
+.kpi span{font-size:12.5px;color:var(--muted);font-weight:800}
+.user{display:flex;align-items:center;gap:12px;cursor:pointer}
+.av{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-family:Fredoka;font-weight:700;font-size:20px;color:#fff;flex:none}
+.user .i{flex:1;min-width:0}
+.user .i b{font-size:17px}
+.user .i small{display:block;color:var(--muted);font-weight:700;font-size:12.5px}
+.muted{color:var(--muted);font-weight:700;font-size:13px}
+.bars{display:flex;align-items:flex-end;gap:4px;height:130px;padding-top:8px}
+.bars div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.bars i{display:block;width:100%;max-width:34px;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,#4f8be0,#1f3a5f);min-height:2px}
+.bars i.z{background:#e7e0d2}
+.bars em{font-style:normal;font-size:10.5px;color:var(--muted);font-weight:800}
+.bars u{text-decoration:none;font-size:10.5px;font-weight:800}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:12px;color:var(--muted);font-weight:800;padding:6px 6px;border-bottom:1px solid var(--line)}
+td{padding:8px 6px;border-bottom:1px solid #f0ebe1;vertical-align:middle}
+.pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:12px;font-weight:800;background:#f0ebe1;color:#6b5f48;white-space:nowrap}
+.pill.ok{background:#e3f6ea;color:#1d6b3e}.pill.bad{background:#fdecec;color:#9b1c1f}.pill.warn{background:#fff1e0;color:#b45309}.pill.no{background:#f3f4f6;color:#9ca3af}
+.meter{height:8px;border-radius:99px;background:#efe9dd;overflow:hidden;min-width:60px}
+.meter i{display:block;height:100%;border-radius:99px}
+.list{margin:0;padding:0;list-style:none}
+.list li{display:flex;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid #f0ebe1;font-size:14px}
+.list li:last-child{border:0}
+.list .n{font-family:Fredoka;font-weight:700;min-width:28px;text-align:center;border-radius:8px;padding:2px 6px;background:#fdecec;color:#9b1c1f}
+.feed li{font-size:13.5px}
+.feed time{color:var(--muted);font-weight:800;font-size:12px;min-width:92px}
+.tabs{display:flex;gap:6px;margin:0 0 12px;flex-wrap:wrap}
+.tabs button{padding:7px 12px;border-radius:99px;border:1px solid var(--line);background:var(--card);font-weight:800;font-size:13.5px}
+.tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.form{display:grid;gap:8px}
+@media(min-width:760px){.form.row{grid-template-columns:1fr 1fr 120px auto;align-items:end}}
+label{font-size:12.5px;font-weight:800;color:var(--muted)}
+input{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:700}
+.center{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:16px}
+.login{width:100%;max-width:360px;text-align:center}
+.login h1{font-size:28px;margin:8px 0}
+.err{color:#c0262d;font-weight:800;min-height:20px;margin-top:8px;font-size:14px}
+.switch{display:flex;align-items:center;gap:8px;font-weight:800;font-size:14px}
+.switch input{width:auto}
+.ses{border-left:4px solid var(--line);padding:6px 0 6px 10px;margin:8px 0}
+.ses b{font-size:14px}
+.ses small{display:block;color:var(--muted);font-weight:700;font-size:12.5px}
+.empty{color:var(--muted);font-weight:700;font-size:14px;padding:6px 0}
+.hint{background:#fff8dc;border:1px solid #f1e3a6;border-radius:12px;padding:8px 12px;font-weight:700;font-size:13.5px;color:#5b4a12;margin-top:8px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="/biologia/tema-2/contenido.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const TK='estudia:admin';
+const EUROPA=['Oeste','Norte','Centro','Sur y Balcanes','Este'];
+const COLORS=['#119c8f','#2f6fd6','#7a52c7','#d9467a','#ef8a17','#3c9a3c'];
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+async function api(path,opt={}){const h={'Content-Type':'application/json'};const t=localStorage.getItem(TK);if(t)h.Authorization='Bearer '+t;
+  const r=await fetch('/api/'+path,{...opt,headers:h,body:opt.body?JSON.stringify(opt.body):undefined});let d={};try{d=await r.json()}catch(e){}
+  if(r.status===401&&path!=='admin-login'){localStorage.removeItem(TK);boot();throw new Error('auth')}
+  if(!r.ok)throw new Error(d.error||('HTTP '+r.status));return d}
+const fmtMin=s=>{if(s>0&&s<60)return '<1 min';const m=Math.round(s/60);return m<60?m+' min':Math.floor(m/60)+' h '+(m%60)+' min'};
+const dayKey=t=>{const d=new Date(t);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const ago=t=>{if(!t)return 'nunca';const s=(Date.now()-t)/1000;if(s<90)return 'hace un momento';if(s<3600)return 'hace '+Math.round(s/60)+' min';if(s<86400)return 'hace '+Math.round(s/3600)+' h';const d=Math.round(s/86400);return d===1?'ayer':'hace '+d+' días'};
+const when=t=>new Date(t).toLocaleString('es-ES',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+const pct=x=>Math.round(x*100)+'%';
+const meter=(v,c)=>`<div class="meter"><i style="width:${Math.round(v*100)}%;background:${c||(v>=.75?'var(--ok)':v>=.5?'var(--warn)':'var(--bad)')}"></i></div>`;
+
+/* ---------- acceso ---------- */
+async function boot(){
+  let st;try{st=await api('admin-status')}catch(e){return $('#app').innerHTML=`<div class="center"><div class="login"><h1>⚠️</h1><p class="muted">No se puede conectar con el servidor: ${esc(e.message)}</p></div></div>`}
+  if(localStorage.getItem(TK))return home();
+  const setup=!st.configured;
+  $('#app').innerHTML=`<div class="center"><div class="login"><div style="font-size:48px">🔐</div><h1>Panel del tutor</h1>
+    <p class="muted">${setup?'Es la primera vez: elige la contraseña del panel (mínimo 8 caracteres). Guárdala bien.':'Escribe la contraseña del panel.'}</p>
+    <input type="password" id="pw" placeholder="Contraseña" autocomplete="${setup?'new-password':'current-password'}">
+    ${setup?'<input type="password" id="pw2" placeholder="Repite la contraseña" style="margin-top:8px" autocomplete="new-password">':''}
+    <button class="btn" id="go" style="width:100%;margin-top:10px;padding:12px">${setup?'Crear contraseña y entrar':'Entrar'}</button><div class="err" id="err"></div></div></div>`;
+  const go=async()=>{const pw=$('#pw').value;$('#err').textContent='';
+    if(setup&&pw!==$('#pw2').value)return $('#err').textContent='Las contraseñas no coinciden';
+    try{const r=await api(setup?'admin-setup':'admin-login',{method:'POST',body:{password:pw}});localStorage.setItem(TK,r.token);home()}catch(e){$('#err').textContent=e.message}};
+  $('#go').onclick=go;$('#pw').onkeydown=e=>{if(e.key==='Enter')go()};$('#pw').focus()}
+
+/* ---------- análisis ---------- */
+function analyze(data){
+  const ev=data.events.slice().sort((a,b)=>a.t-b.t);
+  const byDay={};let total=0;ev.filter(e=>e.k==='time').forEach(e=>{const k=dayKey(e.t);byDay[k]=(byDay[k]||0)+e.s;total+=e.s});
+  // sesiones: huecos de más de 20 min
+  const ses=[];let cur=null;
+  ev.forEach(e=>{if(!cur||e.t-cur.end>20*60000){cur={start:e.t,end:e.t,time:0,cards:0,q:0,ok:0,rounds:[],apps:new Set(),blocks:new Set(),final:[]};ses.push(cur)}
+    cur.end=e.t;if(e.a&&e.a!=='hub')cur.apps.add(e.a);if(e.b)cur.blocks.add(e.b);
+    if(e.k==='time')cur.time+=e.s;if(e.k==='card')cur.cards++;if(e.k==='q'){cur.q++;if(e.ok)cur.ok++}
+    if(e.k==='round')cur.rounds.push(e);if(e.k==='final')cur.final.push(e)});
+  // preguntas difíciles (primer intento)
+  const qs={};ev.filter(e=>e.k==='q'&&e.first).forEach(e=>{const o=qs[e.id]||(qs[e.id]={id:e.id,l:e.l,b:e.b,n:0,f:0});o.n++;if(!e.ok)o.f++});
+  ev.filter(e=>e.k==='round'&&e.miss).forEach(e=>e.miss.forEach(m=>{const id='eu:'+e.m+':'+m;const o=qs[id]||(qs[id]={id,l:m+(e.m==='cap'?'':' (en el mapa)'),b:e.b,n:0,f:0,eu:true});o.f++;o.n++}));
+  const hard=Object.values(qs).filter(o=>o.f>0).sort((a,b)=>b.f-a.f||(b.f/b.n)-(a.f/a.n)).slice(0,12);
+  // por bloque (biología)
+  const bio=BLOCKS.filter(b=>!b.final).map(b=>{const qq=Object.values(qs).filter(o=>o.b===b.id);const n=qq.reduce((a,o)=>a+o.n,0),f=qq.reduce((a,o)=>a+o.f,0);
+    const rounds=ev.filter(e=>e.k==='round'&&e.b===b.id);const modes=new Set(ev.filter(e=>e.k==='mode'&&e.b===b.id).map(e=>e.m));
+    const p=data.apps['bio-t2'].progress||{};const seen=Object.keys(p.seen||{}).filter(k=>k.startsWith(b.id+'-')).length;
+    return {b,acc:n?1-f/n:null,n,rounds,modes,seen,best:{sort:(p.best||{})[b.id+'-sort']||0,exam:(p.best||{})[b.id+'-exam']||0},stars:{sort:!!(p.stars||{})[b.id+'-sort'],exam:!!(p.stars||{})[b.id+'-exam']},
+      pz:ev.some(e=>e.k==='pizarra'&&e.b===b.id),last:Math.max(0,...ev.filter(e=>e.b===b.id).map(e=>e.t))}});
+  const ep=data.apps.europa.progress||{};
+  const eu=EUROPA.map((name,i)=>{const rounds=ev.filter(e=>e.k==='round'&&e.b==='e'+i);return {name,i,rounds,find:(ep.best||{})[i+'-find']||0,cap:(ep.best||{})[i+'-cap']||0,seen:((ep.seen||{})[i]||[]).length,opened:ev.some(e=>e.b==='e'+i)}});
+  const finals=ev.filter(e=>e.k==='final');
+  const untried=[];
+  bio.forEach(x=>{if(!x.seen&&!x.modes.size)untried.push(`Biología · ${x.b.name}: no lo ha abierto`);else{if(x.seen<x.b.learn.length)untried.push(`Biología · ${x.b.name}: ha leído ${x.seen} de ${x.b.learn.length} tarjetas`);if(!x.rounds.some(r=>r.m==='sort'))untried.push(`Biología · ${x.b.name}: no ha jugado a Clasificar`);if(!x.rounds.some(r=>r.m==='exam'))untried.push(`Biología · ${x.b.name}: no ha hecho el Examen`);if(!x.pz)untried.push(`Biología · ${x.b.name}: no ha mirado las fotos de la pizarra`)}});
+  if(!finals.length)untried.push('Biología · Desafío del tema: no lo ha intentado');
+  if(!ev.some(e=>e.k==='album'))untried.push('Biología · Álbum de cromos: no lo ha abierto');
+  eu.forEach(x=>{if(!x.opened&&!x.find&&!x.cap)untried.push(`Europa · ${x.name}: no lo ha abierto`)});
+  return {ev,byDay,total,ses:ses.reverse(),hard,bio,eu,finals,untried};
+}
+
+/* ---------- vistas ---------- */
+let USERS=[],VIEW={};
+async function home(){
+  $('#app').innerHTML=`<div class="wrap"><div class="top"><h1>Panel del tutor<small>Estudia con Laura</small></h1><a class="btn alt small" href="/" target="_blank">Abrir la web ↗</a><button class="btn alt small" id="out">Salir</button></div><div id="main"><p class="muted">Cargando…</p></div></div>`;
+  $('#out').onclick=()=>{localStorage.removeItem(TK);boot()};
+  try{USERS=(await api('admin-users')).users}catch(e){return}
+  USERS.sort((a,b)=>(b.lastSeen||0)-(a.lastSeen||0));
+  $('#main').innerHTML=`<div class="card"><h2>👧 Alumnas y alumnos</h2>
+    ${USERS.length?USERS.map((u,i)=>`<div class="user card" data-u="${esc(u.user)}" style="margin:0 0 8px"><div class="av" style="background:${COLORS[i%6]}">${esc((u.name||u.user)[0].toUpperCase())}</div>
+      <div class="i"><b>${esc(u.name||u.user)}</b><small>usuario: ${esc(u.user)} · última actividad: ${ago(Number(u.lastSeen))}</small></div><span style="font-size:22px;color:var(--muted)">›</span></div>`).join(''):'<p class="empty">Todavía no hay ninguna cuenta. Crea la de Laura aquí abajo.</p>'}
+    </div>
+    <div class="card"><h2>➕ Nueva cuenta</h2>
+      <div class="form row"><div><label>Nombre</label><input id="nn" placeholder="Laura"></div><div><label>Usuario (para entrar)</label><input id="nu" placeholder="laura" autocapitalize="none"></div><div><label>PIN (4 cifras)</label><input id="np" inputmode="numeric" maxlength="4" placeholder="1234"></div><button class="btn" id="nc">Crear</button></div>
+      <div class="err" id="ne"></div>
+      <div class="hint">💡 Crea también una cuenta <b>tutor</b> para tus pruebas: así no se mezclan con los datos de Laura, y con ella verás los botones de abrir bloques y empezar de cero.</div></div>`;
+  document.querySelectorAll('.user').forEach(el=>el.onclick=()=>detail(el.dataset.u));
+  $('#nc').onclick=async()=>{try{await api('admin-users',{method:'POST',body:{name:$('#nn').value,user:$('#nu').value,pin:$('#np').value}});home()}catch(e){$('#ne').textContent=e.message}};
+}
+
+async function detail(u,tab){
+  const user=USERS.find(x=>x.user===u)||{user:u};
+  $('#main').innerHTML='<p class="muted">Cargando…</p>';
+  let data;try{data=await api('admin-data?user='+encodeURIComponent(u))}catch(e){return}
+  const A=analyze(data);VIEW={u,data,A,tab:tab||'resumen'};
+  const days=[];for(let i=13;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push(d)}
+  const vals=days.map(d=>A.byDay[dayKey(d)]||0),mx=Math.max(600,...vals);
+  const week=vals.slice(7).reduce((a,b)=>a+b,0);
+  const bioStars=Object.values((data.apps['bio-t2'].progress||{}).stars||{}).filter(Boolean).length;
+  const euStars=A.eu.reduce((a,x)=>a+(x.find>=.75)+(x.cap>=.75),0);
+  const firstQ=A.ev.filter(e=>e.k==='q'&&e.first),acc=firstQ.length?firstQ.filter(e=>e.ok).length/firstQ.length:null;
+  const T=VIEW.tab;
+  $('#main').innerHTML=`<div class="top" style="margin-bottom:10px"><button class="btn alt small" id="bk">← Volver</button><h1 style="font-size:22px">${esc(user.name||u)}<small>usuario: ${esc(u)} · última actividad: ${ago(Number(user.lastSeen))}</small></h1><button class="btn alt small" id="rf">↻</button></div>
+   <div class="grid g4" style="margin-bottom:12px">
+    <div class="kpi"><b>${fmtMin(week)}</b><span>de uso esta semana</span></div>
+    <div class="kpi"><b>${fmtMin(A.total)}</b><span>de uso en total</span></div>
+    <div class="kpi"><b>${acc===null?'—':pct(acc)}</b><span>aciertos a la primera</span></div>
+    <div class="kpi"><b>⭐ ${bioStars+euStars}</b><span>${bioStars}/11 Biología · ${euStars}/10 Europa</span></div></div>
+   <div class="tabs">${[['resumen','Resumen'],['bio','Biología T2'],['eu','Europa'],['cuesta','Lo que le cuesta'],['act','Actividad'],['ajustes','Ajustes']].map(([k,n])=>`<button data-t="${k}" class="${T===k?'on':''}">${n}</button>`).join('')}</div>
+   <div id="tab"></div>`;
+  $('#bk').onclick=home;$('#rf').onclick=()=>detail(u,VIEW.tab);
+  document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>detail(u,b.dataset.t));
+  const tabEl=$('#tab');
+  const timeCard=`<div class="card"><h2>⏱️ Tiempo de uso (últimos 14 días)</h2><div class="bars">${days.map((d,i)=>`<div title="${fmtMin(vals[i])}"><u>${vals[i]>=60?Math.round(vals[i]/60):''}</u><i class="${vals[i]?'':'z'}" style="height:${Math.max(2,100*vals[i]/mx)}%"></i><em>${d.toLocaleDateString('es-ES',{weekday:'narrow'})}${d.getDate()}</em></div>`).join('')}</div><p class="muted" style="margin:6px 0 0">Minutos de uso activo por día (no cuenta la web abierta sin tocarla).</p></div>`;
+  const hardCard=(n)=>`<div class="card"><h2>🧩 Lo que más le cuesta</h2>${A.hard.length?`<ul class="list">${A.hard.slice(0,n).map(o=>`<li><span class="n">${o.f}</span><div style="flex:1">${esc(o.l)}<div class="muted" style="font-size:12px">${o.eu?'Europa':'Biología · '+esc((BLOCKS.find(b=>b.id===o.b)||{}).name||'')} · a la primera: ${o.f} ${o.f===1?'fallo':'fallos'} de ${o.n} ${o.n===1?'intento':'intentos'}</div></div></li>`).join('')}</ul>`:'<p class="empty">Todavía no hay fallos registrados.</p>'}</div>`;
+  const untriedCard=`<div class="card"><h2>🕳️ Lo que no ha probado</h2>${A.untried.length?`<ul class="list">${A.untried.slice(0,14).map(x=>`<li>• ${esc(x)}</li>`).join('')}</ul>${A.untried.length>14?`<p class="muted">…y ${A.untried.length-14} más.</p>`:''}`:'<p class="empty">¡Lo ha probado todo! 🎉</p>'}</div>`;
+  const sesCard=(n)=>`<div class="card"><h2>📅 Últimas sesiones</h2>${A.ses.length?A.ses.slice(0,n).map(s=>`<div class="ses"><b>${when(s.start)}</b> · ${fmtMin(s.time)}<small>${[...s.apps].map(a=>a==='bio-t2'?'Biología':a==='europa'?'Europa':a).join(', ')||'Portada'}${s.cards?` · ${s.cards} tarjetas leídas`:''}${s.q?` · ${s.q} preguntas (${pct(s.ok/s.q)} bien)`:''}${s.rounds.filter(r=>r.star).length?` · ⭐ ${s.rounds.filter(r=>r.star).length} rondas superadas`:''}${s.final.length?` · Desafío: ${s.final.map(f=>f.pts+' pts'+(f.won?' 🏆':'')).join(', ')}`:''}</small></div>`).join(''):'<p class="empty">Todavía no hay sesiones.</p>'}</div>`;
+  if(T==='resumen')tabEl.innerHTML=timeCard+`<div class="grid g2">${hardCard(6)}${untriedCard}</div>`+sesCard(5);
+  if(T==='bio'){const p=data.apps['bio-t2'].progress||{};
+    tabEl.innerHTML=`<div class="card"><h2>🔬 Biología · Tema 2 Microorganismos</h2><div style="overflow-x:auto"><table><tr><th>Bloque</th><th>Tarjetas</th><th>Clasificar (mejor)</th><th>Examen (mejor)</th><th>Aciertos a la 1.ª</th><th>Rondas</th><th>Última vez</th></tr>
+      ${A.bio.map(x=>`<tr><td><b>${esc(x.b.name)}</b></td><td>${x.seen}/${x.b.learn.length}</td>
+        <td>${x.rounds.some(r=>r.m==='sort')?`${x.stars.sort?'⭐ ':''}${pct(x.best.sort)}`:'<span class="pill no">sin probar</span>'}</td>
+        <td>${x.rounds.some(r=>r.m==='exam')?`${x.stars.exam?'⭐ ':''}${pct(x.best.exam)}`:'<span class="pill no">sin probar</span>'}</td>
+        <td>${x.acc===null?'—':`<div style="display:flex;gap:6px;align-items:center">${meter(x.acc)}<span class="muted">${pct(x.acc)}</span></div>`}</td>
+        <td>${x.rounds.length}</td><td class="muted">${x.last?ago(x.last):'—'}</td></tr>`).join('')}</table></div>
+      <div class="grid g3" style="margin-top:12px"><div class="kpi"><b>${A.finals.length}</b><span>intentos del Desafío</span></div><div class="kpi"><b>${p.hi||0}</b><span>récord del Desafío (puntos)</span></div>
+      <div class="kpi"><b>🃏 ${ALBUM.filter(c=>c.b==='final'?(p.stars||{})['final-run']:((p.stars||{})[c.b+'-sort']&&(p.stars||{})[c.b+'-exam'])).length}/${ALBUM.length}</b><span>cromos conseguidos</span></div></div></div>`+hardCard(12)}
+  if(T==='eu')tabEl.innerHTML=`<div class="card"><h2>🌍 Europa: países y capitales</h2><table><tr><th>Bloque</th><th>Explorados</th><th>Países (mejor)</th><th>Capitales (mejor)</th><th>Rondas</th></tr>
+      ${A.eu.map(x=>`<tr><td><b>${x.name}</b></td><td>${x.seen}</td><td>${x.find?`${x.find>=.75?'⭐ ':''}${pct(x.find)}`:'<span class="pill no">sin probar</span>'}</td><td>${x.cap?`${x.cap>=.75?'⭐ ':''}${pct(x.cap)}`:'<span class="pill no">sin probar</span>'}</td><td>${x.rounds.length}</td></tr>`).join('')}</table>
+      <p class="muted" style="margin:8px 0 0">Los datos de rondas y fallos de Europa se registran desde que existe la cuenta; las estrellas anteriores se conservan.</p></div>`;
+  if(T==='cuesta')tabEl.innerHTML=hardCard(30)+untriedCard;
+  if(T==='act')tabEl.innerHTML=timeCard+sesCard(30)+`<div class="card"><h2>🧾 Últimos movimientos</h2><ul class="list feed">${A.ev.filter(e=>e.k!=='time').slice(-60).reverse().map(e=>`<li><time>${when(e.t)}</time><span>${esc(human(e))}</span></li>`).join('')||'<li class="empty">Sin actividad.</li>'}</ul></div>`;
+  if(T==='ajustes'){const cb=data.apps['bio-t2'].ctl||{},ce=data.apps.europa.ctl||{};
+    tabEl.innerHTML=`<div class="card"><h2>🔓 Bloques</h2>
+      <label class="switch"><input type="checkbox" id="ub" ${cb.unlockAll?'checked':''}> Biología: todos los bloques abiertos</label><br>
+      <label class="switch"><input type="checkbox" id="ue" ${ce.unlockAll?'checked':''}> Europa: todos los bloques abiertos</label>
+      <p class="muted" style="margin:8px 0 0">Si está desactivado, cada bloque se abre al ganar las dos estrellas del anterior. Se aplica la próxima vez que abra la web.</p></div>
+      <div class="card"><h2>🔑 Cambiar PIN</h2><div class="form" style="grid-template-columns:140px auto;display:grid;align-items:end"><div><label>Nuevo PIN</label><input id="pin" inputmode="numeric" maxlength="4"></div><div><button class="btn" id="pinb">Guardar</button></div></div><div class="err" id="pine"></div></div>
+      <div class="card"><h2>♻️ Empezar de cero</h2><p class="muted" style="margin:0 0 8px">Borra estrellas, cromos y récord (el historial de actividad se mantiene).</p>
+        <button class="btn danger" id="rb">Reiniciar Biología</button> <button class="btn danger" id="re">Reiniciar Europa</button></div>
+      <div class="card"><h2>🗑️ Borrar cuenta</h2><p class="muted" style="margin:0 0 8px">Elimina la cuenta, su progreso y todo su historial. No se puede deshacer.</p><button class="btn danger" id="del">Borrar la cuenta de ${esc(user.name||u)}</button></div>`;
+    $('#ub').onchange=e=>api('admin-ctl',{method:'POST',body:{user:u,app:'bio-t2',unlockAll:e.target.checked}});
+    $('#ue').onchange=e=>api('admin-ctl',{method:'POST',body:{user:u,app:'europa',unlockAll:e.target.checked}});
+    $('#pinb').onclick=async()=>{try{await api('admin-users',{method:'POST',body:{user:u,name:user.name,pin:$('#pin').value}});$('#pine').style.color='var(--ok)';$('#pine').textContent='PIN cambiado ✓'}catch(e){$('#pine').style.color='';$('#pine').textContent=e.message}};
+    $('#rb').onclick=async()=>{if(confirm('¿Borrar todo el progreso de Biología de '+(user.name||u)+'?')){await api('admin-ctl',{method:'POST',body:{user:u,app:'bio-t2',reset:true}});detail(u,'ajustes')}};
+    $('#re').onclick=async()=>{if(confirm('¿Borrar todo el progreso de Europa de '+(user.name||u)+'?')){await api('admin-ctl',{method:'POST',body:{user:u,app:'europa',reset:true}});detail(u,'ajustes')}};
+    $('#del').onclick=async()=>{if(prompt('Para confirmar, escribe el usuario: '+u)===u){await api('admin-users?user='+encodeURIComponent(u),{method:'DELETE'});home()}};
+  }
+}
+function bname(id){if(!id)return '';if(id[0]==='e')return 'Europa · '+(EUROPA[+id.slice(1)]||'Desafío Europa');const b=BLOCKS.find(x=>x.id===id);return b?b.name:id}
+const MODES={learn:'Aprender',sort:'Clasificar',exam:'Examen',explore:'Explorar',find:'Encontrar países',cap:'Capitales',mix:'Desafío'};
+function human(e){switch(e.k){
+  case 'open':return 'Abre la web'+(e.page&&e.page!=='/'?' ('+e.page.replace(/\//g,' ').trim()+')':'');
+  case 'block':return 'Entra en '+bname(e.b);
+  case 'mode':return bname(e.b)+' → '+(MODES[e.m]||e.m);
+  case 'card':return 'Lee la tarjeta «'+e.l+'» ('+bname(e.b)+')';
+  case 'check':return (e.ok?'✅':'❌')+' «¿Te acuerdas?» de '+bname(e.b);
+  case 'q':return (e.ok?'✅ ':'❌ ')+e.l+(e.first?'':' (repetida)');
+  case 'round':return (e.star?'⭐ ':'')+bname(e.b)+' · '+(MODES[e.m]||e.m)+': '+e.sc+'% a la primera';
+  case 'final':return '🏁 Desafío: '+e.pts+' puntos'+(e.won?' 🏆':' (sin vidas)');
+  case 'final-start':return 'Empieza el Desafío';
+  case 'pizarra':return '📷 Mira la pizarra ('+bname(e.b)+')';
+  case 'album':return '🃏 Abre el álbum';case 'cromo':return '🃏 Mira el cromo '+e.id;
+  case 'link':return '▶️ Abre un vídeo o actividad';case 'globos':return '🧪 Experimento de los globos '+(e.ok?'✅':'❌');
+  default:return e.k}}
+boot();
+</script>
+</body>
+</html>

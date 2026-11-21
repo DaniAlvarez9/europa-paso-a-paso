@@ -286,6 +286,7 @@ b{font-weight:800}
   <div class="pbtns"><button id="pzoom" aria-label="Ampliar">🔍</button><button id="pclose" aria-label="Cerrar">✕</button></div>
   <div class="cap">Apuntes de la pizarra · toca 🔍 para ampliar</div></div>
 
+<script src="/shared/cuenta.js"></script>
 <script src="contenido.js"></script>
 <script>
 /* ---------- Micro, el guía ---------- */
@@ -413,7 +414,7 @@ impohongo:()=>cells([['🍄','Comestibles','trufas, champiñón'],['🌱','Humus
 };
 const FIG_INIT={
 globos:()=>{document.querySelectorAll('#gbtn button').forEach(b=>b.onclick=()=>{
-  const ok=b.dataset.g==='C';tone(ok);
+  const ok=b.dataset.g==='C';tone(ok);Cuenta.ev('globos',{ok});
   document.querySelectorAll('#gbtn button').forEach(x=>{x.disabled=true;if(x.dataset.g==='C')x.classList.add('ok');else if(x===b)x.classList.add('bad');else x.classList.add('dim')});
   $('#gq').textContent='⏳ Esperamos un rato…';
   setTimeout(()=>{$('#balA').style.transform='scale(1)';$('#balB').style.transform='scale(1.15)';$('#balC').style.transform='scale(.25)'},300);
@@ -425,7 +426,7 @@ const PASS=0.75,FINAL_N=20,LIVES=3;
 const KEY='laura-bio-t2-v1';
 let S={stars:{},best:{},seen:{},unlockAll:false,cards:{},hi:0};
 try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}Cuenta.save('bio-t2',S)}
 const has=(b,m)=>!!S.stars[b+'-'+m];
 const done=b=>has(b,'sort')&&has(b,'exam');
 const NB=BLOCKS.filter(b=>!b.final);
@@ -503,18 +504,18 @@ function renderAlbum(){const owned=ALBUM.filter(cardOwned).length;
   document.querySelectorAll('#grid .cromo').forEach(el=>el.onclick=()=>{
     if(el.classList.contains('locked')){const c=ALBUM.find(x=>x.id===el.dataset.id),B=BLOCKS.find(b=>b.id===c.b);
       return msgSheet('think','Cromo bloqueado',B.final?'Gana el Desafío del tema para conseguirlo.':`Consigue las dos estrellas de <b>${B.name}</b> para conseguirlo.`)}
-    el.classList.toggle('flip')})}
-$('#openAlbum').onclick=()=>{renderAlbum();show('album')};
+    el.classList.toggle('flip');if(el.classList.contains('flip'))Cuenta.ev('cromo',{id:el.dataset.id})})}
+$('#openAlbum').onclick=()=>{renderAlbum();show('album');Cuenta.ev('album')};
 $('#aback').onclick=()=>{show('home');renderHome()};
 document.querySelector('#album .guide').innerHTML=document.querySelector('#album .guide').innerHTML.replace('__MIC__',MIC('wow'));
 
 /* ---------- bloque ---------- */
 let CUR=0,MODE='learn';
-function openBlock(i,mode){CUR=i;const b=BLOCKS[i];
+function openBlock(i,mode){CUR=i;const b=BLOCKS[i];Cuenta.ev('block',{b:b.id});
   document.documentElement.style.setProperty('--blk',cssv(b.c));
   $('#btitle').textContent=(i+1)+'. '+b.name;$('#bsub').textContent=b.desc;
   $('#tabs').style.display='';show('block');setMode(mode)}
-function setMode(m){MODE=m;const b=BLOCKS[CUR];
+function setMode(m){MODE=m;const b=BLOCKS[CUR];Cuenta.ev('mode',{b:b.id,m});
   document.querySelectorAll('.tab').forEach(t=>{t.classList.toggle('on',t.dataset.m===m);
     const st=t.querySelector('.st');if(st)st.textContent=has(b.id,t.dataset.m)?'⭐':''});
   $('#body').scrollTop=0;
@@ -524,14 +525,14 @@ $('#back').onclick=()=>{if(Q&&Q.kind==='final'&&Q.live&&!confirm('¿Salir del De
 
 /* aprender */
 function learn(k){const b=BLOCKS[CUR],L=b.learn,c=L[k];
-  S.seen[b.id+'-'+k]=1;save();
+  S.seen[b.id+'-'+k]=1;save();Cuenta.ev('card',{b:b.id,i:k,l:c.t});
   const intro=k===0&&b.hello?guide('happy',b.hello):'';
   $('#body').innerHTML=`${intro}<div class="lcard">
     <div class="lhead">${IC[c.ic]}<div><h3>${c.t}</h3><small>${c.s}</small></div></div>
     ${c.fig?`<div class="fig">${FIG[c.fig]()}</div>`:''}
     <ul>${c.p.map(x=>`<li>${md(x)}</li>`).join('')}</ul>
     <div class="tip"><span>💡</span><div>${c.tip}</div></div>
-    ${c.links?`<div class="links">${c.links.map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener"><span>${u.includes('youtu')?'▶️':'📝'}</span>${t}</a>`).join('')}</div>`:''}
+    ${c.links?`<div class="links">${c.links.map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener" onclick="Cuenta.ev('link',{u:'${u}'})"><span>${u.includes('youtu')?'▶️':'📝'}</span>${t}</a>`).join('')}</div>`:''}
     ${c.check?`<div class="check"><div class="cq"><em>¿Te acuerdas?</em> ${c.check[0]}</div><div class="copts">${shuffle(c.check[1].map((o,i)=>[o,i])).map(([o,i])=>`<button data-i="${i}">${o}</button>`).join('')}</div><div class="cfb"></div></div>`:''}
     <button class="pz" id="pz"><img src="img/pizarra/p${c.pz}.webp" alt="">📷 Ver lo que escribió la profesora en la pizarra</button>
   </div>
@@ -544,7 +545,7 @@ function learn(k){const b=BLOCKS[CUR],L=b.learn,c=L[k];
   $('#pz').onclick=()=>openPhoto(c.pz);
   if($('#tosort'))$('#tosort').onclick=()=>setMode('sort');
   document.querySelectorAll('.check .copts button').forEach(el=>el.onclick=()=>{
-    const ok=el.dataset.i==='0';tone(ok);
+    const ok=el.dataset.i==='0';tone(ok);Cuenta.ev('check',{b:b.id,i:k,ok});
     document.querySelectorAll('.check .copts button').forEach(x=>{x.disabled=true;if(x.dataset.i==='0')x.classList.add('ok');else if(x===el)x.classList.add('bad');else x.classList.add('dim')});
     $('.check .cfb').innerHTML=(ok?'✅ '+pick(OK_MSG)+' ':'🤔 ')+c.check[2]});
   swipe($('#body'),d=>{if(d>0&&k<L.length-1)learn(k+1);if(d<0&&k>0)learn(k-1)});
@@ -552,7 +553,7 @@ function learn(k){const b=BLOCKS[CUR],L=b.learn,c=L[k];
 function swipe(el,cb){let x0=null,y0=null;el.ontouchstart=e=>{x0=e.touches[0].clientX;y0=e.touches[0].clientY};
   el.ontouchend=e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;
     if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)cb(dx<0?1:-1);x0=null}}
-function openPhoto(n){$('#pimg').src='img/pizarra/p'+n+'.webp';$('#photo').classList.remove('zoom');$('#photo').classList.add('on')}
+function openPhoto(n){Cuenta.ev('pizarra',{b:BLOCKS[CUR].id,pz:n});$('#pimg').src='img/pizarra/p'+n+'.webp';$('#photo').classList.remove('zoom');$('#photo').classList.add('on')}
 $('#pclose').onclick=()=>$('#photo').classList.remove('on');
 $('#pzoom').onclick=()=>$('#photo').classList.toggle('zoom');
 
@@ -602,7 +603,7 @@ function nextQ(){if(!Q)return;if(!Q.queue.length||(Q.kind==='final'&&Q.lives<=0)
 function answerSort(el){const it=Q.queue[0],g=it.x[3],ok=el.dataset.k===g;
   document.querySelectorAll('.bin').forEach(b=>{b.disabled=true;if(b.dataset.k===g)b.classList.add('ok');else if(b===el)b.classList.add('bad');else b.classList.add('dim')});
   answer(ok)}
-function answer(ok,extra){const it=Q.queue[0],why=it.t==='sort'?it.x[4]:it.x[2];
+function answer(ok,extra){const it=Q.queue[0],why=it.t==='sort'?it.x[4]:it.x[2];Cuenta.ev('q',{b:it.b,m:Q.kind==='final'?'final':it.t,id:it.uid,l:label(it),ok,first:!Q.tried.has(it.uid)});
   if(!Q.tried.has(it.uid)){Q.tried.add(it.uid);if(ok)Q.first.add(it.uid);else Q.missed.add(it.uid)}
   Q.queue.shift();
   let gain=0;
@@ -623,6 +624,7 @@ function finish(){
   const b=BLOCKS[CUR],sc=Q.first.size/Q.total,key=b.id+'-'+Q.kind;
   const wasDone=done(b.id);
   S.best[key]=Math.max(S.best[key]||0,sc);const got=sc>=PASS,was=!!S.stars[key];if(got)S.stars[key]=1;save();
+  Cuenta.ev('round',{b:b.id,m:Q.kind,sc:Math.round(sc*100),n:Q.total,first:Q.first.size,star:got,streak:Q.best});
   const all=asItems(b,Q.kind),names=[...new Set(all.filter(it=>Q.missed.has(it.uid)).map(label))];
   const other=Q.kind==='sort'?'exam':'sort';
   if(got)confetti();
@@ -654,11 +656,11 @@ function openFinal(){CUR=BLOCKS.length-1;const b=BLOCKS[CUR];
     <p>Termina con al menos una vida para ganar el 🏆 y el último cromo.${S.hi?`<br>Tu récord: <b>${S.hi} puntos</b>.`:''}</p>
     <button class="big" id="go">¡Empezar!</button></div>`;
   $('#go').onclick=startFinal}
-function startFinal(){const per=Math.ceil(FINAL_N/NB.length);let pool=[];
+function startFinal(){Cuenta.ev('final-start');const per=Math.ceil(FINAL_N/NB.length);let pool=[];
   NB.forEach(b=>{const ex=shuffle(asItems(b,'exam')),so=shuffle(asItems(b,'sort'));pool=pool.concat(shuffle(ex.slice(0,Math.ceil(per/2)+1).concat(so.slice(0,Math.floor(per/2)))).slice(0,per))});
   Q={kind:'final',queue:shuffle(pool).slice(0,FINAL_N),total:FINAL_N,done:0,wrong:0,lives:LIVES,pts:0,first:new Set(),missed:new Set(),tried:new Set(),streak:0,best:0,live:true};
   Q.total=Q.queue.length;nextQ()}
-function finishFinal(){Q.live=false;const won=Q.lives>0,first=!has('final','run');
+function finishFinal(){Q.live=false;const won=Q.lives>0,first=!has('final','run');Cuenta.ev('final',{pts:Q.pts,won,ok:Q.done,n:Q.total,lives:Q.lives,streak:Q.best});
   if(won)S.stars['final-run']=1;const rec=Q.pts>(S.hi||0);if(rec)S.hi=Q.pts;save();
   if(won)confetti();
   const card=won&&first?ALBUM.filter(c=>c.b==='final'):[];
@@ -677,6 +679,10 @@ function closeSheet(){$('#over').classList.remove('on')}
 $('#over').onclick=e=>{if(e.target.id==='over')closeSheet()};
 
 renderHome();
+(async()=>{const me=await Cuenta.gate();
+  if(me){S=Object.assign({stars:{},best:{},seen:{},unlockAll:false,cards:{},hi:0},await Cuenta.load('bio-t2',S));try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+  document.querySelector('#home .foot').style.display=(!me||me.tutor)?'':'none';
+  renderHome()})();
 </script>
 </body>
 </html>
