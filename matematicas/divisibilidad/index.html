@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Matemáticas · Estudia con Laura</title>
+<meta name="theme-color" content="#e07a10">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../motor.css">
+<style>
+/* columna de la descomposición (como en el cuaderno) */
+.fwrap{display:flex;justify-content:center;margin:6px 0 4px}
+.fcol{font-family:Fredoka,Nunito,sans-serif;font-size:26px;font-weight:600;display:grid;gap:1px}
+.fr{display:grid;grid-template-columns:auto auto}
+.fr .fn{text-align:right;padding:0 12px 0 10px;min-width:3.4ch;border-right:3px solid var(--ink)}
+.fr .fp{padding-left:12px;color:var(--blk);min-width:2.2ch}
+.fr.cur .fn{background:#fff3c4;border-radius:8px 0 0 8px}
+.fdone .fr.cur .fn{background:none}
+.fdemo .fr{opacity:0;transform:translateY(6px);transition:.35s}
+.fdemo .fr.in{opacity:1;transform:none}
+/* fichas para comunes y no comunes (colores del cuaderno: verde comunes, naranja no comunes) */
+.cmrow{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:2px;margin:6px 0}
+.cmn{font-size:22px;margin-right:6px}
+.chip{font-family:Fredoka,Nunito,sans-serif;font-size:22px;font-weight:600;padding:3px 11px;border-radius:12px;background:#fff;border:2px solid var(--line);box-shadow:0 2px 0 var(--line);margin:2px;line-height:1.5}
+.chip.on{border-color:var(--blk);background:#fff3c4}
+.chip.com{background:#c9f0b7;border-color:#8fd16f}
+.chip.nocom{background:#ffd7ad;border-color:#f4a259}
+.chip.com.on,.chip.nocom.on{outline:3px solid var(--ink);outline-offset:2px}
+span.chip{display:inline-block;cursor:default}
+.dot{font-weight:800;color:var(--muted);font-size:20px}
+.legend{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;font-size:13.5px;font-weight:800;margin:4px 0}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:4px}
+.rule{border:2px solid var(--ink);border-radius:12px;padding:8px 10px;font-family:Fredoka,Nunito,sans-serif;font-size:18px;font-weight:600;text-align:center;background:#fff;margin:8px 0;line-height:1.35}
+.rule b{color:inherit!important}
+.hl-g{background:#c9f0b7;border-radius:4px;padding:0 3px}
+.hl-o{background:#ffd7ad;border-radius:4px;padding:0 3px}
+.hl-y{background:#fff07a;border-radius:4px;padding:0 3px}
+.dap{display:grid;grid-template-columns:1fr;gap:6px;margin:8px 0}
+.dap div{border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:#fff;font-size:15.5px;line-height:1.4}
+.dap b{display:block;font-family:Fredoka,Nunito,sans-serif;font-size:16px}
+</style>
+</head>
+<body>
+<section id="home" class="screen on">
+  <a class="tohub" href="../../#matematicas">← Matemáticas</a>
+  <h1 id="htitle"></h1>
+  <div id="hguide"></div>
+  <div class="total"><span>⭐</span><div class="bar"><i id="totbar"></i></div><b id="tot">0</b></div>
+  <div class="path" id="path"></div>
+  <div class="foot"><button id="unlockAll">Abrir todos los bloques</button><button id="reset">Empezar de cero</button></div>
+</section>
+<section id="block" class="screen">
+  <div class="top"><button class="back" id="back" aria-label="Volver">←</button><div class="ttl"><h2 id="btitle"></h2><small id="bsub"></small></div></div>
+  <div class="tabs" id="tabs">
+    <button class="tab" data-m="learn">💡 Entiende</button>
+    <button class="tab" data-m="prac">✏️ Practica</button>
+    <button class="tab" data-m="reto">⭐ Reto<span class="st"></span></button>
+  </div>
+  <div class="body" id="body"></div>
+</section>
+<div class="overlay" id="over"><div class="sheet" id="sheet"></div></div>
+<script src="/shared/cuenta.js"></script>
+<script src="../motor.js"></script>
+<script src="contenido.js"></script>
+</body>
+</html>

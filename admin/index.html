@@ -99,9 +99,10 @@ const meter=(v,c)=>`<div class="meter"><i style="width:${Math.round(v*100)}%;bac
 
 /* ---------- matemáticas: metadatos de los temas ---------- */
 const MATH={'mat-nat':{name:'Números naturales',blocks:[['n1','El orden de las operaciones',6],['n2','Operaciones combinadas',3],['n3','División de dos cifras',4],['n4','Problemas',2]]},
- 'mat-pot':{name:'Potencias y raíces',blocks:[['p1','¿Qué es una potencia?',5],['p2','Multiplicar y dividir potencias',4],['p3','Potencia de potencia y mismo exponente',4],['p4','Raíces cuadradas',4],['p5','El método fiesta',4],['p6','Operaciones y problemas',3]]}};
+ 'mat-pot':{name:'Potencias y raíces',blocks:[['p1','¿Qué es una potencia?',5],['p2','Multiplicar y dividir potencias',4],['p3','Potencia de potencia y mismo exponente',4],['p4','Raíces cuadradas',4],['p5','El método fiesta',4],['p6','Operaciones y problemas',3]]},
+ 'mat-div':{name:'Divisibilidad: m.c.m. y m.c.d.',blocks:[['d1','Divisibilidad',6],['d2','Descomponer en primos',5],['d3','m.c.m. y m.c.d.',6],['d4','Problemas',3]]}};
 const MBLK={};Object.entries(MATH).forEach(([a,t])=>t.blocks.forEach(([id,name,n])=>MBLK[id]={a,name,n,tema:t.name}));
-const APPN={'bio-t2':'Biología','europa':'Europa','mat-nat':'Mates · Naturales','mat-pot':'Mates · Potencias'};
+const APPN={'bio-t2':'Biología','europa':'Europa','mat-nat':'Mates · Naturales','mat-pot':'Mates · Potencias','mat-div':'Mates · Divisibilidad'};
 
 /* ---------- acceso ---------- */
 async function boot(){
@@ -187,7 +188,7 @@ async function detail(u,tab){
   const vals=days.map(d=>A.byDay[dayKey(d)]||0),mx=Math.max(600,...vals);
   const week=vals.slice(7).reduce((a,b)=>a+b,0);
   const bioStars=Object.values((data.apps['bio-t2'].progress||{}).stars||{}).filter(Boolean).length;
-  const euStars=A.eu.reduce((a,x)=>a+(x.find>=.75)+(x.cap>=.75),0);const matStars=A.mat['mat-nat'].stars+A.mat['mat-pot'].stars;
+  const euStars=A.eu.reduce((a,x)=>a+(x.find>=.75)+(x.cap>=.75),0);const matStars=Object.values(A.mat).reduce((a,x)=>a+x.stars,0);
   const firstQ=A.ev.filter(e=>e.k==='q'&&e.first),acc=firstQ.length?firstQ.filter(e=>e.ok).length/firstQ.length:null;
   const T=VIEW.tab;
   $('#main').innerHTML=`<div class="top" style="margin-bottom:10px"><button class="btn alt small" id="bk">← Volver</button><h1 style="font-size:22px">${esc(user.name||u)}<small>usuario: ${esc(u)} · última actividad: ${ago(Number(user.lastSeen))}</small></h1><button class="btn alt small" id="rf">↻</button></div>
@@ -230,22 +231,24 @@ async function detail(u,tab){
       <p class="muted" style="margin:8px 0 0">Los datos de rondas y fallos de Europa se registran desde que existe la cuenta; las estrellas anteriores se conservan.</p></div>`;
   if(T==='cuesta')tabEl.innerHTML=hardCard(30)+untriedCard;
   if(T==='act')tabEl.innerHTML=timeCard+sesCard(30)+`<div class="card"><h2>🧾 Últimos movimientos</h2><ul class="list feed">${A.ev.filter(e=>e.k!=='time').slice(-60).reverse().map(e=>`<li><time>${when(e.t)}</time><span>${esc(human(e))}</span></li>`).join('')||'<li class="empty">Sin actividad.</li>'}</ul></div>`;
-  if(T==='ajustes'){const cb=data.apps['bio-t2'].ctl||{},ce=data.apps.europa.ctl||{},cn=(data.apps['mat-nat']||{}).ctl||{},cp=(data.apps['mat-pot']||{}).ctl||{};
+  if(T==='ajustes'){const cb=data.apps['bio-t2'].ctl||{},ce=data.apps.europa.ctl||{},cn=(data.apps['mat-nat']||{}).ctl||{},cp=(data.apps['mat-pot']||{}).ctl||{},cd=(data.apps['mat-div']||{}).ctl||{};
     tabEl.innerHTML=`<div class="card"><h2>🔓 Bloques</h2>
       <label class="switch"><input type="checkbox" id="ub" ${cb.unlockAll?'checked':''}> Biología: todos los bloques abiertos</label><br>
       <label class="switch"><input type="checkbox" id="ue" ${ce.unlockAll?'checked':''}> Europa: todos los bloques abiertos</label><br>
       <label class="switch"><input type="checkbox" id="un" ${cn.unlockAll?'checked':''}> Mates · Números naturales: todos los bloques abiertos</label><br>
-      <label class="switch"><input type="checkbox" id="up" ${cp.unlockAll?'checked':''}> Mates · Potencias y raíces: todos los bloques abiertos</label>
+      <label class="switch"><input type="checkbox" id="up" ${cp.unlockAll?'checked':''}> Mates · Potencias y raíces: todos los bloques abiertos</label><br>
+      <label class="switch"><input type="checkbox" id="ud" ${cd.unlockAll?'checked':''}> Mates · Divisibilidad (m.c.m. y m.c.d.): todos los bloques abiertos</label>
       <p class="muted" style="margin:8px 0 0">Si está desactivado, cada bloque se abre al ganar las estrellas del anterior (en Mates, también tras 8 ejercicios de práctica). Se aplica la próxima vez que abra la web.</p></div>
       <div class="card"><h2>🔑 Cambiar PIN</h2><div class="form" style="grid-template-columns:140px auto;display:grid;align-items:end"><div><label>Nuevo PIN</label><input id="pin" inputmode="numeric" maxlength="4"></div><div><button class="btn" id="pinb">Guardar</button></div></div><div class="err" id="pine"></div></div>
       <div class="card"><h2>♻️ Empezar de cero</h2><p class="muted" style="margin:0 0 8px">Borra estrellas, cromos y récord (el historial de actividad se mantiene).</p>
-        <button class="btn danger" id="rb">Reiniciar Biología</button> <button class="btn danger" id="re">Reiniciar Europa</button> <button class="btn danger" id="rn">Reiniciar Naturales</button> <button class="btn danger" id="rp">Reiniciar Potencias</button></div>
+        <button class="btn danger" id="rb">Reiniciar Biología</button> <button class="btn danger" id="re">Reiniciar Europa</button> <button class="btn danger" id="rn">Reiniciar Naturales</button> <button class="btn danger" id="rp">Reiniciar Potencias</button> <button class="btn danger" id="rd">Reiniciar Divisibilidad</button></div>
       <div class="card"><h2>🗑️ Borrar cuenta</h2><p class="muted" style="margin:0 0 8px">Elimina la cuenta, su progreso y todo su historial. No se puede deshacer.</p><button class="btn danger" id="del">Borrar la cuenta de ${esc(user.name||u)}</button></div>`;
     $('#ub').onchange=e=>api('admin-ctl',{method:'POST',body:{user:u,app:'bio-t2',unlockAll:e.target.checked}});
     $('#ue').onchange=e=>api('admin-ctl',{method:'POST',body:{user:u,app:'europa',unlockAll:e.target.checked}});
     $('#un').onchange=e=>api('admin-ctl',{method:'POST',body:{user:u,app:'mat-nat',unlockAll:e.target.checked}});
     $('#up').onchange=e=>api('admin-ctl',{method:'POST',body:{user:u,app:'mat-pot',unlockAll:e.target.checked}});
-    [['rn','mat-nat','Números naturales'],['rp','mat-pot','Potencias y raíces']].forEach(([id,app,n])=>$('#'+id).onclick=async()=>{if(confirm('¿Borrar todo el progreso de '+n+' de '+(user.name||u)+'?')){await api('admin-ctl',{method:'POST',body:{user:u,app,reset:true}});detail(u,'ajustes')}});
+    $('#ud').onchange=e=>api('admin-ctl',{method:'POST',body:{user:u,app:'mat-div',unlockAll:e.target.checked}});
+    [['rn','mat-nat','Números naturales'],['rp','mat-pot','Potencias y raíces'],['rd','mat-div','Divisibilidad']].forEach(([id,app,n])=>$('#'+id).onclick=async()=>{if(confirm('¿Borrar todo el progreso de '+n+' de '+(user.name||u)+'?')){await api('admin-ctl',{method:'POST',body:{user:u,app,reset:true}});detail(u,'ajustes')}});
     $('#pinb').onclick=async()=>{try{await api('admin-users',{method:'POST',body:{user:u,name:user.name,pin:$('#pin').value}});$('#pine').style.color='var(--ok)';$('#pine').textContent='PIN cambiado ✓'}catch(e){$('#pine').style.color='';$('#pine').textContent=e.message}};
     $('#rb').onclick=async()=>{if(confirm('¿Borrar todo el progreso de Biología de '+(user.name||u)+'?')){await api('admin-ctl',{method:'POST',body:{user:u,app:'bio-t2',reset:true}});detail(u,'ajustes')}};
     $('#re').onclick=async()=>{if(confirm('¿Borrar todo el progreso de Europa de '+(user.name||u)+'?')){await api('admin-ctl',{method:'POST',body:{user:u,app:'europa',reset:true}});detail(u,'ajustes')}};

@@ -75,7 +75,8 @@ const MATERIAS=[
   temas:[{n:'2',name:'Microorganismos',desc:'5 bloques, Desafío final y álbum de cromos',href:'biologia/tema-2/',stars:()=>bioStars('laura-bio-t2-v1'),total:11}]},
  {id:'matematicas',name:'Matemáticas',c:'var(--mat)',bg:'#fde9e0',icon:'mat',sub:'Matemáticas · 1º ESO',
   temas:[{n:'ℕ',name:'Los números naturales',desc:'Orden de operaciones, combinadas, divisiones y problemas',href:'matematicas/naturales/',stars:()=>bioStars('laura-mat-nat-v1'),total:5},
-         {n:'aⁿ',name:'Potencias y raíces',desc:'Propiedades, raíces, método fiesta y operaciones',href:'matematicas/potencias/',stars:()=>bioStars('laura-mat-pot-v1'),total:7}]}
+         {n:'aⁿ',name:'Potencias y raíces',desc:'Propiedades, raíces, método fiesta y operaciones',href:'matematicas/potencias/',stars:()=>bioStars('laura-mat-pot-v1'),total:7},
+         {n:'÷',name:'Divisibilidad: m.c.m. y m.c.d.',desc:'Criterios, descomponer en primos, m.c.m., m.c.d. y problemas',href:'matematicas/divisibilidad/',stars:()=>bioStars('laura-mat-div-v1'),total:5}]}
 ];
 
 function bar(t){const s=t.stars(),p=Math.round(100*s/t.total);return `<div class="bar"><i style="width:${p}%"></i></div><p>⭐ ${s} de ${t.total} estrellas</p>`}
@@ -107,7 +108,7 @@ addEventListener('hashchange',route);addEventListener('pageshow',route);route();
 (async()=>{const me=await Cuenta.gate();if(!me)return;
   document.getElementById('hello').textContent=`¡Hola, ${me.name||me.user}! 👋`;
   const w=document.getElementById('who');w.style.display='inline';w.textContent=`¿No eres ${me.name||me.user}? Cambiar de usuario`;w.onclick=()=>Cuenta.logout();
-  const [e,b,mn,mp]=await Promise.all([Cuenta.remote('europa'),Cuenta.remote('bio-t2'),Cuenta.remote('mat-nat'),Cuenta.remote('mat-pot')]);if(e)REMOTE['laura-europa-v1']=e;if(b)REMOTE['laura-bio-t2-v1']=b;if(mn)REMOTE['laura-mat-nat-v1']=mn;if(mp)REMOTE['laura-mat-pot-v1']=mp;route()})();
+  const [e,b,mn,mp,md]=await Promise.all([Cuenta.remote('europa'),Cuenta.remote('bio-t2'),Cuenta.remote('mat-nat'),Cuenta.remote('mat-pot'),Cuenta.remote('mat-div')]);if(e)REMOTE['laura-europa-v1']=e;if(b)REMOTE['laura-bio-t2-v1']=b;if(mn)REMOTE['laura-mat-nat-v1']=mn;if(mp)REMOTE['laura-mat-pot-v1']=mp;if(md)REMOTE['laura-mat-div-v1']=md;route()})();
 </script>
 </body>
 </html>

@@ -154,6 +154,7 @@ const val = s => s.dataset.v === undefined || s.dataset.v === '' ? null : +s.dat
 const OKM = ['¡Bien!', '¡Eso es!', '¡Muy bien!', '¡Genial!', '¡Exacto!', '¡Lo tienes!'];
 const NOM = ['Casi…', 'Uy, revisa.', 'No pasa nada, otra vez.', 'Mmm, no es eso.'];
 const CALM = { wrongRow: 0, lastCalm: 0, onCalm: null };
+const DEMOS_EXT = {};
 
 function runExercise(host, ex, done, opts = {}) {
   let si = -1, revealed = false, errs = 0, hints = 0, hintI = 0;
@@ -398,7 +399,7 @@ function learn(k) {
   $('.slide .say').onclick = () => speak(strip(c.t + '. ' + c.html));
   $('#prev').onclick = () => learn(k - 1); $('#next').onclick = () => learn(k + 1);
   if ($('#topr')) $('#topr').onclick = () => setMode('prac');
-  if (c.demo) DEMOS[c.demo.type]($('.slide .demo'), c.demo);
+  if (c.demo) (DEMOS[c.demo.type] || DEMOS_EXT[c.demo.type])($('.slide .demo'), c.demo);
   if (c.check) { const ch = c.check, d = document.createElement('div'); d.className = 'box'; d.innerHTML = `<div class="q" style="margin:0">🤔 ${ch[0]}</div><div class="choices">${shuffle(ch[1].map((o, i) => [o, i])).map(([o, i]) => `<button data-i="${i}">${o}</button>`).join('')}</div><div class="cfb" style="margin-top:6px;font-weight:700"></div>`; $('.slide .try').appendChild(d); d.querySelectorAll('button').forEach(bt => bt.onclick = () => { const ok = bt.dataset.i === '0'; tone(ok); Cuenta.ev('check', { b: b.id, i: k, ok }); if (ok) { d.querySelectorAll('button').forEach(x => { x.disabled = true; if (x === bt) x.classList.add('ok'); else x.classList.add('dim') }); d.querySelector('.cfb').innerHTML = '✅ ' + pick(OKM) + ' ' + (ch[2] || '') } else { bt.classList.add('bad'); bt.disabled = true; d.querySelector('.cfb').innerHTML = '🤔 Casi. ' + (ch[3] || 'Prueba otra.') } }) }
   if (c.try) { const host = document.createElement('div'); host.innerHTML = `<div class="q" style="margin-top:10px">✋ ¡Tu turno!</div><div class="h"></div>`; $('.slide .try').appendChild(host); runExercise(host.querySelector('.h'), c.try(), r => { Cuenta.ev('q', { b: b.id, m: 'learn', id: b.id + ':try' + k, l: 'Tu turno: ' + c.t, ok: r.perfect, first: true, errs: r.errs, hints: r.hints }) }, { head: '' }) }
 }
@@ -528,6 +529,9 @@ renderHome(); refreshFoot(null);
 
 window.__test = { get S() { return S }, BL, runExercise, setMode, openBlock, get CUR() { return CUR } };
 }
-window.M = { P, R, mx, fmt, rnd, pick, shuffle, solveAll, tokenize, allowed, calc, subOf, applyOp, runExercise, MIC };
+window.M = { P, R, mx, fmt, rnd, pick, shuffle, solveAll, tokenize, allowed, calc, subOf, applyOp, runExercise, MIC,
+  /* para que un tema añada sus propios tipos de paso y demos */
+  addType: (n, f) => { TYPES[n] = f }, addDemo: (n, f) => { DEMOS_EXT[n] = f },
+  ui: { slot, val, padOn, padOff, focusSlot, tone, guide, CALM } };
 window.startMates = startApp;
 })();
