@@ -4,7 +4,7 @@ const crypto = require('crypto');
 
 const URL_ = process.env.KV_REST_API_URL;
 const TOKEN = process.env.KV_REST_API_TOKEN;
-const APPS = ['europa', 'bio-t2', 'mat-nat', 'mat-pot', 'mat-div'];
+const APPS = ['europa', 'bio-t2', 'mat-nat', 'mat-pot', 'mat-div', 'mat-calc'];
 const DAY = 86400;
 
 async function redis(...cmds) {

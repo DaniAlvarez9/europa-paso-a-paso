@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Matemáticas · Estudia con Laura</title>
+<meta name="theme-color" content="#e07a10">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../motor.css">
+<style>
+/* ronda relámpago */
+.blz{text-align:center}
+.blz .bt{display:flex;justify-content:space-between;gap:6px;font-weight:800;font-size:13.5px;color:var(--muted);flex-wrap:wrap}
+.blz .bclock{font-family:Fredoka;font-size:18px;color:var(--ink)}
+.blz .bq{font-family:Fredoka,Nunito,sans-serif;font-size:44px;font-weight:600;margin:10px 0 2px;animation:pop .2s ease-out}
+.blz .bbar{height:12px;border-radius:99px;background:#efe9dd;overflow:hidden;margin-top:12px}
+.blz .bbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--c0),var(--c4),var(--c2));border-radius:99px;transition:width .3s}
+.blz .rocket{font-size:26px;display:inline-block;transition:transform .3s}
+.blz .end{font-family:Fredoka;font-size:24px;font-weight:600;margin:8px 0}
+.fam{display:inline-grid;grid-template-columns:auto auto;gap:4px 14px;font-family:Fredoka;font-size:20px;background:#fff;border:2px solid var(--line);border-radius:16px;padding:10px 16px}
+.steps3{display:grid;gap:6px;margin:8px 0}
+.steps3 div{position:relative;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 10px 8px 48px;font-size:16px;line-height:1.4;min-height:44px}
+.steps3 b.n{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--blk);color:#fff!important;font-family:Fredoka}
+.hl-y{background:#fff07a;border-radius:4px;padding:0 3px}
+.hard{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin:8px 0}
+.hard div{background:#fff;border:2px solid var(--line);border-radius:12px;padding:6px;text-align:center;font-family:Fredoka;font-size:19px;font-weight:600}
+.hard div small{display:block;font-family:Nunito;font-size:12px;color:var(--muted);font-weight:700}
+/* gimnasio: meta diaria, racha, rango y medallas */
+.gym{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:12px;box-shadow:0 2px 0 var(--line);margin-bottom:12px}
+.gtop{display:flex;align-items:center;gap:12px}
+.ring{flex:none;width:84px;height:84px;border-radius:50%;background:conic-gradient(var(--c4) calc(var(--p)*1%),#efe9dd 0);display:grid;place-items:center}
+.ring>div{width:66px;height:66px;border-radius:50%;background:#fff;display:grid;place-items:center;align-content:center;line-height:1.05}
+.ring b{font-family:Fredoka;font-size:20px}.ring small{font-size:11px;font-weight:800;color:var(--muted)}
+.gmid{flex:1;min-width:0}
+.fire{font-family:Fredoka;font-size:19px;color:var(--muted);filter:grayscale(1)}.fire.on{filter:none;color:#d4570f}.fire b{font-size:26px}.fire span{font-size:14px;font-weight:600}
+.week{display:flex;gap:5px;margin-top:6px}
+.week i{flex:1;height:30px;border-radius:9px;background:#efe9dd;display:grid;place-items:center;font-style:normal;font-size:11px;font-weight:800;color:#9b9384}
+.week i.some{background:#ffd7ad;color:#8a4b00}.week i.full{background:#ff9b4a;color:#fff}.week i.full::after{content:'🔥';position:absolute;font-size:9px;transform:translate(9px,-11px)}
+.week i{position:relative}.week i.td{outline:2px solid var(--ink);outline-offset:1px}
+.rank{display:flex;align-items:center;gap:10px;margin-top:12px}
+.rank .ri{font-size:30px}.rl{display:flex;justify-content:space-between;gap:6px;font-size:13px;font-weight:700;color:var(--muted);flex-wrap:wrap}.rl b{font-family:Fredoka;font-size:17px;color:var(--ink)}
+.rbar{height:10px;border-radius:99px;background:#efe9dd;overflow:hidden;margin-top:4px}.rbar i{display:block;height:100%;background:linear-gradient(90deg,#ffd34d,#ff9b4a,#d9467a);border-radius:99px;transition:width .6s}
+.meds{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+.meds summary{cursor:pointer;font-weight:800;font-size:14px;list-style:none}.meds summary::-webkit-details-marker{display:none}.meds summary span{float:right;color:var(--muted);text-decoration:underline;font-size:12.5px}
+.mgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:8px}
+.mgrid div{border:1px solid var(--line);border-radius:12px;padding:6px 8px;background:#f7f3ec;opacity:.65;display:grid;grid-template-columns:auto 1fr;column-gap:8px;align-items:center}
+.mgrid div.got{background:#fff8dc;border-color:#f1d77a;opacity:1}
+.mgrid span{grid-row:span 2;font-size:24px}.mgrid b{font-size:13px;line-height:1.1}.mgrid small{font-size:11px;color:var(--muted);font-weight:700;line-height:1.15}
+.toast{position:fixed;left:50%;top:14px;transform:translate(-50%,-140%);z-index:20;background:#1f2a37;color:#fff;border-radius:18px;padding:10px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 10px 30px rgba(0,0,0,.25);transition:transform .45s cubic-bezier(.2,1.4,.4,1);max-width:92vw}
+.toast.on{transform:translate(-50%,0)}.toast .tbig{font-size:34px;animation:jump .8s .2s}.toast small{display:block;font-size:12px;color:#ffd34d;font-weight:800}.toast b{font-family:Fredoka;font-size:18px}
+</style>
+</head>
+<body>
+<section id="home" class="screen on">
+  <a class="tohub" href="../../#matematicas">← Matemáticas</a>
+  <h1 id="htitle"></h1>
+  <div id="hguide"></div>
+  <div class="total"><span>⭐</span><div class="bar"><i id="totbar"></i></div><b id="tot">0</b></div>
+  <div class="path" id="path"></div>
+  <div class="foot"><button id="unlockAll">Abrir todos los bloques</button><button id="reset">Empezar de cero</button></div>
+</section>
+<section id="block" class="screen">
+  <div class="top"><button class="back" id="back" aria-label="Volver">←</button><div class="ttl"><h2 id="btitle"></h2><small id="bsub"></small></div></div>
+  <div class="tabs" id="tabs">
+    <button class="tab" data-m="learn">💡 Entiende</button>
+    <button class="tab" data-m="prac">✏️ Practica</button>
+    <button class="tab" data-m="reto">⭐ Reto<span class="st"></span></button>
+  </div>
+  <div class="body" id="body"></div>
+</section>
+<div class="overlay" id="over"><div class="sheet" id="sheet"></div></div>
+<script src="/shared/cuenta.js"></script>
+<script src="../motor.js"></script>
+<script src="contenido.js"></script>
+</body>
+</html>

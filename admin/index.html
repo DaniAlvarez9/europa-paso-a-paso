@@ -100,9 +100,10 @@ const meter=(v,c)=>`<div class="meter"><i style="width:${Math.round(v*100)}%;bac
 /* ---------- matemáticas: metadatos de los temas ---------- */
 const MATH={'mat-nat':{name:'Números naturales',blocks:[['n1','El orden de las operaciones',6],['n2','Operaciones combinadas',3],['n3','División de dos cifras',4],['n4','Problemas',2]]},
  'mat-pot':{name:'Potencias y raíces',blocks:[['p1','¿Qué es una potencia?',5],['p2','Multiplicar y dividir potencias',4],['p3','Potencia de potencia y mismo exponente',4],['p4','Raíces cuadradas',4],['p5','El método fiesta',4],['p6','Operaciones y problemas',3]]},
- 'mat-div':{name:'Divisibilidad: m.c.m. y m.c.d.',blocks:[['d1','Divisibilidad',6],['d2','Descomponer en primos',5],['d3','m.c.m. y m.c.d.',9],['d4','Problemas',6]]}};
+ 'mat-div':{name:'Divisibilidad: m.c.m. y m.c.d.',blocks:[['d1','Divisibilidad',6],['d2','Descomponer en primos',5],['d3','m.c.m. y m.c.d.',9],['d4','Problemas',6]]},
+ 'mat-calc':{name:'Cálculo mental y divisiones',blocks:[['c1','Tablas a tope',4],['c2','Sumar y restar de cabeza',3],['c3','Multiplicar de cabeza',3],['c4','Dividir de cabeza',3],['c5','¿Cuántas veces cabe?',3],['c6','Divisiones de dos cifras',3]]}};
 const MBLK={};Object.entries(MATH).forEach(([a,t])=>t.blocks.forEach(([id,name,n])=>MBLK[id]={a,name,n,tema:t.name}));
-const APPN={'bio-t2':'Biología','europa':'Europa','mat-nat':'Mates · Naturales','mat-pot':'Mates · Potencias','mat-div':'Mates · Divisibilidad'};
+const APPN={'bio-t2':'Biología','europa':'Europa','mat-nat':'Mates · Naturales','mat-pot':'Mates · Potencias','mat-div':'Mates · Divisibilidad','mat-calc':'Mates · Cálculo'};
 
 /* ---------- acceso ---------- */
 async function boot(){
@@ -231,24 +232,26 @@ async function detail(u,tab){
       <p class="muted" style="margin:8px 0 0">Los datos de rondas y fallos de Europa se registran desde que existe la cuenta; las estrellas anteriores se conservan.</p></div>`;
   if(T==='cuesta')tabEl.innerHTML=hardCard(30)+untriedCard;
   if(T==='act')tabEl.innerHTML=timeCard+sesCard(30)+`<div class="card"><h2>🧾 Últimos movimientos</h2><ul class="list feed">${A.ev.filter(e=>e.k!=='time').slice(-60).reverse().map(e=>`<li><time>${when(e.t)}</time><span>${esc(human(e))}</span></li>`).join('')||'<li class="empty">Sin actividad.</li>'}</ul></div>`;
-  if(T==='ajustes'){const cb=data.apps['bio-t2'].ctl||{},ce=data.apps.europa.ctl||{},cn=(data.apps['mat-nat']||{}).ctl||{},cp=(data.apps['mat-pot']||{}).ctl||{},cd=(data.apps['mat-div']||{}).ctl||{};
+  if(T==='ajustes'){const cb=data.apps['bio-t2'].ctl||{},ce=data.apps.europa.ctl||{},cn=(data.apps['mat-nat']||{}).ctl||{},cp=(data.apps['mat-pot']||{}).ctl||{},cd=(data.apps['mat-div']||{}).ctl||{},cc=(data.apps['mat-calc']||{}).ctl||{};
     tabEl.innerHTML=`<div class="card"><h2>🔓 Bloques</h2>
       <label class="switch"><input type="checkbox" id="ub" ${cb.unlockAll?'checked':''}> Biología: todos los bloques abiertos</label><br>
       <label class="switch"><input type="checkbox" id="ue" ${ce.unlockAll?'checked':''}> Europa: todos los bloques abiertos</label><br>
       <label class="switch"><input type="checkbox" id="un" ${cn.unlockAll?'checked':''}> Mates · Números naturales: todos los bloques abiertos</label><br>
       <label class="switch"><input type="checkbox" id="up" ${cp.unlockAll?'checked':''}> Mates · Potencias y raíces: todos los bloques abiertos</label><br>
-      <label class="switch"><input type="checkbox" id="ud" ${cd.unlockAll?'checked':''}> Mates · Divisibilidad (m.c.m. y m.c.d.): todos los bloques abiertos</label>
+      <label class="switch"><input type="checkbox" id="ud" ${cd.unlockAll?'checked':''}> Mates · Divisibilidad (m.c.m. y m.c.d.): todos los bloques abiertos</label><br>
+      <label class="switch"><input type="checkbox" id="uc" ${cc.unlockAll?'checked':''}> Mates · Cálculo mental y divisiones: todos los bloques abiertos</label>
       <p class="muted" style="margin:8px 0 0">Si está desactivado, cada bloque se abre al ganar las estrellas del anterior (en Mates, también tras 8 ejercicios de práctica). Se aplica la próxima vez que abra la web.</p></div>
       <div class="card"><h2>🔑 Cambiar PIN</h2><div class="form" style="grid-template-columns:140px auto;display:grid;align-items:end"><div><label>Nuevo PIN</label><input id="pin" inputmode="numeric" maxlength="4"></div><div><button class="btn" id="pinb">Guardar</button></div></div><div class="err" id="pine"></div></div>
       <div class="card"><h2>♻️ Empezar de cero</h2><p class="muted" style="margin:0 0 8px">Borra estrellas, cromos y récord (el historial de actividad se mantiene).</p>
-        <button class="btn danger" id="rb">Reiniciar Biología</button> <button class="btn danger" id="re">Reiniciar Europa</button> <button class="btn danger" id="rn">Reiniciar Naturales</button> <button class="btn danger" id="rp">Reiniciar Potencias</button> <button class="btn danger" id="rd">Reiniciar Divisibilidad</button></div>
+        <button class="btn danger" id="rb">Reiniciar Biología</button> <button class="btn danger" id="re">Reiniciar Europa</button> <button class="btn danger" id="rn">Reiniciar Naturales</button> <button class="btn danger" id="rp">Reiniciar Potencias</button> <button class="btn danger" id="rd">Reiniciar Divisibilidad</button> <button class="btn danger" id="rc">Reiniciar Cálculo</button></div>
       <div class="card"><h2>🗑️ Borrar cuenta</h2><p class="muted" style="margin:0 0 8px">Elimina la cuenta, su progreso y todo su historial. No se puede deshacer.</p><button class="btn danger" id="del">Borrar la cuenta de ${esc(user.name||u)}</button></div>`;
     $('#ub').onchange=e=>api('admin-ctl',{method:'POST',body:{user:u,app:'bio-t2',unlockAll:e.target.checked}});
     $('#ue').onchange=e=>api('admin-ctl',{method:'POST',body:{user:u,app:'europa',unlockAll:e.target.checked}});
     $('#un').onchange=e=>api('admin-ctl',{method:'POST',body:{user:u,app:'mat-nat',unlockAll:e.target.checked}});
     $('#up').onchange=e=>api('admin-ctl',{method:'POST',body:{user:u,app:'mat-pot',unlockAll:e.target.checked}});
     $('#ud').onchange=e=>api('admin-ctl',{method:'POST',body:{user:u,app:'mat-div',unlockAll:e.target.checked}});
-    [['rn','mat-nat','Números naturales'],['rp','mat-pot','Potencias y raíces'],['rd','mat-div','Divisibilidad']].forEach(([id,app,n])=>$('#'+id).onclick=async()=>{if(confirm('¿Borrar todo el progreso de '+n+' de '+(user.name||u)+'?')){await api('admin-ctl',{method:'POST',body:{user:u,app,reset:true}});detail(u,'ajustes')}});
+    $('#uc').onchange=e=>api('admin-ctl',{method:'POST',body:{user:u,app:'mat-calc',unlockAll:e.target.checked}});
+    [['rn','mat-nat','Números naturales'],['rp','mat-pot','Potencias y raíces'],['rd','mat-div','Divisibilidad'],['rc','mat-calc','Cálculo mental']].forEach(([id,app,n])=>$('#'+id).onclick=async()=>{if(confirm('¿Borrar todo el progreso de '+n+' de '+(user.name||u)+'?')){await api('admin-ctl',{method:'POST',body:{user:u,app,reset:true}});detail(u,'ajustes')}});
     $('#pinb').onclick=async()=>{try{await api('admin-users',{method:'POST',body:{user:u,name:user.name,pin:$('#pin').value}});$('#pine').style.color='var(--ok)';$('#pine').textContent='PIN cambiado ✓'}catch(e){$('#pine').style.color='';$('#pine').textContent=e.message}};
     $('#rb').onclick=async()=>{if(confirm('¿Borrar todo el progreso de Biología de '+(user.name||u)+'?')){await api('admin-ctl',{method:'POST',body:{user:u,app:'bio-t2',reset:true}});detail(u,'ajustes')}};
     $('#re').onclick=async()=>{if(confirm('¿Borrar todo el progreso de Europa de '+(user.name||u)+'?')){await api('admin-ctl',{method:'POST',body:{user:u,app:'europa',reset:true}});detail(u,'ajustes')}};
@@ -271,6 +274,8 @@ function human(e){switch(e.k){
   case 'album':return '🃏 Abre el álbum';case 'cromo':return '🃏 Mira el cromo '+e.id;
   case 'link':return '▶️ Abre un vídeo o actividad';case 'globos':return '🧪 Experimento de los globos '+(e.ok?'✅':'❌');
   case 'calm':return '😮‍💨 Se atasca (3 fallos seguidos)'+(e.b?' en '+bname(e.b):'')+': Micro le ofrece calma';
+  case 'medalla':return '🏅 Gana la medalla «'+e.l+'»';case 'rango':return '⬆️ Sube de rango: '+e.l+' ('+e.xp+' puntos)';
+  case 'blitz':return (e.rec?'🏆 ':'⚡ ')+(e.l?e.l:'Ronda relámpago')+': '+String(e.s).replace('.',',')+' s'+(e.miss?' · '+e.miss+' fallos corregidos':' · sin fallos')+(e.rec?' (récord)':'');
   case 'break':return '☕ Acepta un descanso';case 'break-offer':return '☕ Micro le sugiere un descanso (15 min seguidos)';
   default:if(e.k.startsWith('calm-'))return '😮‍💨 Elige: '+({breath:'respirar',example:'ver un ejemplo',easy:'uno más fácil',go:'seguir'}[e.k.slice(5)]||e.k.slice(5));return e.k}}
 boot();

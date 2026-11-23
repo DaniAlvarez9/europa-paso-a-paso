@@ -298,7 +298,7 @@ const TYPES = {
       if (phase === 'q') {
         dq.innerHTML = `¿Cuántas veces cabe <b>${d}</b> en <b>${fmt(Pv)}</b>?`;
         dc.innerHTML = `<div class="ans">${slot('', 1)}</div>`; const s = dc.querySelector('.slot'); let tr = 0;
-        api.setHint(i => i === 0 ? (drawChul(Pv), w.querySelector('.chul').style.display = '', `Mira la tabla del ${d}: busca el resultado más grande que <b>no se pase</b> de ${fmt(Pv)}.`) : `Cabe <b>${Math.floor(Pv / d)}</b> veces: ${d} × ${Math.floor(Pv / d)} = ${fmt(d * Math.floor(Pv / d))}.`);
+        api.setHint(i => { const Rd = Math.round(d / 10) * 10, est = Math.min(9, Math.floor(Pv / Rd)); if (d >= 10 && i === 0) return `Redondea ${d} a <b>${Rd}</b>. Quita los ceros: ¿cuántas veces cabe ${Rd / 10} en ${Math.floor(Pv / 10)}? → prueba con <b>${est}</b>: ${d} × ${est} = ${fmt(d * est)}${d * est > Pv ? ', te pasas: baja uno' : Pv - d * est >= d ? ', sobra demasiado: sube uno' : ', ¡bien!'}.`; const j = d >= 10 ? i - 1 : i; return j === 0 ? (drawChul(Pv), w.querySelector('.chul').style.display = '', `Mira la tabla del ${d}: busca el resultado más grande que <b>no se pase</b> de ${fmt(Pv)}.`) : `Cabe <b>${Math.floor(Pv / d)}</b> veces: ${d} × ${Math.floor(Pv / d)} = ${fmt(d * Math.floor(Pv / d))}.` });
         padOn([s], () => {
           const v = val(s); if (v === null) return; const ans = Math.floor(Pv / d);
           if (v === ans) { tone(true); CALM.wrongRow = 0; padOff(); qd = v; q += v; phase = 'r'; step() }
@@ -365,7 +365,8 @@ function renderHome() {
   const items = BL.concat([{ id: 'final', name: 'Desafío del tema', desc: '10 ejercicios mezclados, sin prisa', ico: '🏁', c: '--c6' }]);
   const curI = items.findIndex((b, i) => unlocked(i) && !has(b.id));
   const msg = n === 0 ? TM.hello : n < TSTARS ? `¡Llevas <b>${n} ${n === 1 ? 'estrella' : 'estrellas'}</b>! ${curI >= 0 ? `Te toca: <b>${items[curI].name}</b>.` : ''} Paso a paso, sin prisa. 💪` : '¡Has completado el tema entero! Eres una crack. 🏆';
-  $('#hguide').innerHTML = guide(n ? 'wow' : 'happy', msg);
+  $('#hguide').innerHTML = guide(n ? 'wow' : 'happy', TM.homeMsg ? TM.homeMsg(S, msg) : msg);
+  if (TM.homeExtra) { let el = $('#hextra'); if (!el) { el = document.createElement('div'); el.id = 'hextra'; $('#hguide').after(el) } el.innerHTML = TM.homeExtra(S); if (TM.homeBind) TM.homeBind(el, S, { openBlock, unlocked, has }) }
   $('#path').innerHTML = `<svg class="trail" id="trail"></svg>` + items.map((b, i) => {
     const u = unlocked(i), p = has(b.id) ? 100 : Math.min(90, 100 * (S.done[b.id] || 0) / 10);
     return `<div class="stop ${i % 2 ? 'r' : ''} ${u ? '' : 'locked'} ${i === curI ? 'cur' : ''}" data-i="${i}">
@@ -447,13 +448,13 @@ const DEMOS = {
 /* ---------- práctica ---------- */
 let RUN = null;
 const LV = ['🌱 Nivel 1', '🌿 Nivel 2', '🌳 Nivel 3'];
-function logQ(b, ex, r, m) { Cuenta.ev('q', { b: b.id, m, id: b.id + ':' + ex.skill, l: ex.label, ok: r.perfect, first: true, errs: r.errs, hints: r.hints, rev: r.revealed }); S.done[b.id] = (S.done[b.id] || 0) + 1; save() }
+function logQ(b, ex, r, m) { Cuenta.ev('q', { b: b.id, m, id: b.id + ':' + ex.skill, l: ex.label, ok: r.perfect, first: true, errs: r.errs, hints: r.hints, rev: r.revealed }); S.done[b.id] = (S.done[b.id] || 0) + 1; if (TM.onEx) try { TM.onEx(S, b, ex, r, m) } catch (e) { } save() }
 function practice() {
   const b = BL[CUR]; let lvl = S.lvl[b.id] || 1, row = 0, bad = 0, count = 0;
   RUN = { live: false };
   const fixed = (b.fixed || []).slice(); let fi = S.best['fix-' + b.id] || 0;
   const nextEx = () => {
-    const ex = fi < fixed.length && Math.random() < .5 ? (fi++, S.best['fix-' + b.id] = fi, fixed[fi - 1]()) : b.gen(lvl);
+    const ex = fi < fixed.length && Math.random() < .5 ? (fi++, S.best['fix-' + b.id] = fi, fixed[fi - 1]()) : b.gen(lvl, 'prac');
     const host = $('#body'); host.innerHTML = `<div class="h"></div><div class="after"></div>`;
     runExercise(host.querySelector('.h'), ex, r => {
       logQ(b, ex, r, 'practica'); count++;
@@ -475,10 +476,10 @@ function reto() {
   const res = []; RUN = { live: true };
   const host = $('#body');
   host.innerHTML = guide('happy', `<b>Reto de ${N} ejercicios.</b> Sin prisa y sin vidas: puedes pedir pistas. Para la estrella necesitas ${Math.ceil(N * .75)} bien: resueltos por ti, sin ver la solución y con un fallo como mucho.`) + `<button class="big" id="go">¡Empezar!</button>`;
-  $('#go').onclick = () => { let k = 0; const one = () => { if (k >= N) return end(); const ex = b.gen(lv[k]); host.innerHTML = `<div class="h"></div><div class="after"></div>`; runExercise(host.querySelector('.h'), ex, r => { res.push(r); logQ(b, ex, r, 'reto'); k++; host.querySelector('.after').innerHTML = `<button class="big" id="nx">${k < N ? 'Siguiente →' : 'Ver resultado'}</button>`; $('#nx').onclick = one; $('#nx').scrollIntoView({ block: 'end', behavior: 'smooth' }) }, { head: `<span class="pdots">${Array(N).fill(0).map((_, i) => `<i class="${i < res.length ? (res[i].ok && res[i].errs <= 1 ? 'ok' : 'no') : i === k ? 'cur' : ''}"></i>`).join('')}</span><span class="sp"></span><span>⭐ Reto ${k + 1}/${N}</span>` }) }; one() };
+  $('#go').onclick = () => { let k = 0; const one = () => { if (k >= N) return end(); const ex = b.gen(lv[k], 'reto'); host.innerHTML = `<div class="h"></div><div class="after"></div>`; runExercise(host.querySelector('.h'), ex, r => { res.push(r); logQ(b, ex, r, 'reto'); k++; host.querySelector('.after').innerHTML = `<button class="big" id="nx">${k < N ? 'Siguiente →' : 'Ver resultado'}</button>`; $('#nx').onclick = one; $('#nx').scrollIntoView({ block: 'end', behavior: 'smooth' }) }, { head: `<span class="pdots">${Array(N).fill(0).map((_, i) => `<i class="${i < res.length ? (res[i].ok && res[i].errs <= 1 ? 'ok' : 'no') : i === k ? 'cur' : ''}"></i>`).join('')}</span><span class="sp"></span><span>⭐ Reto ${k + 1}/${N}</span>` }) }; one() };
   function end() {
     RUN = null; const good = res.filter(r => r.ok && r.errs <= 1).length, got = good >= Math.ceil(N * .75), was = has(b.id);
-    if (got) { S.stars[b.id] = 1; confetti() } S.best[b.id] = Math.max(S.best[b.id] || 0, good / N); save();
+    if (got) { S.stars[b.id] = 1; confetti(); if (TM.onStar) try { TM.onStar(S, b.id) } catch (e) { } } S.best[b.id] = Math.max(S.best[b.id] || 0, good / N); save();
     Cuenta.ev('round', { b: b.id, m: 'reto', sc: Math.round(100 * good / N), n: N, first: good, star: got });
     sheet(`${MIC(got ? 'wow' : 'calm')}<h2>${got ? (was ? '¡Otra vez genial!' : '¡Estrella conseguida! ⭐') : '¡Buen trabajo!'}</h2><p>${good} de ${N} bien.${got ? '' : ` Para la estrella hacen falta ${Math.ceil(N * .75)}. Practica un poco más y vuelve: ¡seguro que lo consigues!`}</p>
       ${got && CUR < NB - 1 ? `<button class="big" id="s1">Siguiente bloque: ${BL[CUR + 1].name} →</button>` : ''}${!got ? `<button class="big" id="s2">Practicar un poco más ✏️</button>` : ''}<button class="big alt" id="s3">Volver al camino 🗺️</button>`);
@@ -493,8 +494,8 @@ function openFinal() {
   const N = 10; const host = $('#body');
   host.innerHTML = `<div style="text-align:center;padding:8px">${MIC('wow')}</div>` + guide('happy', `¡El Desafío! <b>${N} ejercicios</b> de todo el tema mezclados, como en un examen. Sin prisa y sin vidas. Para el 🏆 necesitas <b>8 bien</b>.`) + `<button class="big" id="go">¡Empezar!</button>`;
   host.querySelector('svg').style.cssText = 'width:110px;height:110px';
-  $('#go').onclick = () => { Cuenta.ev('final-start'); const res = []; let k = 0; const order = shuffle(Array(N).fill(0).map((_, i) => BL[i % NB])); RUN = { live: true }; const one = () => { if (k >= N) return end(res, order); const b = order[k], ex = b.gen(k < 4 ? 2 : 3); host.innerHTML = `<div class="h"></div><div class="after"></div>`; runExercise(host.querySelector('.h'), ex, r => { res.push(r); logQ(b, ex, r, 'final'); k++; host.querySelector('.after').innerHTML = `<button class="big" id="nx">${k < N ? 'Siguiente →' : 'Ver resultado'}</button>`; $('#nx').onclick = one; $('#nx').scrollIntoView({ block: 'end', behavior: 'smooth' }) }, { head: `<span class="pdots">${Array(N).fill(0).map((_, i) => `<i class="${i < res.length ? (res[i].ok && res[i].errs <= 1 ? 'ok' : 'no') : i === k ? 'cur' : ''}"></i>`).join('')}</span><span class="sp"></span><span style="color:var(${b.c})">${b.name}</span>` }) }; one() };
-  function end(res) { RUN = null; const good = res.filter(r => r.ok && r.errs <= 1).length, won = good >= 8; if (won) { S.stars.final = 1; confetti() } S.best.final = Math.max(S.best.final || 0, good); save(); Cuenta.ev('final', { pts: good, won, ok: good, n: N }); sheet(`${MIC(won ? 'wow' : 'calm')}<h2>${won ? '¡Desafío superado! 🏆' : '¡Muy buen intento!'}</h2><p>${good} de ${N} bien.${won ? ' ¡Estás preparada para el examen!' : ' Repasa los bloques donde fallaste y vuelve a intentarlo.'}</p><button class="big" id="f1">Jugar otra vez</button><button class="big alt" id="f2">Volver al camino 🗺️</button>`); $('#f1').onclick = () => { closeSheet(); openFinal() }; $('#f2').onclick = () => { closeSheet(); show('home'); renderHome() } }
+  $('#go').onclick = () => { Cuenta.ev('final-start'); const res = []; let k = 0; const order = shuffle(Array(N).fill(0).map((_, i) => BL[i % NB])); RUN = { live: true }; const one = () => { if (k >= N) return end(res, order); const b = order[k], ex = b.gen(k < 4 ? 2 : 3, 'final'); host.innerHTML = `<div class="h"></div><div class="after"></div>`; runExercise(host.querySelector('.h'), ex, r => { res.push(r); logQ(b, ex, r, 'final'); k++; host.querySelector('.after').innerHTML = `<button class="big" id="nx">${k < N ? 'Siguiente →' : 'Ver resultado'}</button>`; $('#nx').onclick = one; $('#nx').scrollIntoView({ block: 'end', behavior: 'smooth' }) }, { head: `<span class="pdots">${Array(N).fill(0).map((_, i) => `<i class="${i < res.length ? (res[i].ok && res[i].errs <= 1 ? 'ok' : 'no') : i === k ? 'cur' : ''}"></i>`).join('')}</span><span class="sp"></span><span style="color:var(${b.c})">${b.name}</span>` }) }; one() };
+  function end(res) { RUN = null; const good = res.filter(r => r.ok && r.errs <= 1).length, won = good >= 8; if (won) { S.stars.final = 1; confetti(); if (TM.onStar) try { TM.onStar(S, 'final') } catch (e) { } } S.best.final = Math.max(S.best.final || 0, good); save(); Cuenta.ev('final', { pts: good, won, ok: good, n: N }); sheet(`${MIC(won ? 'wow' : 'calm')}<h2>${won ? '¡Desafío superado! 🏆' : '¡Muy buen intento!'}</h2><p>${good} de ${N} bien.${won ? ' ¡Estás preparada para el examen!' : ' Repasa los bloques donde fallaste y vuelve a intentarlo.'}</p><button class="big" id="f1">Jugar otra vez</button><button class="big alt" id="f2">Volver al camino 🗺️</button>`); $('#f1').onclick = () => { closeSheet(); openFinal() }; $('#f2').onclick = () => { closeSheet(); show('home'); renderHome() } }
 }
 
 /* ---------- calma y descansos ---------- */
@@ -532,6 +533,6 @@ window.__test = { get S() { return S }, BL, runExercise, setMode, openBlock, get
 window.M = { P, R, mx, fmt, rnd, pick, shuffle, solveAll, tokenize, allowed, calc, subOf, applyOp, runExercise, MIC,
   /* para que un tema añada sus propios tipos de paso y demos */
   addType: (n, f) => { TYPES[n] = f }, addDemo: (n, f) => { DEMOS_EXT[n] = f },
-  ui: { slot, val, padOn, padOff, focusSlot, tone, guide, CALM } };
+  ui: { slot, val, padOn, padOff, focusSlot, tone, guide, CALM, confetti } };
 window.startMates = startApp;
 })();
