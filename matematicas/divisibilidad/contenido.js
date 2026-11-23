@@ -108,7 +108,7 @@ M.addType('fact', (w, st, api) => {
         padOff(); ss.forEach(s => s.classList.add('ok'));
         fin.insertAdjacentHTML('beforeend', `<div class="box" style="font-weight:700;text-align:center">✅ <span class="m" style="font-size:22px">${fmt(N)} = ${fs(f)}</span>${f.length > 1 || f[0][1] > 1 ? `<br><span style="color:var(--muted);font-size:14px">Comprobación: ${f.map(([p, e]) => fmt(Math.pow(p, e))).join(' · ')} = ${fmt(N)} ✔️</span>` : ''}</div>`);
         api.right(); api.next();
-      } else { const k = bad.indexOf(true); ss.forEach((s, i) => { if (bad[i]) s.classList.add('no') }); api.wrong(`Cuenta otra vez cuántas veces aparece el <b>${f[k][0]}</b> en la columna.`); setTimeout(() => ss.forEach((s, i) => { if (bad[i]) { s.dataset.v = ''; s.innerHTML = '<span class="ph">?</span>'; s.classList.remove('no') } }), 900) }
+      } else { const k = bad.indexOf(true); ss.forEach((s, i) => { if (bad[i]) s.classList.add('no') }); api.wrong(`Cuenta otra vez cuántas veces aparece el <b>${f[k][0]}</b> en la columna.`); setTimeout(() => { ss.forEach((s, i) => { if (bad[i]) { s.dataset.v = ''; s.innerHTML = '<span class="ph">?</span>'; s.classList.remove('no') } }); focusSlot(k) }, 900) }
     });
   }
   pickPhase();
@@ -151,7 +151,7 @@ M.addType('cm', (w, st, api) => {
       padOn([s], () => { const v = val(s); if (v === null) return; if (v === 1) { padOff(); phase = 'done'; s.classList.add('ok'); api.right('Si no hay comunes, el m.c.d. es <b>1</b>. ¡Nunca 0!'); api.next() } else { s.classList.add('no'); api.wrong(v === 0 ? '¡Nunca es 0! Todos los números se pueden dividir entre <b>1</b>, así que el m.c.d. es 1.' : 'Si no hay comunes, el único divisor que comparten es el 1.'); clear(s) } });
       return;
     }
-    Q.innerHTML = kind === 'mcm' ? `<b>m.c.m.(${nm(nums)})</b>: comunes <b>y no comunes</b>, con el exponente <b>más alto</b>. Toca las fichas que entran (una de cada número).` : `<b>m.c.d.(${nm(nums)})</b>: <b>solo los comunes</b>, con el exponente <b>más bajo</b>. Toca las fichas que entran.`;
+    Q.innerHTML = kind === 'mcm' ? `<b>m.c.m.(${nm(nums)})</b>: comunes <b>y no comunes</b>, con el exponente <b>más alto</b>. Toca las fichas que entran (una ficha por cada número primo).` : `<b>m.c.d.(${nm(nums)})</b>: <b>solo los comunes</b>, con el exponente <b>más bajo</b>. Toca las fichas que entran.`;
     const need = (kind === 'mcm' ? allP : com).map(p => { const es = chips.filter(c => c.p === p).map(c => c.e); return [p, kind === 'mcm' ? Math.max(...es) : Math.min(...es)] });
     BT.innerHTML = `<div class="choices" style="justify-content:center"><button class="ck">Comprobar</button></div>`;
     api.setHint(i => i === 0 ? (kind === 'mcm' ? 'Coge <b>todos</b> los números que aparecen (verdes y naranjas). Si uno sale en varias filas, coge el de exponente más grande.' : 'Coge solo los <b>verdes</b> (comunes). De cada uno, el de exponente más pequeño.') : `Entran: ${fs(need)}.`);
@@ -209,6 +209,38 @@ M.addDemo('colum', (host, d) => {
     }; tick();
   };
 });
+M.addDemo('ranas', (host, d) => {
+  const a = d.a, b = d.b, Mx = lcm(a, b), W = 340, x = n => 22 + (W - 44) * n / Mx, la = d.la || '🐸', lb = d.lb || '🐰', YA = 70, YB = 150;
+  const track = (y, s, col) => `<line x1="12" y1="${y}" x2="${W - 12}" y2="${y}" stroke="#8a8172" stroke-width="2.5"/>${Array(Mx / s + 1).fill(0).map((_, i) => { const n = i * s; return `<line x1="${x(n)}" y1="${y - 4}" x2="${x(n)}" y2="${y + 4}" stroke="${col}" stroke-width="2"/><text x="${x(n)}" y="${y + 18}" font-size="${n === Mx ? 14 : 11}" text-anchor="middle" font-family="Fredoka" font-weight="700" fill="${n === Mx ? '#d9467a' : col}">${n}</text>` }).join('')}`;
+  host.innerHTML = `<div class="box" style="text-align:center"><svg viewBox="0 0 ${W} 178" style="width:100%;max-width:440px">${track(YA, a, '#3c9a3c')}${track(YB, b, '#c2630a')}<g class="arcs"></g><line class="meet" x1="${x(Mx)}" y1="${YA}" x2="${x(Mx)}" y2="${YB}" stroke="#d9467a" stroke-width="2.5" stroke-dasharray="5 4" opacity="0"/><text class="fa" x="${x(0)}" y="${YA - 6}" font-size="22" text-anchor="middle">${la}</text><text class="fb" x="${x(0)}" y="${YB - 6}" font-size="22" text-anchor="middle">${lb}</text></svg>
+    <div class="cap" style="font-weight:800;min-height:46px;line-height:1.4"></div><button class="big alt" style="width:auto;padding:8px 16px;margin:0">▶️ ¡Que salten!</button></div>`;
+  const arcs = host.querySelector('.arcs'), fa = host.querySelector('.fa'), fb = host.querySelector('.fb'), meet = host.querySelector('.meet'), cap = host.querySelector('.cap'), btn = host.querySelector('button');
+  const arc = (y, p, s, col) => `<path d="M${x(p)} ${y} Q${(x(p) + x(p + s)) / 2} ${y - Math.max(16, Math.min(40, 260 * s / Mx))} ${x(p + s)} ${y}" fill="none" stroke="${col}" stroke-width="2.5" stroke-dasharray="4 3"/>`;
+  btn.onclick = () => {
+    btn.disabled = true; arcs.innerHTML = ''; meet.setAttribute('opacity', 0); fa.setAttribute('x', x(0)); fb.setAttribute('x', x(0)); let pa = 0, pb = 0; const sa = [], sb = [];
+    const tick = () => {
+      const ga = pa < Mx, gb = pb < Mx;
+      if (!ga && !gb) { meet.setAttribute('opacity', 1); arcs.insertAdjacentHTML('beforeend', `<text x="${x(Mx)}" y="${(YA + YB) / 2 + 6}" font-size="20" text-anchor="middle">⭐</text>`); cap.innerHTML = `${la} ${sa.join(', ')}<br>${lb} ${sb.join(', ')}<br>¡Coinciden por primera vez en el <span style="color:#d9467a">${Mx}</span>! Ese es el <b>m.c.m.(${a}, ${b})</b>.`; tone(true, true); btn.disabled = false; btn.textContent = '🔁 Otra vez'; return }
+      if (ga) { arcs.insertAdjacentHTML('beforeend', arc(YA, pa, a, '#3c9a3c')); pa += a; sa.push(pa); fa.setAttribute('x', x(pa)) }
+      if (gb) { arcs.insertAdjacentHTML('beforeend', arc(YB, pb, b, '#e07a10')); pb += b; sb.push(pb); fb.setAttribute('x', x(pb)) }
+      cap.innerHTML = `${la} salta de ${a} en ${a}: ${sa.join(', ')}<br>${lb} salta de ${b} en ${b}: ${sb.join(', ')}`; tone(true); setTimeout(tick, 1000);
+    }; tick();
+  };
+});
+M.addDemo('cintas', (host, d) => {
+  const a = d.a, b = d.b, big = Math.max(a, b), u = d.u || 'cm', tries = []; for (let k = Math.min(a, b); k >= 1; k--) if (Math.min(a, b) % k === 0) { tries.push(k); if (Math.max(a, b) % k === 0) break }
+  const bar = (len, k) => { const n = Math.floor(len / k), r = len - n * k, wpx = 100 * len / big; return `<div style="display:flex;width:${wpx}%;height:30px;border-radius:8px;overflow:hidden;border:2px solid #8a8172;margin:4px 0">${Array(n).fill(0).map((_, i) => `<div style="flex:${k};background:${i % 2 ? '#c9f0b7' : '#9ad97f'};border-right:2px solid #fff;font:700 12px Fredoka;display:grid;place-items:center">${k}</div>`).join('')}${r ? `<div style="flex:${r};background:repeating-linear-gradient(45deg,#fdecec,#fdecec 4px,#f5c2c3 4px,#f5c2c3 8px);font:700 11px Fredoka;color:#9b1c1f;display:grid;place-items:center">sobra ${r}</div>` : ''}</div>` };
+  host.innerHTML = `<div class="box"><div style="font-weight:800;font-size:14px">Cinta de ${a} ${u}</div><div class="b1">${bar(a, a)}</div><div style="font-weight:800;font-size:14px;margin-top:6px">Cinta de ${b} ${u}</div><div class="b2">${bar(b, b)}</div><div class="cap" style="font-weight:800;min-height:46px;line-height:1.4;text-align:center;margin:6px 0"></div><div style="text-align:center"><button class="big alt" style="width:auto;padding:8px 16px;margin:0">✂️ ¡A cortar!</button></div></div>`;
+  const b1 = host.querySelector('.b1'), b2 = host.querySelector('.b2'), cap = host.querySelector('.cap'), btn = host.querySelector('button');
+  btn.onclick = () => {
+    btn.disabled = true; let i = 0;
+    const tick = () => {
+      const k = tries[i]; b1.innerHTML = bar(a, k); b2.innerHTML = bar(b, k); const ok = a % k === 0 && b % k === 0;
+      cap.innerHTML = ok ? `✅ Trozos de <b>${k} ${u}</b>: ¡caben exactos en las dos cintas!<br>Es el trozo más grande posible → <b>m.c.d.(${a}, ${b}) = ${k}</b>` : `❌ Trozos de ${k} ${u}: en una cinta sobra un trozo. Probamos más pequeño…`;
+      tone(ok, ok); if (ok) { btn.disabled = false; btn.textContent = '🔁 Otra vez'; return } i++; setTimeout(tick, 1700);
+    }; tick();
+  };
+});
 const chipsHTML = (nums, mark) => nums.map(n => `<div class="cmrow"><span class="m cmn">${fmt(n)} =</span>${factor(n).map(([p, e]) => `<span class="chip ${mark ? (nums.every(x => x % p === 0) ? 'com' : 'nocom') : ''}">${pe(p, e)}</span>`).join('<span class="dot">·</span>')}</div>`).join('');
 
 /* ---------- generadores · bloque 1: divisibilidad ---------- */
@@ -246,7 +278,7 @@ function exDivCasita(l) {
   const q = l === 1 ? rnd(12, 60) : rnd(11, 45), r = yes ? 0 : rnd(1, d - 1), D = d * q + r;
   return { skill: 'divcasita', label: l === 1 ? '¿Es divisible? (división)' : '¿Es divisible? (división de dos cifras)', title: `¿Es <b>${fmt(D)}</b> divisible entre <b>${d}</b>? Haz la división:`, steps: [{ type: 'div', D, d }, { type: 'choice', q: `El resto es ${r}. Entonces, ¿${fmt(D)} es divisible entre ${d}?`, opts: ['Sí', 'No'], keep: true, ans: yes ? 0 : 1, why: () => 'Es divisible solo si el resto es <b>0</b>.' }], sol: `${fmt(D)} : ${d} = ${q}${r ? `, y sobra${r > 1 ? 'n' : ''} ${r}` : ' con resto 0'}. ${yes ? '<b>Sí</b> es divisible.' : '<b>No</b> es divisible.'}` };
 }
-function gen1(l) { return (l === 1 ? pick([exCrit, exCrit, exPrimo, exMarca, exDivCasita]) : l === 2 ? pick([exCrit, exPrimo, exMarca, exDivisores, exDivCasita]) : pick([exCrit, exPrimo, exDivisores, exDivCasita, exMarca]))(l) }
+function gen1(l) { return (l === 1 ? pick([exCrit, exCrit, exPrimo, exMarca, exDivCasita, exMental]) : l === 2 ? pick([exCrit, exPrimo, exMarca, exDivisores, exDivCasita]) : pick([exCrit, exPrimo, exDivisores, exDivCasita, exMarca]))(l) }
 
 /* ---------- bloque 2: descomponer ---------- */
 const FA = { 1: [12, 18, 20, 24, 28, 30, 36, 40, 44, 45, 50, 54, 16, 27], 2: [42, 48, 56, 60, 63, 70, 72, 75, 80, 84, 90, 96, 98, 100, 108], 3: [120, 126, 132, 135, 140, 144, 150, 168, 180, 200, 210, 240, 252, 300, 360, 65, 52, 91, 266, 123, 119, 85] };
@@ -264,7 +296,12 @@ function exComprueba(l, fixed) {
   const v = fval(g), f = factor(n);
   return { skill: 'comprueba', label: 'Comprobar una descomposición', title: `Alguien ha escrito: <span class="m" style="font-size:22px">${fmt(n)} = ${fs(g)}</span><br>¿Está bien?`, steps: [{ q: 'Multiplica para comprobarlo:', pre: `<span class="m">${fs(g)} =</span> `, ans: v, max: 5, hints: [g.length > 1 ? `${g.map(([p, e]) => fmt(Math.pow(p, e))).join(' · ')}. Multiplica de dos en dos.` : `${fs(g)} = ${Array(g[0][1]).fill(g[0][0]).join(' · ')}`, `Da ${fmt(v)}.`] }, { type: 'choice', q: `Da ${fmt(v)}. Entonces, ¿está bien la descomposición de ${fmt(n)}?`, opts: ['Sí, está bien', 'No, está mal'], keep: true, ans: v === n ? 0 : 1, why: () => v === n ? `Da justo ${fmt(n)}.` : `${fmt(v)} no es ${fmt(n)}.` }], sol: `${fs(g)} = ${fmt(v)}. ${v === n ? '<b>Está bien.</b>' : `<b>Está mal</b>: lo correcto es ${fmt(n)} = ${fs(f)}.`}` };
 }
-function gen2(l) { return Math.random() < (l === 3 ? .15 : .25) ? exComprueba(l) : exFact(l) }
+function exMental(l) {
+  const t = l === 1 ? pick([2, 2, 3, 5]) : l === 2 ? pick([2, 3, 5, 7]) : pick([3, 7, 12, 15, 16]);
+  const q = l === 1 ? rnd(11, 49) : l === 2 ? rnd(13, 99) : (t > 10 ? rnd(11, 30) : rnd(21, 99)), n = t * q;
+  return { skill: 'mental-' + (t > 10 ? 'dos' : t), label: t > 10 ? 'Dividir de cabeza entre dos cifras' : `Dividir de cabeza entre ${t}`, title: `⚡ Cálculo rápido: <b>${fmt(n)} : ${t}</b>`, steps: [{ pre: `<span class="m">${fmt(n)} : ${t} =</span> `, ans: q, max: 4, hints: [divHint(n, t), `${fmt(n)} : ${t} = ${q}, porque ${t} · ${q} = ${fmt(n)}.`], why: v => `${t} · ${v} = ${fmt(t * v)}, no ${fmt(n)}. ${divHint(n, t)}` }], sol: `${divHint(n, t)}<br>${fmt(n)} : ${t} = <b>${q}</b>, porque ${t} · ${q} = ${fmt(n)}.` };
+}
+function gen2(l) { const r = Math.random(); return r < .2 ? exMental(l) : r < (l === 3 ? .32 : .4) ? exComprueba(l) : exFact(l) }
 
 /* ---------- bloque 3: m.c.m. y m.c.d. ---------- */
 const PAIRS = {
@@ -295,7 +332,18 @@ function exSentido(l) {
   const [s, k] = pick([[6, 3], [12, 2], [15, 3], [8, 5], [9, 4], [7, 3], [10, 4], [14, 2]]), b = s * k;
   return { skill: 'sentido', label: 'Atajo: cuando uno es múltiplo del otro', title: `${b} es múltiplo de ${s} (${s} · ${k} = ${b}). Sin hacer cuentas largas:`, steps: [{ type: 'choice', q: `¿Cuál es el m.c.m.(${s}, ${b})?`, opts: [String(b), String(s), String(s * b)], ans: 0, why: () => `El m.c.m. es el múltiplo común más pequeño. ${b} ya es múltiplo de ${s} y de sí mismo.` }, { type: 'choice', q: `¿Y el m.c.d.(${s}, ${b})?`, opts: [String(s), String(b), '1'], ans: 0, why: () => `${s} divide a ${s} y también a ${b}. Ningún divisor común puede ser mayor que el número más pequeño.` }], sol: `Si uno es múltiplo del otro: m.c.m. = el <b>grande</b> (${b}); m.c.d. = el <b>pequeño</b> (${s}).` };
 }
-function gen3(l) { return (l === 1 ? pick([() => exCM(1), () => exSolo(1), () => exSolo(1), exSentido]) : l === 2 ? pick([() => exCM(2), exCopr, () => exSolo(2), exTres, () => exCM(2)]) : pick([() => exCM(3), exTres, () => exCM(3), exCopr]))(l) }
+function examWhy(nums, vm, vd) {
+  const m = L(nums), g = G(nums), mn = Math.min(...nums), mxn = Math.max(...nums), tips = [];
+  if (vm === g && vd === m) return '¡Los has cambiado! El <b>m.c.m.</b> es el grande (exponente más alto) y el <b>m.c.d.</b> el pequeño (exponente más bajo).';
+  if (vm !== m) { if (vm < mxn) tips.push(`El m.c.m. no puede ser más pequeño que ${mxn}.`); else if (nums.some(n => vm % n)) tips.push(`Comprueba: ${fmt(vm)} : ${nums.find(n => vm % n)} no da exacto, así que ${fmt(vm)} no es múltiplo de los dos.`); else tips.push(`${fmt(vm)} es múltiplo común, pero no el más pequeño: ¿has cogido algún exponente de más?`) }
+  if (vd !== g) { if (vd === 0) tips.push('El m.c.d. <b>nunca es 0</b>: si no hay comunes, es 1.'); else if (vd > mn) tips.push(`El m.c.d. no puede ser más grande que ${mn}.`); else if (nums.some(n => n % vd)) tips.push(`Comprueba: ${nums.find(n => n % vd)} : ${vd} no da exacto, así que ${vd} no divide a los dos.`); else tips.push(`${vd} divide a los dos, pero hay uno más grande: revisa los exponentes de los comunes.`) }
+  return tips.join(' ') + ' Revisa la descomposición en tu cuaderno.';
+}
+function exExamen(l, nums) {
+  nums = nums || pick(PAIRS[Math.max(2, l)].concat(COPR.slice(0, 4)));
+  return { skill: 'examen', label: 'Modo examen: m.c.m. y m.c.d. en el cuaderno', title: `🎯 <b>Modo examen</b>: hazlo en tu cuaderno, como en el examen, y escribe solo los resultados.<br><span class="m" style="font-size:22px">m.c.m.(${nm(nums)}) y m.c.d.(${nm(nums)})</span>`, steps: [{ type: 'pair', q: 'Toca ⇅ para cambiar de casilla:', fields: [{ label: 'm.c.m. =', v: L(nums), max: 5 }, { label: 'm.c.d. =', v: G(nums), max: 4 }], hints: ['Paso 1: descompón los dos números. Paso 2: colorea comunes y no comunes. Paso 3: m.c.m. → todos, exponente más alto; m.c.d. → solo comunes, exponente más bajo.', `${nums.map(n => `${n} = ${fs(factor(n))}`).join(' · ')}`], why: vs => examWhy(nums, vs[0], vs[1]) }], sol: solCM(nums) };
+}
+function gen3(l) { return (l === 1 ? pick([() => exCM(1), () => exSolo(1), () => exSolo(1), exSentido]) : l === 2 ? pick([() => exCM(2), exCopr, () => exSolo(2), exTres, () => exCM(2), exExamen]) : pick([() => exCM(3), exTres, exExamen, exExamen, exCopr]))(l) }
 
 /* ---------- bloque 4: problemas ---------- */
 const hh = m => { const t = 14 * 60 + m, h = Math.floor(t / 60), mi = t % 60; return `${h}:${String(mi).padStart(2, '0')}` };
@@ -336,7 +384,12 @@ function exQue(l) {
   const it = pick([['volver a coincidir', 0], ['salir juntos otra vez', 0], ['encenderse a la vez de nuevo', 0], ['repartir en partes iguales sin que sobre', 1], ['los trozos más largos posible', 1], ['las bolsas más grandes posible', 1], ['el menor número que sea múltiplo de los dos', 0], ['el mayor número que divida a los dos', 1]]);
   return { skill: 'que', label: 'Elegir entre m.c.m. y m.c.d.', title: `Un problema pregunta por «<b>${it[0]}</b>». ¿Qué calculas?`, steps: [{ type: 'choice', q: 'Elige:', opts: ['El m.c.m.', 'El m.c.d.'], keep: true, ans: it[1], why: () => 'Truco de tu profe: m.c.m. → <b>coincidencias</b>; m.c.d. → <b>el más grande, repartir</b>.' }], sol: it[1] ? '<b>m.c.d.</b>: el más grande / repartir.' : '<b>m.c.m.</b>: coincidencias.' };
 }
-function gen4(l) { return l === 1 && Math.random() < .3 ? exQue(l) : exProb(l) }
+function exProbExamen(l, T, set) {
+  T = T || pick(PR); const [a, b] = set || pick(T.sets), v = T.k === 'mcm' ? lcm(a, b) : gcd(a, b), w = T.k === 'mcm' ? gcd(a, b) : lcm(a, b);
+  const unit = { 0: 'días', 1: 'min', 2: 'minutos', 3: 'días', 4: 'segundos', 5: 'litros', 6: 'cm', 7: 'cm', 8: 'caramelos', 9: 'personas' }[PR.indexOf(T)];
+  return { skill: 'prob-examen', label: 'Modo examen: problemas', title: `🎯 <b>Modo examen</b>: resuélvelo en tu cuaderno (Datos, Operación, Solución) y escribe el resultado.<br>${T.t(a, b)}`, steps: [{ type: 'choice', q: '¿Qué has calculado?', opts: ['El m.c.m.', 'El m.c.d.'], keep: true, ans: T.k === 'mcm' ? 0 : 1, why: () => T.k === 'mcm' ? 'Pregunta cuándo vuelven a <b>coincidir</b> → m.c.m.' : 'Pide lo <b>más grande posible</b> para repartir → m.c.d.' }, { q: PR.indexOf(T) === 1 ? '¿Cada cuántos minutos coinciden?' : `Resultado (en ${unit}):`, pre: `${T.k === 'mcm' ? 'm.c.m.' : 'm.c.d.'}(${a}, ${b}) = `, ans: v, max: 4, hints: [`${a} = ${fs(factor(a))} · ${b} = ${fs(factor(b))}`], why: x => x === w ? `Ese número es el ${T.k === 'mcm' ? 'm.c.d.' : 'm.c.m.'}: ¿has elegido bien el método?` : examWhy([a, b], T.k === 'mcm' ? x : lcm(a, b), T.k === 'mcd' ? x : gcd(a, b)) }], sol: `${T.k === 'mcm' ? 'm.c.m.' : 'm.c.d.'}(${a}, ${b}) = <b>${v}</b>. ${T.sol(v, a, b)}` };
+}
+function gen4(l) { return l === 1 && Math.random() < .3 ? exQue(l) : l === 3 && Math.random() < .45 ? exProbExamen(l) : exProb(l) }
 
 /* ---------- tema ---------- */
 window.TEMA = {
@@ -369,6 +422,9 @@ window.TEMA = {
       fixed: [[10, 15], [16, 24], [12, 18], [50, 70], [20, 24], [24, 36], [54, 60], [56, 70], [120, 144], [140, 180], [20, 25], [12, 24], [50, 75], [200, 300], [24, 42], [135, 84], [45, 40]].map(n => () => exCM(n[0] > 100 ? 2 : 1, n)).concat([() => exTres(2, TRES[1]), () => exTres(2, TRES[6]), () => exCopr(3)]),
       hello: 'Ahora el método de tu profe con colores: <span class="hl-g">verde</span> para los comunes y <span class="hl-o">naranja</span> para los no comunes. Y recuerda: siempre en minúsculas, <b>m.c.m.</b> y <b>m.c.d.</b>',
       slides: [
+        { t: '¿Qué es el m.c.m.?', html: `<p><b>m.c.m.</b> = <b>m</b>ínimo <b>c</b>omún <b>m</b>últiplo: el número <b>más pequeño</b> que está en la tabla de los dos.</p><div class="box" style="font-family:Fredoka;font-size:17px">Tabla del 6: 6, 12, 18, <span class="hl-y">24</span>, 30…<br>Tabla del 8: 8, 16, <span class="hl-y">24</span>, 32…</div><p>Imagina una rana que salta de 6 en 6 y un conejo que salta de 8 en 8. ¿Dónde coinciden?</p>`, demo: { type: 'ranas', a: 6, b: 8 }, check: ['m.c.m.(4, 6) = ? (piensa en las tablas)', ['12', '24', '2'], 'Tabla del 4: 4, 8, 12… Tabla del 6: 6, 12… ¡12!', 'Escribe las tablas del 4 y del 6 hasta que coincidan.'] },
+        { t: '¿Qué es el m.c.d.?', html: `<p><b>m.c.d.</b> = <b>m</b>áximo <b>c</b>omún <b>d</b>ivisor: el número <b>más grande</b> que divide a los dos (con resto 0).</p><div class="box" style="font-family:Fredoka;font-size:17px">Divisores de 12: 1, 2, 3, 4, <span class="hl-y">6</span>, 12<br>Divisores de 18: 1, 2, 3, <span class="hl-y">6</span>, 9, 18</div><p>Es como cortar dos cintas en trozos iguales, <b>lo más largos posible</b>, sin que sobre nada:</p>`, demo: { type: 'cintas', a: 12, b: 18 }, check: ['m.c.d.(8, 12) = ?', ['4', '2', '24'], 'Divisores comunes de 8 y 12: 1, 2, 4. El más grande, 4.', 'Busca el número más grande que divide a los dos.'] },
+        { t: 'Con números grandes…', html: `<p>Con 135 y 84, hacer listas de tablas y divisores sería <b>larguísimo</b>. 😵</p><p>Por eso tu profe usa un atajo con <b>tres pasos</b>:</p><div class="box"><p style="margin:0">1️⃣ <b>Descomponer</b> en primos.<br>2️⃣ <b>Colorear</b> comunes y no comunes.<br>3️⃣ <b>Elegir</b> exponentes y multiplicar.</p></div>` },
         { t: 'Paso 1: descomponer', html: `<p>Ejemplo de tu cuaderno: <b>m.c.m.(24, 42)</b> y <b>m.c.d.(24, 42)</b>.</p>${chipsHTML([24, 42], false)}<p>Primero, siempre, descomponemos los números con la columna.</p>` },
         { t: 'Paso 2: colorear', html: `${chipsHTML([24, 42], true)}<div class="box"><p style="margin:0"><span class="hl-g">Comunes</span>: están en <b>todos</b> los números (se repiten): el 2 y el 3.<br><span class="hl-o">No comunes</span>: solo están en uno (no se repiten): el 7.</p></div>` },
         { t: 'm.c.m.: el más alto', html: `<div class="rule">m.c.m. → comunes <b>y no comunes</b><br>al exponente <b>más alto</b></div><div class="big-math" style="font-size:22px">m.c.m.(24, 42) = ${P(2, 3)} · 3 · 7 = 8 · 3 · 7 = <span class="hi">168</span></div><p>Del 2 hay ${P(2, 3)} y 2: cogemos ${P(2, 3)}, el más alto.</p>`, try: () => exSolo(1, 'mcm', [12, 18]) },
@@ -381,7 +437,10 @@ window.TEMA = {
       hello: 'Los problemas de tu libro. Lo difícil es saber si es de <b>m.c.m.</b> o de <b>m.c.d.</b>: te enseño el truco de tu profe.',
       slides: [
         { t: 'El truco de tu profe', html: `<div class="rule" style="text-align:left">m.c.m. → <span class="hl-g">COINCIDENCIAS</span> (volver a coincidir, a la vez, juntos otra vez)<br><br>m.c.d. → <span class="hl-o">EL MÁS GRANDE</span> posible, <b>repartir</b> en partes iguales sin que sobre</div><div class="tip"><span>💡</span><div><b>¿Dudas?</b> Haz los dos y <b>descarta la solución ilógica</b>.</div></div>`, check: ['«¿Cuándo volverán a salir juntos los dos autobuses?»', ['m.c.m.', 'm.c.d.'], 'Volver a salir juntos = coincidencia.', 'Piensa: ¿coincidir o repartir?'] },
-        { t: 'Datos, Operación, Solución', html: `<p>Igual que en tu cuaderno, escribe siempre las tres partes:</p><div class="dap"><div><b>📋 Datos</b>Valencia → cada 6 días · Sevilla → cada 8 días</div><div><b>🧮 Operación</b>m.c.m.(6, 8): 6 = 2 · 3, 8 = ${P(2, 3)} → ${P(2, 3)} · 3 = 24</div><div><b>✍️ Solución</b>Volverán a coincidir dentro de <b>24 días</b>.</div></div><div class="warn"><span>⚠️</span><div>La solución se escribe con una <b>frase</b> y con las <b>unidades</b> (días, cm, litros…).</div></div>` },
+        { t: 'Coincidencias = saltos', html: `<p>Los envíos a Valencia (cada 6 días) y a Sevilla (cada 8 días) son como dos animales saltando. Coinciden en el <b>m.c.m.</b>:</p>`, demo: { type: 'ranas', a: 6, b: 8, la: '🚚', lb: '🚛' } },
+        { t: 'Repartir = cortar', html: `<p>60 litros de girasol y 80 de oliva en garrafas iguales, <b>lo más grandes posible</b>: es cortar dos cintas en trozos iguales. Es el <b>m.c.d.</b>:</p>`, demo: { type: 'cintas', a: 60, b: 80, u: 'L' } },
+        { t: '🦗 Curiosidad: las cigarras', html: `<p>En Estados Unidos hay cigarras que pasan <b>13 o 17 años</b> bajo tierra y luego salen todas a la vez. ¡13 y 17 son <b>primos</b>!</p><p>Una explicación que dan los científicos: si un depredador aparece cada 4 años, coincide con la cigarra de 17 años solo cada m.c.m.(4, 17) = <b>68 años</b>. Con 16 años coincidiría cada 16. Ser «prima» la protege. 😎</p>`, check: ['¿Cada cuántos años coincide una cigarra de 13 años con un depredador que sale cada 2 años?', ['26', '13', '15'], 'm.c.m.(2, 13) = 2 · 13 = 26: no tienen comunes, se multiplican.', 'Son primos entre sí: multiplica.'] },
+        { t: 'Datos, Operación, Solución', html: `<p>Igual que en tu cuaderno, escribe siempre las tres partes:</p><div class="dap"><div><span class="h">📋 Datos</span>Valencia → cada 6 días · Sevilla → cada 8 días</div><div><span class="h">🧮 Operación</span>m.c.m.(6, 8): 6 = 2 · 3, 8 = ${P(2, 3)} → ${P(2, 3)} · 3 = 24</div><div><span class="h">✍️ Solución</span>Volverán a coincidir dentro de <b>24 días</b>.</div></div><div class="warn"><span>⚠️</span><div>La solución se escribe con una <b>frase</b> y con las <b>unidades</b> (días, cm, litros…).</div></div>` },
         { t: '¡Ahora tú!', html: '<p>El de las garrafas de aceite, de tu libro (pág. 75, ej. 9):</p>', try: () => exProb(1, PR[5], [60, 80]) }
       ] }
   ]

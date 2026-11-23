@@ -204,7 +204,7 @@ const TYPES = {
       const vs = ss.map(val); if (vs.some(v => v === null)) { const k = vs.findIndex(v => v === null); focusSlot(k); return }
       const bad = st.fields.map((f, i) => vs[i] !== f.v);
       if (!bad.some(Boolean)) { ss.forEach(s => s.classList.add('ok')); padOff(); api.right(st.okMsg); api.next() }
-      else { ss.forEach((s, i) => { if (bad[i]) s.classList.add('no') }); api.wrong(st.why ? st.why(vs) : 'Revisa la casilla en rojo.'); setTimeout(() => ss.forEach((s, i) => { if (bad[i]) { s.dataset.v = ''; s.innerHTML = '<span class="ph">?</span>'; s.classList.remove('no') } }), 900) }
+      else { ss.forEach((s, i) => { if (bad[i]) s.classList.add('no') }); api.wrong(st.why ? st.why(vs) : 'Revisa la casilla en rojo.'); setTimeout(() => { ss.forEach((s, i) => { if (bad[i]) { s.dataset.v = ''; s.innerHTML = '<span class="ph">?</span>'; s.classList.remove('no') } }); focusSlot(bad.indexOf(true)) }, 900) }
     });
   },
   pow(w, st, api) {

@@ -100,7 +100,7 @@ const meter=(v,c)=>`<div class="meter"><i style="width:${Math.round(v*100)}%;bac
 /* ---------- matemáticas: metadatos de los temas ---------- */
 const MATH={'mat-nat':{name:'Números naturales',blocks:[['n1','El orden de las operaciones',6],['n2','Operaciones combinadas',3],['n3','División de dos cifras',4],['n4','Problemas',2]]},
  'mat-pot':{name:'Potencias y raíces',blocks:[['p1','¿Qué es una potencia?',5],['p2','Multiplicar y dividir potencias',4],['p3','Potencia de potencia y mismo exponente',4],['p4','Raíces cuadradas',4],['p5','El método fiesta',4],['p6','Operaciones y problemas',3]]},
- 'mat-div':{name:'Divisibilidad: m.c.m. y m.c.d.',blocks:[['d1','Divisibilidad',6],['d2','Descomponer en primos',5],['d3','m.c.m. y m.c.d.',6],['d4','Problemas',3]]}};
+ 'mat-div':{name:'Divisibilidad: m.c.m. y m.c.d.',blocks:[['d1','Divisibilidad',6],['d2','Descomponer en primos',5],['d3','m.c.m. y m.c.d.',9],['d4','Problemas',6]]}};
 const MBLK={};Object.entries(MATH).forEach(([a,t])=>t.blocks.forEach(([id,name,n])=>MBLK[id]={a,name,n,tema:t.name}));
 const APPN={'bio-t2':'Biología','europa':'Europa','mat-nat':'Mates · Naturales','mat-pot':'Mates · Potencias','mat-div':'Mates · Divisibilidad'};
 
